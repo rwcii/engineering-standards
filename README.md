@@ -1,0 +1,89 @@
+# Engineering Standards
+
+A portable, stack-agnostic system of **decision records** and an automated
+**standards-review** gate, designed to be vendored into any project regardless
+of language or framework.
+
+It has two halves:
+
+- **Architecture Decision Records (ADRs)** — *how the system is built*: structure,
+  patterns, boundaries, infrastructure. See [`docs/architecture/adr/`](docs/architecture/adr/).
+- **Product Decision Records (PDRs)** — *how the product behaves*: user flows,
+  UX contracts, voice/identity. See [`docs/product/pdr/`](docs/product/pdr/).
+
+Plus a [`standards-review`](.claude/commands/standards-review.md) command — an
+independent preflight review agent that checks a branch against the records
+before push/PR.
+
+## The core idea: principle vs. enforcement
+
+The decision records in this repository are written at **principle level** and are
+deliberately language-agnostic. A universal record states *the decision and why*;
+it does **not** prescribe a specific toolchain.
+
+Each adopting project supplies its own **enforcement** — the concrete lint rules,
+CI guards, codegen, type checks, and build gates that make the principle real on
+*that* stack. A TypeScript monorepo enforces "Interface Boundaries" with package
+`exports` maps and ESLint import rules; a Go service enforces the same principle
+with internal packages and `go vet`. Same principle, different enforcement.
+
+This separation is what makes the standards reusable. Copy the principle, write
+your own enforcement.
+
+## What's inside
+
+```
+.
+├── docs/
+│   ├── architecture/adr/     # Architecture Decision Records + process
+│   └── product/pdr/          # Product Decision Records + process
+└── .claude/
+    └── commands/
+        └── standards-review.md   # independent preflight review protocol
+```
+
+### Baseline records
+
+| Record  | Kind                                   | Status   |
+| ------- | -------------------------------------- | -------- |
+| ADR 001 | Code Architecture Standards (+ 001.1–001.5) | Accepted (universal) |
+| ADR 002 | Tech Stack (+ 002.1/.2/.3)             | Template (fill per project) |
+| ADR 004 | Database & Data Handling               | Template (fill per project) |
+| ADR 005 | Security                               | Draft stub |
+| ADR 006 | Authentication                         | Draft stub |
+
+ADR 003 is intentionally reserved (a future universal "Configuration &
+Deployment" record). Project-specific ADRs begin at **007**. PDRs are inherently
+project-specific, so this repository ships only the PDR *process and template* —
+no universal PDR content.
+
+## Adopting this in a project
+
+1. **Vendor** `docs/architecture/adr/`, `docs/product/pdr/`, and
+   `.claude/commands/standards-review.md` into your repo.
+2. **Keep** ADR 001.x as-is (the universal code-architecture standards).
+3. **Fill in** the templates for your stack: ADR 002.x (frontend / api /
+   backend-persistence) and ADR 004.x (your data-handling specifics).
+4. **Flesh out** the stubs (ADR 005 Security, 006 Authentication) when those
+   decisions are made — or leave them `draft` until then.
+5. **Add** your project's own ADRs from 007+ and your PDRs from 001.
+6. **Adapt** `standards-review.md`: set your base branch, your build/test gate,
+   and the project-specific ADR/PDR checklist.
+
+The records are a starting template you own and adapt — not a runtime dependency.
+Vendor and customize; don't submodule.
+
+## Process & lifecycle
+
+Each half documents its own rules, template, and status lifecycle:
+
+- [ADR process](docs/architecture/adr/ADR_PROCESS.md)
+- [PDR process](docs/product/pdr/PDR_PROCESS.md)
+
+Both share the lifecycle `draft → under_review → accepted → modified →
+deprecated/superseded` and the cardinal rules: **no line numbers, no AI/bot
+attribution, no volatile implementation details** — records must stay durable.
+
+## License
+
+[MIT](LICENSE) © Stratovera.
