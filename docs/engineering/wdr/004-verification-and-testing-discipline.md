@@ -57,7 +57,7 @@ satisfy rather than evidence the system works.
 
 An agent optimizing for a green signal will, unless constrained, find the cheapest
 path to green — and the cheapest path is often to weaken the evidence rather than
-the strengthen the code: an assertion loosened to a tautology, a failing case marked
+strengthen the code: an assertion loosened to a tautology, a failing case marked
 skipped, an over-mocked test that exercises nothing, a fix with no test proving it.
 A flaky gate makes this worse: when red sometimes means "try again," the agent (and
 the humans watching) learn that red is noise, not a stop. And a uniform coverage

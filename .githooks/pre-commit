@@ -10,7 +10,7 @@ branch="$(git symbolic-ref --short -q HEAD)"
 git_dir="$(git rev-parse --git-dir)"
 
 if [ "$branch" = "main" ] && [ ! -f "$git_dir/MERGE_HEAD" ]; then
-  echo "✗ Blocked: direct commits to 'main' are not allowed (WDR 010)." >&2
+  echo "Blocked: direct commits to 'main' are not allowed (WDR 010)." >&2
   echo "  Work on a feature branch off 'develop'; squash-merge to 'develop'," >&2
   echo "  then promote 'develop' to 'main' with a merge commit." >&2
   exit 1
