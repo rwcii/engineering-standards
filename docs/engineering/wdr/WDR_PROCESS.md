@@ -106,7 +106,7 @@ compliance claim that points at it.
 
 Same as ADRs. **Create:** take the next number from the index → write from the ADR
 template (with WDR frontmatter) → fill all required sections → add a row to this
-`README.md` → commit `docs(wdr): add NNN [title]`. **Update an accepted WDR:**
+`README.md` (hand-maintained until generated — WDR 002) → commit `docs(wdr): add NNN [title]`. **Update an accepted WDR:**
 `accepted → modified`, bump `updated:`, add a Document History entry, update the
 index, commit `docs(wdr): update NNN [title]`. **Reference** from code with
 `// Per WDR 00X, …`, from docs with a link, and between records via the `related`

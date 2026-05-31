@@ -251,7 +251,8 @@ the parent's problem context but have distinct mechanisms or implementation deta
 ## Creating, Updating, Referencing
 
 **Create:** pick the next number from the index → write from the template → fill all
-required frontmatter and sections → add a row to `README.md` → commit
+required frontmatter and sections → add a row to `README.md` (hand-maintained until a
+generator is wired — WDR 002) → commit
 `docs(adr): add NNN [title]`.
 
 **Update an accepted ADR:** change `accepted` → `modified`, bump `updated:`, add a

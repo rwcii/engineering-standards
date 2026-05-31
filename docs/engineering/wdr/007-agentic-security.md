@@ -191,7 +191,7 @@ scan before commit/egress.
 
 Per project: dependency existence/identity verification, exact pinning, integrity
 and vulnerability checks in the gate; a secrets scan before commit and before any
-egress; pairs with ADR 005 (secrets management) and the pinned-toolchain record.
+egress; pairs with ADR 005 (secrets management) and ADR 003 (pinned toolchain).
 
 ---
 

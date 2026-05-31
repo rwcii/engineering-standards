@@ -126,7 +126,9 @@ in the catalog is derived, so the catalog cannot disagree with the record.
 
 Per project: a published frontmatter schema; a validator run in the gate; a
 generator that builds each index from frontmatter, and a check that fails when the
-committed index is stale relative to the records.
+committed index is stale relative to the records. Until a project wires that generator,
+the index is hand-maintained as a tracked stopgap kept honest by the staleness check —
+hand-maintenance is the rejected *steady state*, not a forbidden interim.
 
 ---
 

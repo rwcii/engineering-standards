@@ -54,7 +54,7 @@ read it before adding or editing records there.
   `.githooks/pre-commit` blocks direct commits to `main` (enable per clone with
   `git config core.hooksPath .githooks`).
 - **Index:** update the module `README.md` table whenever you add a record or
-  change its status.
+  change its status (hand-maintained until a generator is wired — WDR 002).
 
 ## Before You Add or Change a Record
 

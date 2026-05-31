@@ -205,7 +205,7 @@ the boundary.
 
 Per project: a flakiness policy (quarantine + track, do not retry-to-green);
 deterministic test construction (frozen time, seeded randomness, no live external
-calls); pairs with the environment-parity record and ADR 004 for seed/fixture data.
+calls); pairs with ADR 003 (environment parity) and ADR 004 for seed/fixture data.
 
 ---
 

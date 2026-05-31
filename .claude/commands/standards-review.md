@@ -108,7 +108,7 @@ realization of each standard (recorded in ADR 002.x), not a fixed toolchain.
 
 ### Phase 2: Validate ADR Compliance
 
-Read each ADR in `docs/architecture/adr/` and check whether the changes comply with or
+Read each *applicable* ADR (selected in Phase 0) and check whether the changes comply with or
 violate its decisions. For each accepted ADR, verify the change honors its decisions and
 enforcement; for each draft ADR, check consistency with its stated intent.
 
@@ -119,7 +119,7 @@ enforcement; for each draft ADR, check consistency with its stated intent.
 
 ### Phase 2b: Validate PDR Compliance
 
-Read each PDR in `docs/product/pdr/` and check whether the changes comply with its
+Read each *applicable* PDR (selected in Phase 0) and check whether the changes comply with its
 product decisions. PDRs define **how the product should behave** — user flows and UX
 contracts — as distinct from ADRs.
 

@@ -3,7 +3,7 @@ adr: "005"
 title: "Security"
 status: draft
 created: "2026-05-30"
-updated: "2026-05-30"
+updated: "2026-05-31"
 parent_adr: ""
 authors:
   - "Robert Capps"
@@ -98,3 +98,4 @@ record covers the classic security posture that those agent controls bind to.
 | Date       | Change           |
 | ---------- | ---------------- |
 | 2026-05-30 | Initial creation (stub) |
+| 2026-05-31 | Added AI-generation-threats candidate area and WDR 007 cross-reference |
