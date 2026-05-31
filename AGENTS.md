@@ -9,6 +9,7 @@ be **vendored into other projects**. It contains:
 - **PDRs** (`docs/product/pdr/`) — how a product behaves (flows, UX contracts, voice)
 - **WDRs** (`docs/engineering/wdr/`) — how the work is done (workflow, agent operating loop, review/enforcement gates, the record system itself)
 - **`standards-review`** (`.claude/commands/standards-review.md`) — an independent preflight review protocol
+- **`standards-audit`** (`.claude/skills/standards-audit/`) — a skill that mines a repo for candidate ADR/PDR/WDR records
 
 ## The One Principle to Internalize
 
@@ -37,6 +38,9 @@ project's enforcement section, not here.
 | `docs/product/pdr/`           | PDRs + `PDR_PROCESS.md` + index `README.md`        |
 | `docs/engineering/wdr/`       | WDRs + `WDR_PROCESS.md` + index `README.md`        |
 | `.claude/commands/standards-review.md` | The preflight review protocol             |
+| `.claude/skills/standards-audit/` | Skill: mine a repo for candidate ADR/PDR/WDR records |
+| `scripts/setup-repo.sh`       | Apply the branch/merge policy to a GitHub repo (WDR 010) |
+| `.githooks/pre-commit`        | Blocks direct commits to `main` (WDR 010)          |
 | `LICENSE`                     | MIT © Stratovera                                   |
 
 Each module has its own `AGENTS.md` with the rules specific to that record type —
@@ -51,8 +55,8 @@ read it before adding or editing records there.
 - **Commits:** signed (SSH); messages `docs(adr): ...` / `docs(pdr): ...` / `docs(wdr): ...`.
 - **Branching:** never commit to `main`. Work on a feature branch off `develop`;
   squash-merge feature → `develop`, then merge `develop` → `main`. Recorded in WDR 010;
-  `.githooks/pre-commit` blocks direct commits to `main` (enable per clone with
-  `git config core.hooksPath .githooks`).
+  `.githooks/pre-commit` blocks direct commits to `main`. Run `scripts/setup-repo.sh`
+  once per repo to apply the hook path and the GitHub-side branch/merge settings.
 - **Index:** update the module `README.md` table whenever you add a record or
   change its status (hand-maintained until a generator is wired — WDR 002).
 

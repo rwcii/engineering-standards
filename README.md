@@ -14,9 +14,10 @@ It has three record types and a review gate:
   workflow, the agent operating loop, the review/enforcement gates, and the record
   system itself. See [`docs/engineering/wdr/`](docs/engineering/wdr/).
 
-Plus a [`standards-review`](.claude/commands/standards-review.md) command — an
-independent preflight review agent that checks a branch against the records
-before push/PR.
+Plus two agent tools: a [`standards-review`](.claude/commands/standards-review.md)
+command — an independent preflight review agent that checks a branch against the records
+before push/PR — and a [`standards-audit`](.claude/skills/standards-audit/) skill that
+mines an existing repo for decisions that should become ADR/PDR/WDR records.
 
 ## The core idea: principle vs. enforcement
 
@@ -41,9 +42,15 @@ your own enforcement.
 │   ├── architecture/adr/     # Architecture Decision Records + process
 │   ├── product/pdr/          # Product Decision Records + process
 │   └── engineering/wdr/      # Workflow Decision Records + process
+├── scripts/
+│   └── setup-repo.sh         # apply the branch/merge policy to a GitHub repo (WDR 010)
+├── .githooks/
+│   └── pre-commit            # blocks direct commits to main (WDR 010)
 └── .claude/
-    └── commands/
-        └── standards-review.md   # independent preflight review protocol
+    ├── commands/
+    │   └── standards-review.md   # independent preflight review protocol
+    └── skills/
+        └── standards-audit/      # mine a repo for candidate ADR/PDR/WDR records
 ```
 
 ### Baseline records
