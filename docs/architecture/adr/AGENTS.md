@@ -4,7 +4,8 @@
 
 Architecture Decision Records (ADRs) that capture **how a system is built** —
 structure, patterns, boundaries, infrastructure. ADRs are the architectural
-counterpart to Product Decision Records (PDRs) in `docs/product/pdr/`.
+counterpart to Product Decision Records (PDRs, `docs/product/pdr/`) and Workflow
+Decision Records (WDRs, `docs/engineering/wdr/`).
 
 ## When You Should Read These
 
@@ -17,7 +18,9 @@ counterpart to Product Decision Records (PDRs) in `docs/product/pdr/`.
 
 - **ADRs capture architecture, not product behavior.** If the decision survives a
   complete product pivot (new features, new flows) it belongs here. If it survives a
-  complete rewrite (new language, new framework) it belongs in `docs/product/pdr/`.
+  complete rewrite (new language, new framework) it belongs in `docs/product/pdr/`. If
+  it survives **both** — because it governs how the work is done — it belongs in a
+  Workflow Decision Record (`docs/engineering/wdr/`).
 - **Universal records (001.x) stay principle-level.** Do not write a specific
   toolchain into them — concrete lint rules, codegen, and build gates are each
   project's *enforcement*, recorded in that project's copy, not in the universal text.
@@ -30,7 +33,7 @@ counterpart to Product Decision Records (PDRs) in `docs/product/pdr/`.
 | ------ | ------------------------------------------------------------- |
 | 001.x  | Universal code-architecture standards — keep as-is            |
 | 002.x  | Tech stack by layer (frontend / api / backend-persistence)   |
-| 003    | Reserved (Configuration & Deployment)                        |
+| 003    | Reproducible Environments & Observability (universal, accepted) |
 | 004.x  | Database & data-handling specifics                           |
 | 005    | Security (stub)                                              |
 | 006    | Authentication (stub)                                        |
