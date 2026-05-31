@@ -32,3 +32,4 @@ The baseline set (001–009) is complete and universal. Project-specific WDRs be
 | Number | Title | Status |
 | ------ | ----- | ------ |
 | 010    | [Branch & Merge Flow](010-branch-and-merge-flow.md) | Accepted |
+| 011    | [Contribution & Attestation Policy](011-contribution-and-attestation.md) | Accepted |
