@@ -3,8 +3,8 @@
 ## What This Directory Contains
 
 Product Decision Records (PDRs) that capture **product behavior, user flows, and UX
-contracts**. PDRs are the product counterpart to Architecture Decision Records (ADRs) in
-`docs/architecture/adr/`.
+contracts**. PDRs are the product counterpart to Architecture Decision Records (ADRs,
+`docs/architecture/adr/`) and Workflow Decision Records (WDRs, `docs/engineering/wdr/`).
 
 ## When You Should Read These
 
@@ -18,6 +18,8 @@ contracts**. PDRs are the product counterpart to Architecture Decision Records (
 - **PDRs capture product decisions, not architecture.** If the decision survives a
   complete rewrite (new language, new framework) it belongs here. If it survives a
   complete product pivot (new features, new flows) it belongs in `docs/architecture/adr/`.
+  If it survives **both** — because it governs how the work is done — it belongs in a
+  Workflow Decision Record (`docs/engineering/wdr/`).
 - **No line numbers, no AI attribution, no volatile implementation details.** See
   `PDR_PROCESS.md` § "What PDRs Must NOT Contain."
 - **PDRs and ADRs often come in pairs.** Cross-reference via `related_adrs` /
