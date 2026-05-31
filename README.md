@@ -85,6 +85,39 @@ beginning with WDR 001 (the decision-record taxonomy itself). See the
 The records are a starting template you own and adapt — not a runtime dependency.
 Vendor and customize; don't submodule.
 
+## Repository setup (`scripts/setup-repo.sh`)
+
+Part of the branch/merge policy (see [WDR 010](docs/engineering/wdr/010-branch-and-merge-flow.md))
+lives in GitHub repository settings, which a clone does **not** inherit.
+`scripts/setup-repo.sh` re-applies it as config-as-code, so a freshly created or cloned
+repo reproduces the policy in one command. It is idempotent — safe to re-run.
+
+**Prerequisite:** the [GitHub CLI](https://cli.github.com) (`gh`), authenticated with
+admin on the target repo.
+
+```bash
+# configure the current repo (resolved from its 'origin' remote)
+scripts/setup-repo.sh
+
+# ...or target a specific repo
+scripts/setup-repo.sh owner/repo
+```
+
+### What it applies — and what your account type limits
+
+| Setting | Free **public** | Paid (Pro/Team/Enterprise) | Free **private** |
+| ------- | :-------------: | :------------------------: | :--------------: |
+| Merge methods — squash + merge on, rebase off, squash uses PR title/body | yes | yes | yes |
+| Auto-delete head branch on merge | yes | yes | yes |
+| Local `pre-commit` hook path (`core.hooksPath=.githooks`) | yes | yes | yes |
+| Branch-protection **rulesets** — `develop` squash-only + PR, `main` merge-only + PR, block force-push & deletion | yes | yes | **no** |
+
+GitHub **branch protection and rulesets are not available on free _private_ repositories**.
+On a free private repo the script applies everything else and **skips the rulesets with a
+notice**, leaving the local hook plus the WDR 010 convention to carry the policy. Make the
+repo public (free) or move to a paid plan to enable server-side enforcement, then re-run
+the script.
+
 ## Process & lifecycle
 
 Each module documents its own rules, template, and status lifecycle:
