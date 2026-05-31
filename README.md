@@ -77,7 +77,10 @@ beginning with WDR 001 (the decision-record taxonomy itself). See the
    decisions are made — or leave them `draft` until then.
 5. **Add** your project's own ADRs from 007+ and your PDRs from 001.
 6. **Adapt** `standards-review.md`: set your base branch, your build/test gate,
-   and the project-specific ADR/PDR checklist.
+   and the project-specific ADR/PDR/WDR checklist.
+7. **Configure the repo:** run `scripts/setup-repo.sh` to apply the branch/merge policy
+   (merge methods, auto-delete, branch-protection rulesets) and the local hook path —
+   the GitHub settings a clone does not inherit.
 
 The records are a starting template you own and adapt — not a runtime dependency.
 Vendor and customize; don't submodule.

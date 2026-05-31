@@ -111,12 +111,17 @@ adopting project chooses its own); the universal review gate this flow feeds is 
 
 - **Branch protection (remote):** `main` and `develop` reject direct pushes and require
   a reviewed pull request; `develop`'s merge method is squash, `main`'s is a merge
-  commit.
+  commit. Merged head branches auto-delete (a protected `develop` is exempt). GitHub
+  rulesets/branch protection require a public repo or a paid plan; absent that, the
+  local guard and the convention carry the policy.
 - **Local guard:** a committed `pre-commit` hook (`.githooks/pre-commit`) blocks a
   direct (non-merge) commit on `main`; enable it once per clone with
   `git config core.hooksPath .githooks`.
 - **Review base:** `standards-review` defaults its base branch to `develop`, so a
   feature is reviewed against what it will merge into.
+- **Setup (config-as-code):** `scripts/setup-repo.sh` re-applies the GitHub settings
+  above (merge methods, auto-delete, rulesets) and the local hook path, so a cloned or
+  newly created repo reproduces this policy with one command.
 - **Compliance:** a change that lands on `main` other than by a merge from `develop`,
   or a feature reviewed against the wrong base, is a WDR-010 violation finding.
 
