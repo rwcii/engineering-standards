@@ -5,7 +5,7 @@ infrastructure. For process rules, the template, naming, and lifecycle, see
 [ADR_PROCESS.md](ADR_PROCESS.md).
 
 This is the **universal baseline** intended to be vendored into a project. Universal
-records (001.x) are written at principle level; templates (002.x, 004) and stubs
+records (001.x, 003) are written at principle level; templates (002.x, 004) and stubs
 (005, 006) are filled in per project. Project-specific ADRs begin at **007**.
 
 ## Baseline ADRs
@@ -22,7 +22,7 @@ records (001.x) are written at principle level; templates (002.x, 004) and stubs
 | 002.1  | [Frontend](002.1-frontend.md)                                      | Template | Draft    |
 | 002.2  | [API](002.2-api.md)                                                | Template | Draft    |
 | 002.3  | [Backend & Persistence](002.3-backend-persistence.md)             | Template | Draft    |
-| 003    | *reserved — Configuration & Deployment*                            | —        | —        |
+| 003    | [Reproducible Environments & Observability](003-reproducible-environments-and-observability.md) | Universal | Accepted |
 | 004    | [Database & Data Handling](004-database-and-data-handling.md)      | Template | Draft    |
 | 005    | [Security](005-security.md)                                        | Stub     | Draft    |
 | 006    | [Authentication](006-authentication.md)                            | Stub     | Draft    |
@@ -31,7 +31,7 @@ records (001.x) are written at principle level; templates (002.x, 004) and stubs
 
 - **001.x** — universal code-architecture standards. Keep as-is when adopting.
 - **002.x** — your stack, by layer (frontend / api / backend-persistence). Fill in.
-- **003** — reserved for a future universal Configuration & Deployment record.
+- **003** — universal operational standards: reproducible environments & observability.
 - **004.x** — database & data-handling specifics. Fill in.
 - **005 / 006** — security and authentication. Stubs to flesh out when decided.
 - **007+** — your project's own architecture decisions.

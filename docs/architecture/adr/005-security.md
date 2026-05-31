@@ -60,7 +60,10 @@ validated; sensitive data encrypted in transit and at rest.]
 ### Scope
 
 Security posture broadly. Authentication is ADR 006. Authorization, if separate, gets
-its own record. Data-handling integrity is ADR 004.
+its own record. Data-handling integrity is ADR 004. Agent-specific security —
+prompt-injection isolation, the hermetic execution sandbox, tool governance,
+supply-chain/slopsquatting defenses, and secrets non-exposure — is **WDR 007**; this
+record covers the classic security posture that those agent controls bind to.
 
 ---
 
@@ -74,6 +77,10 @@ its own record. Data-handling integrity is ADR 004.
 > - **Output/content safety** — sanitization of stored content rendered to users
 > - **Transport & headers** — TLS, security headers, CORS
 > - **Dependency & supply chain** — vulnerability scanning, pinning
+> - **AI-generation threats** — prompt injection, hallucinated/slopsquatted
+>   dependencies, secrets pulled into generated code, insecure-by-default generation.
+>   The agent-specific controls are recorded in WDR 007; record here how they bind to
+>   this project's security posture.
 >
 > Each becomes a Decision section (Decision / Alternatives / Rationale / Enforcement)
 > once settled, following `ADR_PROCESS.md`.
