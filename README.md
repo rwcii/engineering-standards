@@ -4,12 +4,15 @@ A portable, stack-agnostic system of **decision records** and an automated
 **standards-review** gate, designed to be vendored into any project regardless
 of language or framework.
 
-It has two halves:
+It has three record types and a review gate:
 
 - **Architecture Decision Records (ADRs)** — *how the system is built*: structure,
   patterns, boundaries, infrastructure. See [`docs/architecture/adr/`](docs/architecture/adr/).
 - **Product Decision Records (PDRs)** — *how the product behaves*: user flows,
   UX contracts, voice/identity. See [`docs/product/pdr/`](docs/product/pdr/).
+- **Workflow Decision Records (WDRs)** — *how the work is done*: the engineering
+  workflow, the agent operating loop, the review/enforcement gates, and the record
+  system itself. See [`docs/engineering/wdr/`](docs/engineering/wdr/).
 
 Plus a [`standards-review`](.claude/commands/standards-review.md) command — an
 independent preflight review agent that checks a branch against the records
@@ -36,7 +39,8 @@ your own enforcement.
 .
 ├── docs/
 │   ├── architecture/adr/     # Architecture Decision Records + process
-│   └── product/pdr/          # Product Decision Records + process
+│   ├── product/pdr/          # Product Decision Records + process
+│   └── engineering/wdr/      # Workflow Decision Records + process
 └── .claude/
     └── commands/
         └── standards-review.md   # independent preflight review protocol
@@ -48,19 +52,24 @@ your own enforcement.
 | ------- | -------------------------------------- | -------- |
 | ADR 001 | Code Architecture Standards (+ 001.1–001.5) | Accepted (universal) |
 | ADR 002 | Tech Stack (+ 002.1/.2/.3)             | Template (fill per project) |
+| ADR 003 | Reproducible Environments & Observability | Accepted (universal) |
 | ADR 004 | Database & Data Handling               | Template (fill per project) |
 | ADR 005 | Security                               | Draft stub |
 | ADR 006 | Authentication                         | Draft stub |
 
-ADR 003 is intentionally reserved (a future universal "Configuration &
-Deployment" record). Project-specific ADRs begin at **007**. PDRs are inherently
+ADR 003 (Reproducible Environments & Observability) is a universal
+operational-standards record. Project-specific ADRs begin at **007**. PDRs are inherently
 project-specific, so this repository ships only the PDR *process and template* —
 no universal PDR content.
 
+WDRs ship a universal baseline set of workflow / agentic-engineering standards,
+beginning with WDR 001 (the decision-record taxonomy itself). See the
+[WDR index](docs/engineering/wdr/).
+
 ## Adopting this in a project
 
-1. **Vendor** `docs/architecture/adr/`, `docs/product/pdr/`, and
-   `.claude/commands/standards-review.md` into your repo.
+1. **Vendor** `docs/architecture/adr/`, `docs/product/pdr/`,
+   `docs/engineering/wdr/`, and `.claude/commands/standards-review.md` into your repo.
 2. **Keep** ADR 001.x as-is (the universal code-architecture standards).
 3. **Fill in** the templates for your stack: ADR 002.x (frontend / api /
    backend-persistence) and ADR 004.x (your data-handling specifics).
@@ -75,12 +84,13 @@ Vendor and customize; don't submodule.
 
 ## Process & lifecycle
 
-Each half documents its own rules, template, and status lifecycle:
+Each module documents its own rules, template, and status lifecycle:
 
 - [ADR process](docs/architecture/adr/ADR_PROCESS.md)
 - [PDR process](docs/product/pdr/PDR_PROCESS.md)
+- [WDR process](docs/engineering/wdr/WDR_PROCESS.md)
 
-Both share the lifecycle `draft → under_review → accepted → modified →
+All three share the lifecycle `draft → under_review → accepted → modified →
 deprecated/superseded` and the cardinal rules: **no line numbers, no AI/bot
 attribution, no volatile implementation details** — records must stay durable.
 

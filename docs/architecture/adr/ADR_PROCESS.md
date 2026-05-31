@@ -38,6 +38,10 @@ data-access pattern, service decomposition.
   decision), or don't write one at all.
 - **Narrow, single-field questions** — "where should this one value be persisted?"
   ADRs operate at the level of patterns and policies, not individual fields.
+- **Decisions about how the *work* is done** — the engineering workflow, the agent
+  operating loop, the review/enforcement gates, or the record system itself. These
+  survive both a rewrite and a product pivot; they are **WDRs**
+  (`docs/engineering/wdr/`), not ADRs.
 
 ### What ADRs Must NOT Contain
 

@@ -10,13 +10,13 @@ The agent must follow every instruction below exactly.
 
 > **Adopting this command:** this is a stack-agnostic skeleton. Set your base branch
 > default below, point the test/build references at your project's gate (recorded in ADR
-> 002.x), and — optionally — add a project-specific ADR/PDR checklist table to Phase 2.
+> 002.x), and — optionally — add a project-specific ADR/PDR/WDR checklist table to Phase 2.
 > The mandatory protocol and the phase structure are universal; the concrete checks come
 > from the project's own decision records.
 
 ## Arguments
 
-- `$ARGUMENTS` — optional: base branch override (defaults to `main`)
+- `$ARGUMENTS` — optional: base branch override (defaults to `develop`)
 
 ## Agent Instructions
 
@@ -61,7 +61,7 @@ These rules override everything else. Violation of any rule invalidates the enti
 ### Phase 0: Establish Scope
 
 ```bash
-BASE_BRANCH="${ARGUMENTS:-main}"
+BASE_BRANCH="${ARGUMENTS:-develop}"
 git diff $(git merge-base HEAD $BASE_BRANCH)...HEAD --stat
 git diff $(git merge-base HEAD $BASE_BRANCH)...HEAD --name-only
 git log $(git merge-base HEAD $BASE_BRANCH)...HEAD --oneline
@@ -69,8 +69,15 @@ git log $(git merge-base HEAD $BASE_BRANCH)...HEAD --oneline
 
 1. Run the commands above to identify all changed files and commits.
 2. **Read EVERY changed file completely** with the Read tool — not grep, not search.
-3. Read every ADR in `docs/architecture/adr/` (full content, not filenames).
-4. Read every PDR in `docs/product/pdr/` (full content, not filenames).
+3. Identify the **applicable records**: read the ADR, PDR, and WDR indexes (each
+   module's `README.md`) and select the records whose scope the change touches — by tag,
+   area, and change type — then deep-read the selected records in full (per WDR 002). You
+   need not read the entire corpus, but you must not miss an applicable record; when in
+   doubt, include it.
+4. Always treat as applicable regardless of the change: ADR 001.x (code architecture)
+   and the WDRs governing how work is produced (operating loop, verification, independent
+   review, autonomy, agentic security, provenance) — these bear on essentially every
+   change.
 5. For each changed file, also read the files it imports from or exports to, so you
    understand the full call chain.
 
@@ -125,6 +132,28 @@ For each accepted PDR, check:
 
 If no accepted PDRs exist yet (all draft), note this and check only for consistency with
 draft PDR intent.
+
+---
+
+### Phase 2c: Validate WDR Compliance
+
+Read the applicable WDRs in `docs/engineering/wdr/` and check whether the change — and
+the way it was produced — complies. WDRs govern **how the work is done**:
+
+- **Operating loop & verification (WDR 003/004):** is there evidence the change was run,
+  not just asserted? Are tests honest — nothing skipped, weakened, or made tautological to
+  reach green? Does a defect fix carry a regression test seen to fail first? Is the change
+  scoped, or does it sprawl into unrequested edits?
+- **Independent review & the control plane (WDR 005):** apply **heightened scrutiny to any
+  change to the control plane** — the records, CI guards, hooks, `standards-review` itself,
+  or enforcement config. A weakened, disabled, or removed check is a **high-severity,
+  must-justify** finding, and a gate must not be loosened in the same change whose
+  violations it would catch.
+- **Autonomy, security, provenance (WDR 006/007/009):** are the autonomy/guardrail,
+  prompt-injection-isolation, dependency-trust, and secrets constraints respected? For an
+  autonomous change, is the authorizing principal recorded?
+
+For each applicable WDR, report compliant / violation / N/A with file-path evidence.
 
 ---
 
@@ -220,6 +249,25 @@ Before finalizing:
 
 ---
 
+## Severity & Review Scope
+
+Per WDR 005, the merge gate has a defined severity scale; classify every finding on it:
+
+| Severity | Meaning                                                                                          | Blocks merge? |
+| -------- | ------------------------------------------------------------------------------------------------ | ------------- |
+| critical | Breaks correctness, security, or data integrity; or a control-plane check was weakened/disabled  | Yes           |
+| high     | A real defect, or a violation of an accepted record, likely to cause harm                        | Yes           |
+| medium   | A genuine issue that should be fixed but is contained                                            | No (track)    |
+| low      | A minor issue or smell                                                                           | No            |
+| note     | An observation, not a defect                                                                     | No            |
+
+Scope the review to **correctness, requirements, and record compliance**. Do not pad the
+findings with speculative or stylistic nits — a reviewer that manufactures findings drives
+over-engineering. Report every in-scope issue you find (one below the blocking threshold is
+recorded, not a blocker) and never silently discard one.
+
+---
+
 ## Output Format
 
 The review agent MUST output this structured report:
@@ -249,6 +297,11 @@ The review agent MUST output this structured report:
 | PDR | Status | Evidence |
 |-----|--------|----------|
 | [each applicable PDR] | compliant/violation/N/A | ... |
+
+## WDR Compliance
+| WDR | Status | Evidence |
+|-----|--------|----------|
+| [each applicable WDR] | compliant/violation/N/A | ... |
 
 ## Data & Security Model Compliance
 | Check | Status | Evidence |
