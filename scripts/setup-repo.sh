@@ -40,7 +40,9 @@ apply_ruleset() {
   local name="$1" payload="$2" id
   id="$(gh api "repos/${REPO}/rulesets" --jq ".[] | select(.name==\"${name}\") | .id" 2>/dev/null || true)"
   [ -n "${id}" ] && gh api --method DELETE "repos/${REPO}/rulesets/${id}" >/dev/null 2>&1 || true
-  printf '%s' "${payload}" | gh api --method POST "repos/${REPO}/rulesets" --input - >/dev/null 2>&1
+  # capture stderr so the caller can tell a plan limit from a real error;
+  # the assignment's exit status is the gh call's exit status
+  LAST_RULESET_ERR="$(printf '%s' "${payload}" | gh api --method POST "repos/${REPO}/rulesets" --input - 2>&1 >/dev/null)"
 }
 
 read -r -d '' DEVELOP_RULESET <<'JSON' || true
@@ -75,8 +77,13 @@ if apply_ruleset "develop integration policy" "${DEVELOP_RULESET}" \
    && apply_ruleset "main release policy" "${MAIN_RULESET}"; then
   echo "  - rulesets: develop = PR + squash-only; main = PR + merge-commit; both block force-push & deletion"
 else
-  echo "  - rulesets SKIPPED: GitHub branch protection/rulesets require a PUBLIC repo or a paid plan."
-  echo "    Until then, .githooks/pre-commit + the WDR 010 convention enforce the flow."
+  case "${LAST_RULESET_ERR:-}" in
+    *"Upgrade to GitHub Pro"*|*[Uu]pgrade*|*403*)
+      echo "  - rulesets SKIPPED: branch protection/rulesets need a PUBLIC repo or a paid plan (Pro/Team/Enterprise)."
+      echo "    Meanwhile .githooks/pre-commit + the WDR 010 convention enforce the flow." ;;
+    *)
+      echo "  - rulesets FAILED (re-run — a visibility change can take a moment to propagate): ${LAST_RULESET_ERR}" ;;
+  esac
 fi
 
 echo "Done."
