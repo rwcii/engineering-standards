@@ -75,6 +75,13 @@ beginning with WDR 001 (the decision-record taxonomy itself). See the
 
 ## Adopting this in a project
 
+**Quickest start — use the template.** This is a GitHub
+[template repository](https://docs.github.com/articles/creating-a-repository-from-a-template):
+click **Use this template** (or `gh repo create <your-repo> --template rwcii/engineering-standards`)
+to get a fresh repo with these files, then run `scripts/setup-repo.sh` to apply the GitHub
+settings a template does not carry (merge methods, auto-delete, branch-protection rulesets,
+hook path). To adopt into an *existing* repo instead, vendor the pieces manually:
+
 1. **Vendor** `docs/architecture/adr/`, `docs/product/pdr/`,
    `docs/engineering/wdr/`, and `.claude/commands/standards-review.md` into your repo.
 2. **Keep** ADR 001.x as-is (the universal code-architecture standards).
