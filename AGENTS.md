@@ -41,6 +41,8 @@ project's enforcement section, not here.
 | `.claude/skills/standards-audit/` | Skill: mine a repo for candidate ADR/PDR/WDR records |
 | `scripts/setup-repo.sh`       | Apply the branch/merge policy to a GitHub repo (WDR 010) |
 | `.githooks/pre-commit`        | Blocks direct commits to `main` (WDR 010)          |
+| `CONTRIBUTING.md`             | How to fork/extend or contribute back; DCO sign-off (WDR 011) |
+| `.github/PULL_REQUEST_TEMPLATE.md` | Curated-contribution PR checklist             |
 | `LICENSE`                     | MIT © Stratovera                                   |
 
 Each module has its own `AGENTS.md` with the rules specific to that record type —
