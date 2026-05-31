@@ -1,0 +1,139 @@
+---
+wdr: "010"
+title: "Branch & Merge Flow"
+status: accepted
+created: "2026-05-31"
+updated: "2026-05-31"
+parent_wdr: ""
+authors:
+  - "Robert Capps"
+reviewers: []
+supersedes: ""
+superseded_by: ""
+related:
+  - "005"
+tags:
+  - workflow
+---
+
+# WDR 010: Branch & Merge Flow
+
+**Date:** 2026-05-31
+**Status:** Accepted
+**Authors:** Robert Capps
+
+---
+
+## Executive Summary
+
+This is the first **project-specific** WDR for this repository (the universal baseline
+is 001–009; project records begin at 010). It records how changes flow from a working
+branch to the released line: **work happens on a feature branch off `develop`;
+the feature is squash-merged into `develop`; `develop` is merged into `main` with a
+real merge commit; and nothing is ever committed directly to `main`.** The flow keeps
+`main` stable and releasable, gives `develop` a clean one-commit-per-feature history,
+and preserves real release points on `main`.
+
+---
+
+## Table of Contents
+
+1. Problem Context
+2. Decision: Feature → squash → `develop` → merge → `main`
+3. Conclusion
+4. Document History
+
+---
+
+## 1. Problem Context
+
+### The Problem
+
+A long-lived line that everything commits to directly drifts toward instability: a
+half-finished or unreviewed change lands on the released branch, and there is no buffer
+between work-in-progress and what is considered shippable. With agents committing at
+speed, the released line needs an integration buffer and a hard rule that nothing
+reaches it unreviewed.
+
+At the same time, history matters two different ways. The *integration* line wants to
+read as one clean entry per feature, not the dozens of intermediate commits a feature
+accumulates. The *released* line wants to preserve genuine release points — when a
+batch of integrated work was promoted — as real merge commits, so the lineage from
+integration to release is legible.
+
+### Requirements
+
+1. `main` is always releasable; nothing lands on it unreviewed or directly.
+2. Integration history is clean — one entry per feature.
+3. Release points from integration to released are preserved as real merges.
+
+### Scope
+
+This repository's branch and merge policy. It is a project-specific decision (each
+adopting project chooses its own); the universal review gate this flow feeds is WDR
+005.
+
+---
+
+## 2. Decision: Feature → squash → `develop` → merge → `main`
+
+### Decision
+
+- **Feature branches** are cut from `develop`; all work happens there. Nothing is
+  committed directly to `main`.
+- A finished feature is **squash-merged into `develop`** — one clean commit per feature
+  — after passing the independent review gate (WDR 005, base `develop`).
+- `develop` is promoted to `main` with a **regular merge commit** (no squash), so the
+  release point and the develop→main lineage are preserved.
+- `main` receives **only** merge commits from `develop`; it is never committed to or
+  pushed to directly.
+
+### Alternatives Considered
+
+| Alternative | Description | Why Rejected |
+| ----------- | ----------- | ------------ |
+| Trunk-based (commit to `main`) | Commit directly to `main` or via very short-lived branches | No integration buffer; an unreviewed or half-done change lands on the released line — the exact thing to prevent |
+| GitHub flow (feature → `main`) | Feature branches merge straight into `main`, no `develop` | No integration line to stage and validate a batch before release; `main` absorbs every feature directly |
+| Full Gitflow (release/hotfix branches) | Add long-lived release and hotfix branches on top of develop/main | More ceremony than this repo needs; release/hotfix branches add machinery without a matching problem here |
+| Squash into `main` too | Squash-merge `develop` into `main` as well | Erases the develop→main release lineage; `main` loses real merge/release points |
+
+### Rationale
+
+1. A `develop` buffer keeps `main` releasable: only reviewed, integrated work is
+   promoted.
+2. Squash into `develop` makes integration history one legible commit per feature.
+3. A regular merge into `main` preserves genuine release points and the lineage
+   between the two lines.
+4. "Never commit to `main`" is a single, checkable rule that protects the released line
+   by construction.
+
+### Enforcement
+
+- **Branch protection (remote):** `main` and `develop` reject direct pushes and require
+  a reviewed pull request; `develop`'s merge method is squash, `main`'s is a merge
+  commit.
+- **Local guard:** a committed `pre-commit` hook (`.githooks/pre-commit`) blocks a
+  direct (non-merge) commit on `main`; enable it once per clone with
+  `git config core.hooksPath .githooks`.
+- **Review base:** `standards-review` defaults its base branch to `develop`, so a
+  feature is reviewed against what it will merge into.
+- **Compliance:** a change that lands on `main` other than by a merge from `develop`,
+  or a feature reviewed against the wrong base, is a WDR-010 violation finding.
+
+---
+
+## 3. Conclusion
+
+Changes flow feature → squash → `develop` → merge → `main`, and `main` is never
+committed to directly. The `develop` buffer keeps the released line stable, squash
+keeps integration history clean, and the regular merge to `main` preserves real release
+points. Enforcement is branch protection plus a local commit guard, with
+`standards-review` reviewing each feature against `develop`.
+
+---
+
+## Document History
+
+| Date       | Change           |
+| ---------- | ---------------- |
+| 2026-05-31 | Initial creation |
