@@ -144,6 +144,18 @@ All three share the lifecycle `draft → under_review → accepted → modified 
 deprecated/superseded` and the cardinal rules: **no line numbers, no AI/bot
 attribution, no volatile implementation details** — records must stay durable.
 
+## Contributing
+
+Two ways to engage (see [CONTRIBUTING.md](CONTRIBUTING.md); policy in
+[WDR 011](docs/engineering/wdr/011-contribution-and-attestation.md)):
+
+- **Fork and extend — encouraged.** It's MIT and a template: **Use this template** or
+  fork, run `scripts/setup-repo.sh`, and make it yours. No permission needed.
+- **Contribute back — maintainer-curated.** Open an issue first; PRs are by invitation,
+  follow the [WDR 010](docs/engineering/wdr/010-branch-and-merge-flow.md) branch flow,
+  pass `standards-review`, and carry signed commits with a
+  [DCO](https://developercertificate.org/) sign-off (`git commit -s`).
+
 ## License
 
 [MIT](LICENSE) © Stratovera.
