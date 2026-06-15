@@ -14,10 +14,12 @@ It has three record types and a review gate:
   workflow, the agent operating loop, the review/enforcement gates, and the record
   system itself. See [`docs/engineering/wdr/`](docs/engineering/wdr/).
 
-Plus two agent tools: a [`standards-review`](.claude/commands/standards-review.md)
+Plus three agent tools: a [`standards-review`](.claude/commands/standards-review.md)
 command — an independent preflight review agent that checks a branch against the records
-before push/PR — and a [`standards-audit`](.claude/skills/standards-audit/) skill that
-mines an existing repo for decisions that should become ADR/PDR/WDR records.
+before push/PR; a [`standards-audit`](.claude/skills/standards-audit/) skill that
+mines an existing repo for decisions that should become ADR/PDR/WDR records; and a
+[`handoff`](.claude/skills/handoff/) skill that writes an immutable, timestamp-named
+snapshot of the current work's state so the next session or agent can resume with full context.
 
 ## The core idea: principle vs. enforcement
 
@@ -50,7 +52,8 @@ your own enforcement.
     ├── commands/
     │   └── standards-review.md   # independent preflight review protocol
     └── skills/
-        └── standards-audit/      # mine a repo for candidate ADR/PDR/WDR records
+        ├── standards-audit/      # mine a repo for candidate ADR/PDR/WDR records
+        └── handoff/              # write an immutable timestamped session-state snapshot
 ```
 
 ### Baseline records
