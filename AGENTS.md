@@ -47,7 +47,7 @@ project's enforcement section, not here.
 | `.claude/skills/handoff/`     | Skill: snapshot current work state for the next session |
 | `scripts/setup-repo.sh`       | Apply the branch/merge policy to a GitHub repo (WDR 010) |
 | `.githooks/pre-commit`        | Blocks direct commits to `main` (WDR 010)          |
-| `CONTRIBUTING.md`             | How to fork/extend or contribute back; DCO sign-off (WDR 011) |
+| `CONTRIBUTING.md`             | How to fork/extend or contribute back; DCO sign-off |
 | `.github/PULL_REQUEST_TEMPLATE.md` | Curated-contribution PR checklist             |
 | `LICENSE`                     | MIT © Stratovera                                   |
 

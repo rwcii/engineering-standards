@@ -99,10 +99,16 @@ hook path). To adopt into an *existing* repo instead, vendor the pieces manually
    backend-persistence) and ADR 004.x (your data-handling specifics).
 4. **Flesh out** the stubs (ADR 005 Security, 006 Authentication) when those
    decisions are made — or leave them `draft` until then.
-5. **Add** your project's own ADRs from 007+ and your PDRs from 001.
+5. **Add** your project's own ADRs from 007+, your PDRs from 001, and your WDRs from 010.
+   Baseline WDRs 001–009 are universal — keep them. WDR 010 ships as a branch-flow
+   *template* (the worked example of a project-specific WDR): adopt its default flow or
+   replace it with your own.
 6. **Adapt** `standards-review.md`: set your base branch, your build/test gate,
    and the project-specific ADR/PDR/WDR checklist.
-7. **Configure the repo:** run `scripts/setup-repo.sh` to apply the branch/merge policy
+7. **Replace** `CONTRIBUTING.md` and `.github/PULL_REQUEST_TEMPLATE.md` with your own —
+   they govern contributions to the *kit itself*. The DCO section and the PR checklist
+   items are reusable starting points you can keep.
+8. **Configure the repo:** run `scripts/setup-repo.sh` to apply the branch/merge policy
    (merge methods, auto-delete, branch-protection rulesets) and the local hook path —
    the GitHub settings a clone does not inherit.
 
@@ -156,8 +162,7 @@ attribution, no volatile implementation details** — records must stay durable.
 
 ## Contributing
 
-Two ways to engage (see [CONTRIBUTING.md](CONTRIBUTING.md); policy in
-[WDR 011](docs/engineering/wdr/011-contribution-and-attestation.md)):
+Two ways to engage (see [CONTRIBUTING.md](CONTRIBUTING.md)):
 
 - **Fork and extend — encouraged.** It's MIT and a template: **Use this template** or
   fork, run `scripts/setup-repo.sh`, and make it yours. No permission needed.

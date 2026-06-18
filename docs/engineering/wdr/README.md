@@ -27,9 +27,12 @@ because it governs how the team and its agents work — is a WDR.
 The baseline set (001–009) is complete and universal. Project-specific WDRs begin at
 **010**.
 
-## Project-specific (this repository)
+## Project-specific (template — replace with your own)
+
+These slots hold *your project's* workflow decisions, not universal standards. WDR 010
+ships as a **worked example/template** — a recommended default you adopt or replace.
+Renumber, rewrite, or remove them as your project requires; add yours from 010 onward.
 
 | Number | Title | Status |
 | ------ | ----- | ------ |
-| 010    | [Branch & Merge Flow](010-branch-and-merge-flow.md) | Accepted |
-| 011    | [Contribution & Attestation Policy](011-contribution-and-attestation.md) | Accepted |
+| 010    | [Branch & Merge Flow](010-branch-and-merge-flow.md) | Draft (template) |

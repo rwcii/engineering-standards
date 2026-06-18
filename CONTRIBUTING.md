@@ -1,8 +1,15 @@
 # Contributing
 
+> **Adopting this kit?** This file governs contributions to the **engineering-standards
+> kit itself** (the canonical repository). If you vendored the kit — forked it or used
+> *"Use this template"* — **replace this file with your own project's contribution
+> policy**. The Developer Certificate of Origin section below is a reusable starting
+> point you can keep as-is.
+
 Thanks for your interest in **Engineering Standards**. There are two ways to use and
-improve this kit — pick the one that fits. The policy behind this document is recorded
-in [WDR 011](docs/engineering/wdr/011-contribution-and-attestation.md).
+improve this kit — pick the one that fits. This document is the authoritative policy;
+the DCO sign-off below expresses the human-accountability principle of
+[WDR 009](docs/engineering/wdr/009-ai-provenance-and-accountability.md).
 
 ## 1. Fork and extend (encouraged)
 
