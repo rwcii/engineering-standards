@@ -14,12 +14,16 @@ It has three record types and a review gate:
   workflow, the agent operating loop, the review/enforcement gates, and the record
   system itself. See [`docs/engineering/wdr/`](docs/engineering/wdr/).
 
-Plus three agent tools: a [`standards-review`](.claude/commands/standards-review.md)
+Plus a set of agent tools: a [`standards-review`](.claude/commands/standards-review.md)
 command — an independent preflight review agent that checks a branch against the records
 before push/PR; a [`standards-audit`](.claude/skills/standards-audit/) skill that
-mines an existing repo for decisions that should become ADR/PDR/WDR records; and a
-[`handoff`](.claude/skills/handoff/) skill that writes an immutable, timestamp-named
-snapshot of the current work's state so the next session or agent can resume with full context.
+mines an existing repo for decisions that should become ADR/PDR/WDR records; a
+[`record`](.claude/skills/record/) skill that authors and maintains ADR/PDR/WDR records to
+the template and house rules; a [`sprint`](.claude/skills/sprint/) skill that scopes a
+deliverable (decision → definition-of-done → adversarially-reviewed chunk plan) before any
+code is written; and a [`handoff`](.claude/skills/handoff/) skill that writes an immutable,
+timestamp-named snapshot of the current work's state so the next session or agent can resume
+with full context.
 
 ## The core idea: principle vs. enforcement
 
@@ -53,6 +57,8 @@ your own enforcement.
     │   └── standards-review.md   # independent preflight review protocol
     └── skills/
         ├── standards-audit/      # mine a repo for candidate ADR/PDR/WDR records
+        ├── record/              # author & maintain ADR/PDR/WDR records
+        ├── sprint/              # scope a deliverable before building it
         └── handoff/              # write an immutable timestamped session-state snapshot
 ```
 
@@ -86,7 +92,8 @@ settings a template does not carry (merge methods, auto-delete, branch-protectio
 hook path). To adopt into an *existing* repo instead, vendor the pieces manually:
 
 1. **Vendor** `docs/architecture/adr/`, `docs/product/pdr/`,
-   `docs/engineering/wdr/`, and `.claude/commands/standards-review.md` into your repo.
+   `docs/engineering/wdr/`, `.claude/commands/standards-review.md`, and the
+   `.claude/skills/` you want (`standards-audit`, `record`, `sprint`, `handoff`) into your repo.
 2. **Keep** ADR 001.x as-is (the universal code-architecture standards).
 3. **Fill in** the templates for your stack: ADR 002.x (frontend / api /
    backend-persistence) and ADR 004.x (your data-handling specifics).

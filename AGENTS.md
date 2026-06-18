@@ -10,6 +10,9 @@ be **vendored into other projects**. It contains:
 - **WDRs** (`docs/engineering/wdr/`) — how the work is done (workflow, agent operating loop, review/enforcement gates, the record system itself)
 - **`standards-review`** (`.claude/commands/standards-review.md`) — an independent preflight review protocol
 - **`standards-audit`** (`.claude/skills/standards-audit/`) — a skill that mines a repo for candidate ADR/PDR/WDR records
+- **`record`** (`.claude/skills/record/`) — a skill that authors and maintains ADR/PDR/WDR records to template and house rules
+- **`sprint`** (`.claude/skills/sprint/`) — a skill that scopes a deliverable (decision → DoD → chunk plan, adversarially reviewed) before any code
+- **`handoff`** (`.claude/skills/handoff/`) — a skill that writes an immutable, timestamped snapshot of the current work state
 
 ## The One Principle to Internalize
 
@@ -39,6 +42,9 @@ project's enforcement section, not here.
 | `docs/engineering/wdr/`       | WDRs + `WDR_PROCESS.md` + index `README.md`        |
 | `.claude/commands/standards-review.md` | The preflight review protocol             |
 | `.claude/skills/standards-audit/` | Skill: mine a repo for candidate ADR/PDR/WDR records |
+| `.claude/skills/record/`      | Skill: author & maintain ADR/PDR/WDR records       |
+| `.claude/skills/sprint/`      | Skill: scope a deliverable before building it      |
+| `.claude/skills/handoff/`     | Skill: snapshot current work state for the next session |
 | `scripts/setup-repo.sh`       | Apply the branch/merge policy to a GitHub repo (WDR 010) |
 | `.githooks/pre-commit`        | Blocks direct commits to `main` (WDR 010)          |
 | `CONTRIBUTING.md`             | How to fork/extend or contribute back; DCO sign-off (WDR 011) |
