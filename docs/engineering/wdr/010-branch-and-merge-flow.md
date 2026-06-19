@@ -1,9 +1,9 @@
 ---
 wdr: "010"
 title: "Branch & Merge Flow"
-status: accepted
+status: draft
 created: "2026-05-31"
-updated: "2026-05-31"
+updated: "2026-06-16"
 parent_wdr: ""
 authors:
   - "Robert Capps"
@@ -19,20 +19,27 @@ tags:
 # WDR 010: Branch & Merge Flow
 
 **Date:** 2026-05-31
-**Status:** Accepted
+**Status:** Draft (template)
 **Authors:** Robert Capps
+
+> **Template.** Branch and merge flow is a **project-specific** decision — the universal
+> WDR baseline is 001–009, and project records begin here at 010. This record is the
+> *worked example* of a project-specific WDR: it states a recommended default flow that
+> the kit's bundled tooling (`scripts/setup-repo.sh`, `.githooks/pre-commit`) already
+> implements. **Adopt it as your flow, or replace it with your own and adjust the
+> tooling**, then set `status: accepted`. The decision and rationale below describe the
+> default — keep what fits, rewrite what doesn't.
 
 ---
 
 ## Executive Summary
 
-This is the first **project-specific** WDR for this repository (the universal baseline
-is 001–009; project records begin at 010). It records how changes flow from a working
-branch to the released line: **work happens on a feature branch off `develop`;
-the feature is squash-merged into `develop`; `develop` is merged into `main` with a
-real merge commit; and nothing is ever committed directly to `main`.** The flow keeps
-`main` stable and releasable, gives `develop` a clean one-commit-per-feature history,
-and preserves real release points on `main`.
+This record fixes how changes flow from a working branch to the released line. The
+recommended default: **work happens on a feature branch off `develop`; the feature is
+squash-merged into `develop`; `develop` is merged into `main` with a real merge commit;
+and nothing is ever committed directly to `main`.** The flow keeps `main` stable and
+releasable, gives `develop` a clean one-commit-per-feature history, and preserves real
+release points on `main`. A project with different constraints records its own flow here.
 
 ---
 
@@ -69,15 +76,16 @@ integration to release is legible.
 
 ### Scope
 
-This repository's branch and merge policy. It is a project-specific decision (each
-adopting project chooses its own); the universal review gate this flow feeds is WDR
-005.
+A project's branch and merge policy. This is a project-specific decision — each adopting
+project chooses its own; the universal review gate this flow feeds is WDR 005.
 
 ---
 
 ## 2. Decision: Feature → squash → `develop` → merge → `main`
 
 ### Decision
+
+The recommended default flow:
 
 - **Feature branches** are cut from `develop`; all work happens there. Nothing is
   committed directly to `main`.
@@ -94,7 +102,7 @@ adopting project chooses its own); the universal review gate this flow feeds is 
 | ----------- | ----------- | ------------ |
 | Trunk-based (commit to `main`) | Commit directly to `main` or via very short-lived branches | No integration buffer; an unreviewed or half-done change lands on the released line — the exact thing to prevent |
 | GitHub flow (feature → `main`) | Feature branches merge straight into `main`, no `develop` | No integration line to stage and validate a batch before release; `main` absorbs every feature directly |
-| Full Gitflow (release/hotfix branches) | Add long-lived release and hotfix branches on top of develop/main | More ceremony than this repo needs; release/hotfix branches add machinery without a matching problem here |
+| Full Gitflow (release/hotfix branches) | Add long-lived release and hotfix branches on top of develop/main | More ceremony than this default needs; release/hotfix branches add machinery without a matching problem |
 | Squash into `main` too | Squash-merge `develop` into `main` as well | Erases the develop→main release lineage; `main` loses real merge/release points |
 
 ### Rationale
@@ -108,6 +116,8 @@ adopting project chooses its own); the universal review gate this flow feeds is 
    by construction.
 
 ### Enforcement
+
+The bundled tooling implements this default; a project that changes the flow adjusts it.
 
 - **Branch protection (remote):** `main` and `develop` reject direct pushes and require
   a reviewed pull request; `develop`'s merge method is squash, `main`'s is a merge
@@ -129,11 +139,12 @@ adopting project chooses its own); the universal review gate this flow feeds is 
 
 ## 3. Conclusion
 
-Changes flow feature → squash → `develop` → merge → `main`, and `main` is never
-committed to directly. The `develop` buffer keeps the released line stable, squash
-keeps integration history clean, and the regular merge to `main` preserves real release
-points. Enforcement is branch protection plus a local commit guard, with
-`standards-review` reviewing each feature against `develop`.
+The recommended default flows feature → squash → `develop` → merge → `main`, and `main`
+is never committed to directly. The `develop` buffer keeps the released line stable,
+squash keeps integration history clean, and the regular merge to `main` preserves real
+release points. Enforcement is branch protection plus a local commit guard, with
+`standards-review` reviewing each feature against `develop`. A project with different
+needs records its own flow in this slot.
 
 ---
 
@@ -142,3 +153,4 @@ points. Enforcement is branch protection plus a local commit guard, with
 | Date       | Change           |
 | ---------- | ---------------- |
 | 2026-05-31 | Initial creation |
+| 2026-06-16 | Reframed as the project-specific template/worked example — recommended default flow to adopt or replace; removed sibling WDR 011 (contribution policy now lives in `CONTRIBUTING.md`) |

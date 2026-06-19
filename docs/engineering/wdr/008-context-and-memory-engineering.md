@@ -3,7 +3,7 @@ wdr: "008"
 title: "Context & Memory Engineering"
 status: accepted
 created: "2026-05-31"
-updated: "2026-05-31"
+updated: "2026-06-19"
 parent_wdr: ""
 authors:
   - "Robert Capps"
@@ -63,11 +63,11 @@ costing more. The second is **stale carryover**: an agent that inherits a long p
 transcript drags forward superseded conclusions and dead ends, anchoring on
 intermediate states that are no longer true.
 
-Underneath both sits an unstated convention this repository already lives but never
-recorded: `AGENTS.md` as the portable source of truth, `CLAUDE.md` as a thin pointer
-to it, tiered per directory. Every adopting project inherits that layout, yet nothing
-explains why it is shaped that way or what belongs in it — so adopters fill it by
-guess, and it drifts toward bloat.
+Underneath both sits a convention that is widely adopted but rarely recorded:
+`AGENTS.md` as the portable source of truth, `CLAUDE.md` as a thin pointer to it,
+tiered per directory. The layout is inherited wholesale, yet nothing explains why it
+is shaped that way or what belongs in it — so it gets filled by guess, and drifts
+toward bloat.
 
 ### Requirements
 
@@ -148,8 +148,7 @@ Tool-specific entry files are pointers to `AGENTS.md`, never forks of it.
 ### Enforcement
 
 Per project: `AGENTS.md` as the source of truth with `CLAUDE.md` (and any other
-tool's entry file) a thin import; per-directory `AGENTS.md` for local rules; this
-repository ships the convention as its own example.
+tool's entry file) a thin import; per-directory `AGENTS.md` for local rules.
 
 ---
 
@@ -205,3 +204,4 @@ summary mechanics are each adopting project's enforcement.
 | Date       | Change           |
 | ---------- | ---------------- |
 | 2026-05-31 | Initial creation |
+| 2026-06-19 | Generalized convention wording for vendoring; removed self-referential example |
