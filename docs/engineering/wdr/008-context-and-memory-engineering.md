@@ -3,7 +3,7 @@ wdr: "008"
 title: "Context & Memory Engineering"
 status: accepted
 created: "2026-05-31"
-updated: "2026-05-31"
+updated: "2026-06-19"
 parent_wdr: ""
 authors:
   - "Robert Capps"
@@ -204,3 +204,4 @@ summary mechanics are each adopting project's enforcement.
 | Date       | Change           |
 | ---------- | ---------------- |
 | 2026-05-31 | Initial creation |
+| 2026-06-19 | Generalized convention wording for vendoring; removed self-referential example |
