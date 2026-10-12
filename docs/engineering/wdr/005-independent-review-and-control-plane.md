@@ -1,9 +1,9 @@
 ---
 wdr: "005"
 title: "Independent Review & Control-Plane Protection"
-status: accepted
+status: modified
 created: "2026-05-31"
-updated: "2026-05-31"
+updated: "2026-10-12"
 parent_wdr: ""
 authors:
   - "Robert Capps"
@@ -22,7 +22,7 @@ tags:
 # WDR 005: Independent Review & Control-Plane Protection
 
 **Date:** 2026-05-31
-**Status:** Accepted
+**Status:** Modified
 **Authors:** Robert Capps
 
 ---
@@ -33,11 +33,12 @@ The single most load-bearing safeguard in this repository is that a change is
 reviewed by an **independent agent** before it merges — a reviewer with no stake in,
 and no context from, the work that produced it. That idea lives today only as an
 instruction inside `standards-review`; it deserves to be the recorded decision that
-command derives from. This record establishes three things: review independence as a
+command derives from. This record establishes four things: review independence as a
 hard requirement; a **defined merge-gate contract** (a severity taxonomy, what
 blocks versus advises, and how an override is justified) so author and reviewer
-cannot simply disagree on severity; and **heightened protection for the control
-plane** — the records, gates, and review machinery that judge every other change.
+cannot simply disagree on severity; **heightened protection for the control
+plane** — the records, gates, and review machinery that judge every other change; and a
+**source review** that traces every refusal, gate or limit a change adds to a decision.
 
 ---
 
@@ -47,8 +48,9 @@ plane** — the records, gates, and review machinery that judge every other chan
 2. Decision 1: Significant Changes Pass an Independent Review Before Merge
 3. Decision 2: The Merge Gate Has a Defined Pass/Fail Contract
 4. Decision 3: Changes to the Control Plane Get Heightened Review
-5. Conclusion
-6. Document History
+5. Decision 4: New Constraints Pass Their Own Source Review
+6. Conclusion
+7. Document History
 
 ---
 
@@ -69,18 +71,24 @@ the records, CI guards, hooks, and `standards-review` are what judge every chang
 yet an agent can weaken the very guard that would catch its change — in the same
 diff — and nothing flags it.
 
+Agents also add constraints that nobody decided: a scope note becomes "never do X", a
+skill gains "ask before Y", a test asserts a refusal no requirement asked for. A general
+review checks that the change works as written, so these pass; later agents obey them,
+refuse work and ask again for approval the task already gave.
+
 ### Requirements
 
 1. A change is judged by someone other than its author, without the author's context.
 2. "Pass" and "fail" are defined, not improvised per change.
 3. Changes that alter the judging machinery are held to a higher bar than the
    changes it judges.
+4. Every refusal, gate or limit a change adds traces to a decision that covers its case.
 
 ### Scope
 
 Covers the review gate and protection of the control plane. The agent's own
 pre-review verification is WDR 003; test integrity feeding the gate is WDR 004; the
-review protocol's concrete steps live in `standards-review`.
+review protocol's concrete steps live in `standards-review` and `refusal-review`.
 
 ---
 
@@ -193,16 +201,58 @@ changed here.
 
 ---
 
-## 5. Conclusion
+## 5. Decision 4: New Constraints Pass Their Own Source Review
+
+### Decision
+
+Every refusal, prohibition, approval or stop step, cap and exclusion that a change adds or
+changes — in records, plans, agent instructions, skills, docs, tests or code — has a source
+that covers its case: an accepted record, the requirement being delivered, the accountable human's
+quoted decision (WDR 009), or a verified contract or reproduced boundary. An independent reviewer
+checks this in a review of its own, with its own verdict, beside the general review. A
+constraint with no source, one wider than its source, or a proposal written as a decided
+rule is a finding on the Decision 2 scale: when it changes behavior it is high and blocks
+the merge until the constraint is removed, narrowed, cited or recorded, or the finding is
+waived under Decision 2.
+
+**Gate crossed:** merge-time.
+
+### Alternatives Considered
+
+| Alternative | Description | Why Rejected |
+| ----------- | ----------- | ------------ |
+| One item of the general review | Check constraint sources inside `standards-review` | A broad review weighs correctness first; unsourced limits pass because the change works as written |
+| Keyword scan in CI | Fail the build on words such as "never" or "only" | Misses positively phrased limits, tests and code conditions, and blocks legitimate text |
+| Periodic audit only | Find unsourced constraints after they merge | Later agents already read them as rules, refuse work and ask for approvals the task gave |
+
+### Rationale
+
+1. Agents turn a single decision or a scope note into a general rule; the next agent
+   obeys it, refuses work and re-asks for permission. The cost lands after merge, so the
+   check belongs before it.
+2. A separate verdict keeps the question "was this limit decided, and for which case?"
+   from being absorbed into "does the change work?".
+3. Requiring a source does not forbid constraints; it routes each one to a decision.
+
+### Enforcement
+
+Per project: the `refusal-review` skill spawned as a fresh-context agent before push/PR, with its
+verdict wired to the merge gate beside `standards-review`; findings classified on the
+Decision 2 scale.
+
+---
+
+## 6. Conclusion
 
 Independent review is the safeguard the whole kit rests on: a fresh, adversarial
 reviewer judges the change against a defined pass/fail contract, and changes to the
 judging machinery itself are held higher than the changes they judge. This is the
 merge-time counterpart to the agent-time operating loop (WDR 003) and testing
 discipline (WDR 004): the agent verifies its own work, then an independent reviewer
-verifies it again with no shared context. The concrete review protocol, severity
-scale, waiver mechanism, and control-plane guards are each adopting project's
-enforcement, with `standards-review` as the reference implementation.
+verifies it again with no shared context, and every limit the change adds is traced
+to a decision. The concrete review protocol, severity scale, waiver mechanism, and
+control-plane guards are each adopting project's enforcement, with `standards-review`
+and `refusal-review` as the reference implementations.
 
 ---
 
@@ -211,3 +261,4 @@ enforcement, with `standards-review` as the reference implementation.
 | Date       | Change           |
 | ---------- | ---------------- |
 | 2026-05-31 | Initial creation |
+| 2026-10-12 | Decision 4: new constraints pass their own source review (`refusal-review`) |

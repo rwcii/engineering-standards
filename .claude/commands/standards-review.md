@@ -145,8 +145,8 @@ the way it was produced — complies. WDRs govern **how the work is done**:
   reach green? Does a defect fix carry a regression test seen to fail first? Is the change
   scoped, or does it sprawl into unrequested edits?
 - **Independent review & the control plane (WDR 005):** apply **heightened scrutiny to any
-  change to the control plane** — the records, CI guards, hooks, `standards-review` itself,
-  or enforcement config. A weakened, disabled, or removed check is a **high-severity,
+  change to the control plane** — the records, CI guards, hooks, `standards-review` and
+  `refusal-review` themselves, or enforcement config. A weakened, disabled, or removed check is a **high-severity,
   must-justify** finding, and a gate must not be loosened in the same change whose
   violations it would catch.
 - **Autonomy, security, provenance (WDR 006/007/009):** are the autonomy/guardrail,

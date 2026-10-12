@@ -34,8 +34,9 @@ who vendors it:
 - **Follow the branch & merge flow** ([WDR 010](docs/engineering/wdr/010-branch-and-merge-flow.md)):
   branch off `develop`, keep the change scoped (no drive-by edits), and target `develop`
   with a **squash** PR. `develop` is promoted to `main` by the maintainer.
-- **Run the preflight:** `standards-review` against `develop` — it must pass (see
-  [`.claude/commands/standards-review.md`](.claude/commands/standards-review.md)).
+- **Run the preflight:** `standards-review` and `refusal-review` against `develop` — both
+  must pass (see [`.claude/commands/standards-review.md`](.claude/commands/standards-review.md)
+  and [`.claude/skills/refusal-review/`](.claude/skills/refusal-review/)).
 - **Records follow their process docs** (`ADR_PROCESS.md` / `PDR_PROCESS.md` /
   `WDR_PROCESS.md`) and the cardinal rules: no AI/bot attribution, no line numbers or
   volatile details, and every record is a *decision with genuine alternatives*. Use the

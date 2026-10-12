@@ -1,10 +1,10 @@
 # Engineering Standards
 
-A portable, stack-agnostic system of **decision records** and an automated
-**standards-review** gate, designed to be vendored into any project regardless
+A portable, stack-agnostic system of **decision records** and automated
+**standards-review** and **refusal-review** gates, designed to be vendored into any project regardless
 of language or framework.
 
-It has three record types and a review gate:
+It has three record types and two review gates:
 
 - **Architecture Decision Records (ADRs)** — *how the system is built*: structure,
   patterns, boundaries, infrastructure. See [`docs/architecture/adr/`](docs/architecture/adr/).
@@ -16,7 +16,9 @@ It has three record types and a review gate:
 
 Plus a set of agent tools: a [`standards-review`](.claude/commands/standards-review.md)
 command — an independent preflight review agent that checks a branch against the records
-before push/PR; a [`standards-audit`](.claude/skills/standards-audit/) skill that
+before push/PR; a [`refusal-review`](.claude/skills/refusal-review/) skill — an
+independent preflight agent that traces every refusal, gate or limit a branch adds to a
+source; a [`standards-audit`](.claude/skills/standards-audit/) skill that
 mines an existing repo for decisions that should become ADR/PDR/WDR records; a
 [`record`](.claude/skills/record/) skill that authors and maintains ADR/PDR/WDR records to
 the template and house rules; a [`sprint`](.claude/skills/sprint/) skill that scopes a
@@ -57,6 +59,7 @@ your own enforcement.
     │   └── standards-review.md   # independent preflight review protocol
     └── skills/
         ├── standards-audit/      # mine a repo for candidate ADR/PDR/WDR records
+        ├── refusal-review/       # preflight: every new constraint has a source
         ├── record/              # author & maintain ADR/PDR/WDR records
         ├── sprint/              # scope a deliverable before building it
         └── handoff/              # write an immutable timestamped session-state snapshot
@@ -92,8 +95,9 @@ settings a template does not carry (merge methods, auto-delete, branch-protectio
 hook path). To adopt into an *existing* repo instead, vendor the pieces manually:
 
 1. **Vendor** `docs/architecture/adr/`, `docs/product/pdr/`,
-   `docs/engineering/wdr/`, `.claude/commands/standards-review.md`, and the
-   `.claude/skills/` you want (`standards-audit`, `record`, `sprint`, `handoff`) into your repo.
+   `docs/engineering/wdr/`, `.claude/commands/standards-review.md`, the
+   `refusal-review` skill, and the other `.claude/skills/` you want (`standards-audit`,
+   `record`, `sprint`, `handoff`) into your repo.
 2. **Keep** ADR 001.x as-is (the universal code-architecture standards).
 3. **Fill in** the templates for your stack: ADR 002.x (frontend / api /
    backend-persistence) and ADR 004.x (your data-handling specifics).
@@ -104,7 +108,8 @@ hook path). To adopt into an *existing* repo instead, vendor the pieces manually
    *template* (the worked example of a project-specific WDR): adopt its default flow or
    replace it with your own.
 6. **Adapt** `standards-review.md`: set your base branch, your build/test gate,
-   and the project-specific ADR/PDR/WDR checklist.
+   and the project-specific ADR/PDR/WDR checklist. Set the base branch in
+   the `refusal-review` skill too.
 7. **Replace** `CONTRIBUTING.md` and `.github/PULL_REQUEST_TEMPLATE.md` with your own —
    they govern contributions to the *kit itself*. The DCO section and the PR checklist
    items are reusable starting points you can keep.
@@ -168,7 +173,7 @@ Two ways to engage (see [CONTRIBUTING.md](CONTRIBUTING.md)):
   fork, run `scripts/setup-repo.sh`, and make it yours. No permission needed.
 - **Contribute back — maintainer-curated.** Open an issue first; PRs are by invitation,
   follow the [WDR 010](docs/engineering/wdr/010-branch-and-merge-flow.md) branch flow,
-  pass `standards-review`, and carry signed commits with a
+  pass `standards-review` and `refusal-review`, and carry signed commits with a
   [DCO](https://developercertificate.org/) sign-off (`git commit -s`).
 
 ## License

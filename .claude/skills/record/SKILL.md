@@ -7,7 +7,8 @@ description: Create or update a decision record (ADR / PDR / WDR, including poin
 
 Decision records are the source of truth for this repository (AGENTS.md). This skill creates and
 maintains them so the set stays internally consistent, cross-referenced, and house-rule clean.
-It does **not** replace the independent `standards-review` (WDR 005) — run that before pushing.
+It does **not** replace the independent `standards-review` and `refusal-review` (WDR 005) — run
+them before pushing.
 
 > **Adopting this skill:** the authoring discipline below is universal; the concrete pointers are
 > this repo's realization. This template ships the three record types (ADR/PDR/WDR), the per-module
@@ -81,7 +82,8 @@ If a candidate has no genuine alternatives, it is **not a record** — it is a t
 
 1. Run your project's **house-rule lint** if it has one — the cardinal rules above are mechanically
    checkable, and an adopting project supplies the linter/CI gate that enforces them.
-2. When the branch is ready, run the independent `standards-review` (WDR 005) over `develop..HEAD`.
+2. When the branch is ready, run the independent `standards-review` and `refusal-review` (WDR 005)
+   over `develop..HEAD`.
 3. Commit message: `docs(adr): …` / `docs(pdr): …` / `docs(wdr): …`.
 
 ## References
