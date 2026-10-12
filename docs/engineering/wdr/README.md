@@ -18,7 +18,7 @@ because it governs how the team and its agents work — is a WDR.
 | 002    | [Record System as Infrastructure](002-record-system-as-infrastructure.md)    | Accepted |
 | 003    | [Agent Operating Loop](003-agent-operating-loop.md)                          | Accepted |
 | 004    | [Verification & Testing Discipline](004-verification-and-testing-discipline.md) | Accepted |
-| 005    | [Independent Review & Control-Plane Protection](005-independent-review-and-control-plane.md) | Accepted |
+| 005    | [Independent Review & Control-Plane Protection](005-independent-review-and-control-plane.md) | Modified |
 | 006    | [Agent Autonomy & Guardrails](006-agent-autonomy-and-guardrails.md)          | Accepted |
 | 007    | [Agentic Security](007-agentic-security.md)                                  | Accepted |
 | 008    | [Context & Memory Engineering](008-context-and-memory-engineering.md)        | Accepted |

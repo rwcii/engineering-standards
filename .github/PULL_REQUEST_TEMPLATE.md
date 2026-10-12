@@ -19,6 +19,6 @@ Closes #
 - [ ] **Invited** — an issue/discussion exists and there's agreement to proceed (CONTRIBUTING.md)
 - [ ] **Branch flow** — branched off `develop`, targets `develop` as a **squash** PR (WDR 010)
 - [ ] **Scoped** — no unrelated/drive-by edits (WDR 003)
-- [ ] **Preflight** — `standards-review` run against `develop` and passing (WDR 005)
+- [ ] **Preflight** — `standards-review` and `refusal-review` run against `develop` and passing (WDR 005)
 - [ ] **Records** — any ADR/PDR/WDR follows its `*_PROCESS.md` and the cardinal rules (no AI/bot attribution, no line numbers/volatile details, decision-with-alternatives)
 - [ ] **Sign-off** — commits are signed and **DCO signed-off** via `git commit -s` (CONTRIBUTING.md / WDR 009)
