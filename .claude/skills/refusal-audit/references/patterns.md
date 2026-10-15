@@ -1,13 +1,13 @@
 # Refusal trap patterns
 
-Each pattern has a generic example and the usual fix. A match is a candidate. Step 3 and step 4
+Each pattern has an example and the usual fix. A match is a candidate. Step 3 and step 4
 of the skill decide whether it is a trap.
 
 ## Patterns in text
 
-| Pattern | Generic example | Usual fix |
+| Pattern | Example | Usual fix |
 | --- | --- | --- |
-| A plan non-goal becomes a permanent ban | A sprint plan said "nothing types into a terminal" for one sprint. Agents later refused to start other agents. | Mark old plans as historical. Their non-goals limited only that plan. |
+| A plan non-goal becomes a permanent ban | A plan said "no terminal input" as a goal for one milestone. Later agents refused all terminal input, also where the work needed it. | Mark old plans as historical. Their non-goals limited only that plan. |
 | A narrow limit becomes a general ban | "Do not weaken sandbox settings" started as a limit on one workaround. Agents read it as a ban on every permission change. | Narrow the text to its case, or cite the source that sets the case. |
 | A failure report becomes a recovery ban | "Report the failure; do not invent recovery steps" only stopped a false claim of success. Agents stopped all recovery. | Keep "report it"; remove the ban that has no source. |
 | An approval step is copied into many files | "Show the exact diff and get approval before you write" copied into a dozen skills. | Remove the copies. State the real approval rule once, where the owner set it. |
@@ -21,9 +21,9 @@ of the skill decide whether it is a trap.
 
 ## Patterns in code, tests and configuration
 
-| Pattern | Generic example | Usual fix |
+| Pattern | Example | Usual fix |
 | --- | --- | --- |
-| A positive requirement drops a valid case | Membership "by exact session" drops a member after each context reset. Routing "to families with a verified role" excludes one family. | Widen the rule to the real case, with a positive test. |
+| A positive requirement drops a valid case | A membership check keyed to one session ID drops a valid member after a restart. Routing only to roles on a fixed list excludes a valid role. | Widen the rule to the real case, with a positive test. |
 | A code condition refuses with no source | An early return or error code that rejects a valid request. | Find its source. If none, bring it to the owner or remove it with a positive test. |
 | A fallback that hides a refusal | A configured program path with no fallback, or a subagent excluded from a list, with no reason. | Record the reason, or remove the limit. |
 | A check applied before current evidence | A stale lock or fence that refuses work although current state allows it. | Check current state first. |
@@ -36,7 +36,8 @@ of the skill decide whether it is a trap.
 
 ## Candidate search words
 
-Use these to find candidates. Add the words of your project's own language. A match is not a
+Save the block below as `patterns.txt`, one pattern for each line, and pass it to `git grep -f`.
+Add the words of your project's own language. A match is a candidate. It is not a
 finding.
 
 ```text

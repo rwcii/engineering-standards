@@ -2,6 +2,10 @@
 
 ## Source kinds that can cover a constraint
 
+These are the source kinds of the `refusal-review` skill. In the Engineering Standards kit, they
+are those of WDR 005, Decision 4. They are repeated here so that the audit works when you copy
+this skill alone. If your project defines its own source kinds, use those.
+
 1. **A decision record** whose scope includes the case, at the status that its header gives. A
    draft or proposed record is not a decision.
 2. **The requirement of the issue or plan** that the work delivers. It covers that work, not

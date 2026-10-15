@@ -18,7 +18,8 @@ Plus a set of agent tools: a [`standards-review`](.claude/commands/standards-rev
 command — an independent preflight review agent that checks a branch against the records
 before push/PR; a [`refusal-review`](.claude/skills/refusal-review/) skill — an
 independent preflight agent that traces every refusal, gate or limit a branch adds to a
-source; a [`refusal-audit`](.claude/skills/refusal-audit/) skill, run once on request, that audits a whole existing
+source; a [`refusal-audit`](.claude/skills/refusal-audit/) skill, run once on request,
+that audits a whole existing
 repo for refusal traps already in it and proposes a fix for each root cause; a
 [`standards-audit`](.claude/skills/standards-audit/) skill that
 mines an existing repo for decisions that should become ADR/PDR/WDR records; a
@@ -100,7 +101,8 @@ hook path). To adopt into an *existing* repo instead, vendor the pieces manually
 1. **Vendor** `docs/architecture/adr/`, `docs/product/pdr/`,
    `docs/engineering/wdr/`, `.claude/commands/standards-review.md`, the
    `refusal-review` skill, and the other `.claude/skills/` you want (`standards-audit`,
-   `record`, `sprint`, `handoff`) into your repo.
+   `refusal-audit`, `record`, `sprint`, `handoff`) into your repo. Keep the `LICENSE` file
+   in the `refusal-audit` folder.
 2. **Keep** ADR 001.x as-is (the universal code-architecture standards).
 3. **Fill in** the templates for your stack: ADR 002.x (frontend / api /
    backend-persistence) and ADR 004.x (your data-handling specifics).

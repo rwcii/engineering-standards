@@ -40,7 +40,8 @@ One block for each root that is not "keep".
 
 ## owner-decisions.md
 
-Only the items that need the owner. One item at a time, each with a recommendation.
+Only the items that need the owner, each with a recommendation. If a second reader ran, also list
+each point where the readers still disagree.
 
 ```markdown
 ## Recommendation: <the action, in one line>

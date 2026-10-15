@@ -5,8 +5,11 @@ description: "Audit a whole repository for refusal traps: text, settings, hooks,
 
 # Refusal audit
 
-Read the project's root instructions first. Also read the instruction file of its skill
-directory, when one exists. Follow the procedures that they name.
+Read the project's root instructions first. If the project keeps an instruction file for its
+skills, such as `agents/skills/AGENTS.md`, read it too. Follow the procedures that they name.
+
+In this skill, the **owner** is the human who is accountable for the project. Where the project
+names an authorizing principal or a maintainer instead, use that person.
 
 ## What this audit finds
 
@@ -33,8 +36,15 @@ A trap can be in any of these carriers:
 This is a one-time audit that you run by hand, on request. The agent that receives the request
 runs it locally, from start to end. It is not a CI job or a merge check.
 
-This audit is the whole-repository partner of a diff-level refusal review. The review stops new
-traps in each change. The audit finds the traps that are already in the repository.
+The audit applies one rule to the content that is already in a repository: each constraint
+needs a source that covers its case. In the Engineering Standards kit, that rule is WDR 005,
+Decision 4. The diff-level partner of this audit is the `refusal-review` skill, or your
+project's equivalent. That review checks only what each change adds or changes.
+
+## Adopting this skill
+
+Nothing needs configuration. Step 1 builds the authority map of the project at run time. Keep
+the `LICENSE` file in this folder when you copy the skill.
 
 ## What a trap is not
 
@@ -72,8 +82,8 @@ Outputs, in the audit's artifact folder (step 1):
 2. Choose the artifact folder for the audit, and set `out` to it. Use the place that the project
    names for private working files, such as an ignored task folder. If it names none, use a
    folder outside the repository. The inventory can quote private sessions or messages. Keep the
-   original evidence unchanged. Keep raw sessions and private IDs out of any report that you
-   publish.
+   original evidence unchanged. Keep secrets out of any report that you publish. Follow the
+   project's rules for private data.
 3. Record the owner's request with its date. The request authorizes the audit and its report.
    Fixes, pushes, settings changes and publication follow the authority of the task and the
    project's normal process (step 9). This audit adds no approval step to them.
@@ -92,12 +102,13 @@ Outputs, in the audit's artifact folder (step 1):
 
 2. Read the high-impact carriers in full: the root instruction files, every skill, every
    procedure, the agent settings and the hooks. Do not rely on a search for these.
-3. Search the other files for candidate words. Use the list in
-   [references/patterns.md](references/patterns.md). A search finds candidates only. It is not
-   the audit. It misses positively phrased rules, tests and code conditions.
+3. Search the other files for candidate words. Save the word list in
+   [references/patterns.md](references/patterns.md) as `"$out/patterns.txt"`, one pattern for
+   each line. A search finds candidates only. It is not the audit. It misses positively phrased
+   rules, tests and code conditions.
 
    ```sh
-   git grep -n -i -E '<pattern list>' <hash> -- . > "$out/candidates.txt"
+   git grep -n -i -E -f "$out/patterns.txt" <hash> -- . > "$out/candidates.txt"
    ```
 
 4. Prove that each search can fail. Run the same search on a file with a known match. Confirm
@@ -175,7 +186,8 @@ Give each root one disposition:
 
 Before you propose to remove a restriction, check whether the owner set it in their own words.
 Some restrictions are the owner's own, for example a rule against new tools or languages
-without approval. Those stay unless the owner changes them.
+without approval. Those stay inside the case that the owner's words answered, unless the owner
+changes them. Text that is wider than that case is "narrow".
 
 ## Step 8: Write the fix proposals
 
@@ -191,8 +203,8 @@ For each root that is not "keep", write one proposal with:
 For a removed code condition or test, add a positive test that shows that the intended work now
 runs. For a removed guard that looks like a check, name it and give the reason in the change.
 
-If you work with a peer agent, agree the proposals with it before the owner sees them. Bring the
-owner only the items that need the owner's decision, one at a time, each with a recommendation.
+Put the items that need the owner's decision in `owner-decisions.md`, each with a
+recommendation. If a second reader ran, also list each point where the readers still disagree.
 
 ## Step 9: Deliver the fixes
 
@@ -206,10 +218,11 @@ Do this step when the task includes the fixes.
 5. Do not add an unsourced rule while you remove an old one. Cite the source, or describe the
    current behavior with its reason ("the tool does X because Y"). Where the remedy is a change
    to the owning record, make it through that record's own approval.
-6. If the project has a diff-level refusal review, run it on each fix.
-7. If a tool refuses an action, record its exact message and its kind. Leave the refused action
-   undone. Do not do it another way, and do not ask a peer to do it. Continue the work that does
-   not depend on it.
+6. Run the project's diff-level refusal review on each fix, if it has one.
+7. If a policy or a setting refuses an action, record its exact message and its source. Do not
+   get around it by another path or through a peer. Use the tool's own approval flow, or report
+   the refusal. For an input or system error, correct the cause and try again. Continue the work
+   that does not depend on the refused action.
 8. Close out. Give every inventory row a final disposition. Record the actual outcome of each
    fix: its review, its merge and its tracker item.
 
@@ -232,5 +245,4 @@ Do this step when the task includes the fixes.
 The method is adapted from the public Koinon project, https://github.com/rwcii/koinon, at
 commit `8f366cb37e4eeaf29241e6e11486a1f1ae13013d`. Its sources are the `refusal-review` skill
 (`agents/skills/refusal-review/SKILL.md`) and the decision-record practice of that project.
-Koinon uses the MIT license. The license notice is in [LICENSE](LICENSE). The method also uses
-the lessons of two repository-wide refusal sweeps.
+Koinon uses the MIT license. The license notice is in [LICENSE](LICENSE).
