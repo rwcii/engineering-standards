@@ -1,3 +1,8 @@
+---
+name: standards-review
+description: Independent preflight that reviews every change on the current branch against the ADR, PDR and WDR records before push or pull request, in a fresh context with no prior conversation. Use before push/PR beside refusal-review, or when asked for a standards review of a branch.
+---
+
 # Standards Review — Preflight Check
 
 Perform a comprehensive architecture, product, and code review of all changes on the
@@ -5,10 +10,11 @@ current branch compared to the base branch. This review is a preflight gate befo
 push/PR.
 
 **This review MUST be performed by a separate agent** with no prior context from the
-working conversation. Spawn it via the Agent tool so it gives an independent assessment.
+working conversation. Start it in a fresh context, such as a subagent or a new agent session, so
+it gives an independent assessment.
 The agent must follow every instruction below exactly.
 
-> **Adopting this command:** this is a stack-agnostic skeleton. Set your base branch
+> **Adopting this skill:** this is a stack-agnostic skeleton. Set your base branch
 > default below, point the test/build references at your project's gate (recorded in ADR
 > 002.x), and — optionally — add a project-specific ADR/PDR/WDR checklist table to Phase 2.
 > The mandatory protocol and the phase structure are universal; the concrete checks come

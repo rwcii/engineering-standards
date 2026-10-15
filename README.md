@@ -14,8 +14,8 @@ It has three record types and two review gates:
   workflow, the agent operating loop, the review/enforcement gates, and the record
   system itself. See [`docs/engineering/wdr/`](docs/engineering/wdr/).
 
-Plus a set of agent tools: a [`standards-review`](.claude/commands/standards-review.md)
-command — an independent preflight review agent that checks a branch against the records
+Plus a set of agent skills: a [`standards-review`](agents/skills/standards-review/)
+skill — an independent preflight review agent that checks a branch against the records
 before push/PR; a [`refusal-review`](agents/skills/refusal-review/) skill — an
 independent preflight agent that traces every refusal, gate or limit a branch adds to a
 source; a [`refusal-audit`](agents/skills/refusal-audit/) skill, run once on request,
@@ -59,6 +59,7 @@ your own enforcement.
 │   └── pre-commit            # blocks direct commits to main (WDR 010)
 ├── agents/
 │   └── skills/               # the one home of the skills, for every agent
+│       ├── standards-review/     # independent preflight review protocol
 │       ├── standards-audit/      # mine a repo for candidate ADR/PDR/WDR records
 │       ├── refusal-review/       # preflight: every new constraint has a source
 │       ├── refusal-audit/        # one-time audit of a whole repo for existing refusal traps
@@ -66,8 +67,6 @@ your own enforcement.
 │       ├── sprint/               # scope a deliverable before building it
 │       └── handoff/              # write an immutable timestamped session-state snapshot
 ├── .claude/
-│   ├── commands/
-│   │   └── standards-review.md   # independent preflight review protocol
 │   └── skills -> ../agents/skills    # Claude Code discovery link
 ├── .agents/
 │   └── skills -> ../agents/skills    # Codex repository discovery link
@@ -110,7 +109,7 @@ settings a template does not carry (merge methods, auto-delete, branch-protectio
 hook path). To adopt into an *existing* repo instead, vendor the pieces manually:
 
 1. **Vendor** `docs/architecture/adr/`, `docs/product/pdr/`,
-   `docs/engineering/wdr/`, `.claude/commands/standards-review.md`, the
+   `docs/engineering/wdr/`, the `standards-review` skill, the
    `refusal-review` skill, and the other `agents/skills/` you want (`standards-audit`,
    `refusal-audit`, `record`, `sprint`, `handoff`) into your repo. Keep the `LICENSE` file
    in the `refusal-audit` folder. Add the relative links `.claude/skills`, `.agents/skills`
@@ -124,7 +123,8 @@ hook path). To adopt into an *existing* repo instead, vendor the pieces manually
    Baseline WDRs 001–009 are universal — keep them. WDR 010 ships as a branch-flow
    *template* (the worked example of a project-specific WDR): adopt its default flow or
    replace it with your own.
-6. **Adapt** `standards-review.md`: set your base branch, your build/test gate,
+6. **Adapt** the `standards-review` skill (`agents/skills/standards-review/SKILL.md`): set
+   your base branch, your build/test gate,
    and the project-specific ADR/PDR/WDR checklist. Set the base branch in
    the `refusal-review` skill too.
 7. **Replace** `CONTRIBUTING.md` and `.github/PULL_REQUEST_TEMPLATE.md` with your own —

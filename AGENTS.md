@@ -8,7 +8,7 @@ be **vendored into other projects**. It contains:
 - **ADRs** (`docs/architecture/adr/`) — how a system is built (structure, patterns, boundaries)
 - **PDRs** (`docs/product/pdr/`) — how a product behaves (flows, UX contracts, voice)
 - **WDRs** (`docs/engineering/wdr/`) — how the work is done (workflow, agent operating loop, review/enforcement gates, the record system itself)
-- **`standards-review`** (`.claude/commands/standards-review.md`) — an independent preflight review protocol
+- **`standards-review`** (`agents/skills/standards-review/`) — a skill: an independent preflight review protocol
 - **`refusal-review`** (`agents/skills/refusal-review/`) — a skill: an independent preflight that traces every new refusal, gate or limit to a source
 - **`refusal-audit`** (`agents/skills/refusal-audit/`) — a skill: a one-time audit, on request, of a whole repo for refusal traps already in it (WDR 005)
 - **`standards-audit`** (`agents/skills/standards-audit/`) — a skill that mines a repo for candidate ADR/PDR/WDR records
@@ -42,7 +42,7 @@ project's enforcement section, not here.
 | `docs/architecture/adr/`      | ADRs + `ADR_PROCESS.md` + index `README.md`        |
 | `docs/product/pdr/`           | PDRs + `PDR_PROCESS.md` + index `README.md`        |
 | `docs/engineering/wdr/`       | WDRs + `WDR_PROCESS.md` + index `README.md`        |
-| `.claude/commands/standards-review.md` | The preflight review protocol             |
+| `agents/skills/standards-review/` | Skill: the preflight review protocol             |
 | `agents/skills/`              | The one home of the skills, for every agent (WDR 008) |
 | `.claude/skills`, `.agents/skills`, `.codex/skills` | Relative symlinks to `../agents/skills`, so Claude Code and Codex find the same skills |
 | `agents/skills/refusal-review/` | Skill: preflight that every new constraint has a source (WDR 005) |

@@ -35,7 +35,7 @@ who vendors it:
   branch off `develop`, keep the change scoped (no drive-by edits), and target `develop`
   with a **squash** PR. `develop` is promoted to `main` by the maintainer.
 - **Run the preflight:** `standards-review` and `refusal-review` against `develop` — both
-  must pass (see [`.claude/commands/standards-review.md`](.claude/commands/standards-review.md)
+  must pass (see [`agents/skills/standards-review/`](agents/skills/standards-review/)
   and [`agents/skills/refusal-review/`](agents/skills/refusal-review/)).
 - **Records follow their process docs** (`ADR_PROCESS.md` / `PDR_PROCESS.md` /
   `WDR_PROCESS.md`) and the cardinal rules: no AI/bot attribution, no line numbers or
