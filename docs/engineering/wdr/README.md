@@ -18,7 +18,7 @@ because it governs how the team and its agents work — is a WDR.
 | 002    | [Record System as Infrastructure](002-record-system-as-infrastructure.md)    | Accepted |
 | 003    | [Agent Operating Loop](003-agent-operating-loop.md)                          | Accepted |
 | 004    | [Verification & Testing Discipline](004-verification-and-testing-discipline.md) | Accepted |
-| 005    | [Independent Review & Control-Plane Protection](005-independent-review-and-control-plane.md) | Accepted |
+| 005    | [Independent Review & Control-Plane Protection](005-independent-review-and-control-plane.md) | Modified |
 | 006    | [Agent Autonomy & Guardrails](006-agent-autonomy-and-guardrails.md)          | Accepted |
 | 007    | [Agentic Security](007-agentic-security.md)                                  | Accepted |
 | 008    | [Context & Memory Engineering](008-context-and-memory-engineering.md)        | Accepted |
@@ -27,9 +27,12 @@ because it governs how the team and its agents work — is a WDR.
 The baseline set (001–009) is complete and universal. Project-specific WDRs begin at
 **010**.
 
-## Project-specific (this repository)
+## Project-specific (template — replace with your own)
+
+These slots hold *your project's* workflow decisions, not universal standards. WDR 010
+ships as a **worked example/template** — a recommended default you adopt or replace.
+Renumber, rewrite, or remove them as your project requires; add yours from 010 onward.
 
 | Number | Title | Status |
 | ------ | ----- | ------ |
-| 010    | [Branch & Merge Flow](010-branch-and-merge-flow.md) | Accepted |
-| 011    | [Contribution & Attestation Policy](011-contribution-and-attestation.md) | Accepted |
+| 010    | [Branch & Merge Flow](010-branch-and-merge-flow.md) | Draft (template) |

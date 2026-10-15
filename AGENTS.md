@@ -8,8 +8,13 @@ be **vendored into other projects**. It contains:
 - **ADRs** (`docs/architecture/adr/`) — how a system is built (structure, patterns, boundaries)
 - **PDRs** (`docs/product/pdr/`) — how a product behaves (flows, UX contracts, voice)
 - **WDRs** (`docs/engineering/wdr/`) — how the work is done (workflow, agent operating loop, review/enforcement gates, the record system itself)
-- **`standards-review`** (`.claude/commands/standards-review.md`) — an independent preflight review protocol
-- **`standards-audit`** (`.claude/skills/standards-audit/`) — a skill that mines a repo for candidate ADR/PDR/WDR records
+- **`standards-review`** (`agents/skills/standards-review/`) — a skill: an independent preflight review protocol
+- **`refusal-review`** (`agents/skills/refusal-review/`) — a skill: an independent preflight that traces every new refusal, gate or limit to a source
+- **`refusal-audit`** (`agents/skills/refusal-audit/`) — a skill: a one-time audit, on request, of a whole repo for refusal traps already in it (WDR 005)
+- **`standards-audit`** (`agents/skills/standards-audit/`) — a skill that mines a repo for candidate ADR/PDR/WDR records
+- **`record`** (`agents/skills/record/`) — a skill that authors and maintains ADR/PDR/WDR records to template and house rules
+- **`sprint`** (`agents/skills/sprint/`) — a skill that scopes a deliverable (decision → DoD → chunk plan, adversarially reviewed) before any code
+- **`handoff`** (`agents/skills/handoff/`) — a skill that writes an immutable, timestamped snapshot of the current work state
 
 ## The One Principle to Internalize
 
@@ -37,11 +42,18 @@ project's enforcement section, not here.
 | `docs/architecture/adr/`      | ADRs + `ADR_PROCESS.md` + index `README.md`        |
 | `docs/product/pdr/`           | PDRs + `PDR_PROCESS.md` + index `README.md`        |
 | `docs/engineering/wdr/`       | WDRs + `WDR_PROCESS.md` + index `README.md`        |
-| `.claude/commands/standards-review.md` | The preflight review protocol             |
-| `.claude/skills/standards-audit/` | Skill: mine a repo for candidate ADR/PDR/WDR records |
+| `agents/skills/standards-review/` | Skill: the preflight review protocol             |
+| `agents/skills/`              | The one home of the skills, for every agent (WDR 008) |
+| `.claude/skills`, `.agents/skills`, `.codex/skills` | Relative symlinks to `../agents/skills`, so Claude Code and Codex find the same skills |
+| `agents/skills/refusal-review/` | Skill: preflight that every new constraint has a source (WDR 005) |
+| `agents/skills/refusal-audit/` | Skill: one-time audit, on request, of a whole repo for refusal traps already in it (WDR 005; MIT notice of its source in the folder) |
+| `agents/skills/standards-audit/` | Skill: mine a repo for candidate ADR/PDR/WDR records |
+| `agents/skills/record/`      | Skill: author & maintain ADR/PDR/WDR records       |
+| `agents/skills/sprint/`      | Skill: scope a deliverable before building it      |
+| `agents/skills/handoff/`     | Skill: snapshot current work state for the next session |
 | `scripts/setup-repo.sh`       | Apply the branch/merge policy to a GitHub repo (WDR 010) |
 | `.githooks/pre-commit`        | Blocks direct commits to `main` (WDR 010)          |
-| `CONTRIBUTING.md`             | How to fork/extend or contribute back; DCO sign-off (WDR 011) |
+| `CONTRIBUTING.md`             | How to fork/extend or contribute back; DCO sign-off |
 | `.github/PULL_REQUEST_TEMPLATE.md` | Curated-contribution PR checklist             |
 | `LICENSE`                     | MIT © Stratovera                                   |
 

@@ -1,3 +1,8 @@
+---
+name: standards-review
+description: Independent preflight that reviews every change on the current branch against the ADR, PDR and WDR records before push or pull request, in a fresh context with no prior conversation. Use before push/PR beside refusal-review, or when asked for a standards review of a branch.
+---
+
 # Standards Review — Preflight Check
 
 Perform a comprehensive architecture, product, and code review of all changes on the
@@ -5,10 +10,11 @@ current branch compared to the base branch. This review is a preflight gate befo
 push/PR.
 
 **This review MUST be performed by a separate agent** with no prior context from the
-working conversation. Spawn it via the Agent tool so it gives an independent assessment.
+working conversation. Start it in a fresh context, such as a subagent or a new agent session, so
+it gives an independent assessment.
 The agent must follow every instruction below exactly.
 
-> **Adopting this command:** this is a stack-agnostic skeleton. Set your base branch
+> **Adopting this skill:** this is a stack-agnostic skeleton. Set your base branch
 > default below, point the test/build references at your project's gate (recorded in ADR
 > 002.x), and — optionally — add a project-specific ADR/PDR/WDR checklist table to Phase 2.
 > The mandatory protocol and the phase structure are universal; the concrete checks come
@@ -28,7 +34,7 @@ The review agent receives the full instructions below. Do NOT summarize or abbre
 
 These rules override everything else. Violation of any rule invalidates the entire review.
 
-1. **READ THE ACTUAL CODE.** You must `Read` every changed file in full before making
+1. **READ THE ACTUAL CODE.** You must read every changed file in full before making
    any assessment. If you have not read a file, you may not comment on it, reference it,
    or include it in findings. Skimming grep output or file listings is not reading.
 
@@ -68,7 +74,7 @@ git log $(git merge-base HEAD $BASE_BRANCH)...HEAD --oneline
 ```
 
 1. Run the commands above to identify all changed files and commits.
-2. **Read EVERY changed file completely** with the Read tool — not grep, not search.
+2. **Read EVERY changed file completely** with a file read — not grep, not search.
 3. Identify the **applicable records**: read the ADR, PDR, and WDR indexes (each
    module's `README.md`) and select the records whose scope the change touches — by tag,
    area, and change type — then deep-read the selected records in full (per WDR 002). You
@@ -145,8 +151,8 @@ the way it was produced — complies. WDRs govern **how the work is done**:
   reach green? Does a defect fix carry a regression test seen to fail first? Is the change
   scoped, or does it sprawl into unrequested edits?
 - **Independent review & the control plane (WDR 005):** apply **heightened scrutiny to any
-  change to the control plane** — the records, CI guards, hooks, `standards-review` itself,
-  or enforcement config. A weakened, disabled, or removed check is a **high-severity,
+  change to the control plane** — the records, CI guards, hooks, `standards-review` and
+  `refusal-review` themselves, or enforcement config. A weakened, disabled, or removed check is a **high-severity,
   must-justify** finding, and a gate must not be loosened in the same change whose
   violations it would catch.
 - **Autonomy, security, provenance (WDR 006/007/009):** are the autonomy/guardrail,
