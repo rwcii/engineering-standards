@@ -11,7 +11,8 @@ that each one has a source that covers its case. This review is a preflight gate
 push/PR and runs beside `standards-review`, with its own verdict (WDR 005, Decision 4).
 
 **This review MUST be performed by a separate agent** with no prior context from the
-working conversation. Spawn it via the Agent tool so it gives an independent assessment.
+working conversation. Start it in a fresh context, such as a subagent or a new agent session, so
+it gives an independent assessment.
 The agent must follow every instruction below exactly.
 
 > **Adopting this skill:** this is a stack-agnostic skeleton. Set your base branch
