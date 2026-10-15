@@ -75,9 +75,9 @@ your own enforcement.
 ```
 
 The skills live once, in `agents/skills/`. Each agent finds them through a relative symlink
-in its own folder, so every agent reads the same files (WDR 008, Decision 2). When you vendor
-the skills, keep `agents/skills/` as the real folder and recreate the links. A link must stay
-relative, so that it works in every clone.
+in its own folder, so every agent reads the same files. This applies the principle of WDR 008,
+Decision 2. When you vendor the skills, keep `agents/skills/` as the real folder and recreate
+the links. A link must stay relative, so that it works in every clone.
 
 ### Baseline records
 

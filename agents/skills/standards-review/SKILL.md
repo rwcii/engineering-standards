@@ -34,7 +34,7 @@ The review agent receives the full instructions below. Do NOT summarize or abbre
 
 These rules override everything else. Violation of any rule invalidates the entire review.
 
-1. **READ THE ACTUAL CODE.** You must `Read` every changed file in full before making
+1. **READ THE ACTUAL CODE.** You must read every changed file in full before making
    any assessment. If you have not read a file, you may not comment on it, reference it,
    or include it in findings. Skimming grep output or file listings is not reading.
 
@@ -74,7 +74,7 @@ git log $(git merge-base HEAD $BASE_BRANCH)...HEAD --oneline
 ```
 
 1. Run the commands above to identify all changed files and commits.
-2. **Read EVERY changed file completely** with the Read tool — not grep, not search.
+2. **Read EVERY changed file completely** with a file read — not grep, not search.
 3. Identify the **applicable records**: read the ADR, PDR, and WDR indexes (each
    module's `README.md`) and select the records whose scope the change touches — by tag,
    area, and change type — then deep-read the selected records in full (per WDR 002). You
