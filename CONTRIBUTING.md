@@ -36,7 +36,7 @@ who vendors it:
   with a **squash** PR. `develop` is promoted to `main` by the maintainer.
 - **Run the preflight:** `standards-review` and `refusal-review` against `develop` — both
   must pass (see [`.claude/commands/standards-review.md`](.claude/commands/standards-review.md)
-  and [`.claude/skills/refusal-review/`](.claude/skills/refusal-review/)).
+  and [`agents/skills/refusal-review/`](agents/skills/refusal-review/)).
 - **Records follow their process docs** (`ADR_PROCESS.md` / `PDR_PROCESS.md` /
   `WDR_PROCESS.md`) and the cardinal rules: no AI/bot attribution, no line numbers or
   volatile details, and every record is a *decision with genuine alternatives*. Use the

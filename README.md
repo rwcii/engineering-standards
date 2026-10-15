@@ -16,17 +16,17 @@ It has three record types and two review gates:
 
 Plus a set of agent tools: a [`standards-review`](.claude/commands/standards-review.md)
 command — an independent preflight review agent that checks a branch against the records
-before push/PR; a [`refusal-review`](.claude/skills/refusal-review/) skill — an
+before push/PR; a [`refusal-review`](agents/skills/refusal-review/) skill — an
 independent preflight agent that traces every refusal, gate or limit a branch adds to a
-source; a [`refusal-audit`](.claude/skills/refusal-audit/) skill, run once on request,
+source; a [`refusal-audit`](agents/skills/refusal-audit/) skill, run once on request,
 that audits a whole existing
 repo for refusal traps already in it and proposes a fix for each root cause; a
-[`standards-audit`](.claude/skills/standards-audit/) skill that
+[`standards-audit`](agents/skills/standards-audit/) skill that
 mines an existing repo for decisions that should become ADR/PDR/WDR records; a
-[`record`](.claude/skills/record/) skill that authors and maintains ADR/PDR/WDR records to
-the template and house rules; a [`sprint`](.claude/skills/sprint/) skill that scopes a
+[`record`](agents/skills/record/) skill that authors and maintains ADR/PDR/WDR records to
+the template and house rules; a [`sprint`](agents/skills/sprint/) skill that scopes a
 deliverable (decision → definition-of-done → adversarially-reviewed chunk plan) before any
-code is written; and a [`handoff`](.claude/skills/handoff/) skill that writes an immutable,
+code is written; and a [`handoff`](agents/skills/handoff/) skill that writes an immutable,
 timestamp-named snapshot of the current work's state so the next session or agent can resume
 with full context.
 
@@ -57,17 +57,28 @@ your own enforcement.
 │   └── setup-repo.sh         # apply the branch/merge policy to a GitHub repo (WDR 010)
 ├── .githooks/
 │   └── pre-commit            # blocks direct commits to main (WDR 010)
-└── .claude/
-    ├── commands/
-    │   └── standards-review.md   # independent preflight review protocol
-    └── skills/
-        ├── standards-audit/      # mine a repo for candidate ADR/PDR/WDR records
-        ├── refusal-review/       # preflight: every new constraint has a source
-        ├── refusal-audit/        # one-time audit of a whole repo for existing refusal traps
-        ├── record/              # author & maintain ADR/PDR/WDR records
-        ├── sprint/              # scope a deliverable before building it
-        └── handoff/              # write an immutable timestamped session-state snapshot
+├── agents/
+│   └── skills/               # the one home of the skills, for every agent
+│       ├── standards-audit/      # mine a repo for candidate ADR/PDR/WDR records
+│       ├── refusal-review/       # preflight: every new constraint has a source
+│       ├── refusal-audit/        # one-time audit of a whole repo for existing refusal traps
+│       ├── record/               # author & maintain ADR/PDR/WDR records
+│       ├── sprint/               # scope a deliverable before building it
+│       └── handoff/              # write an immutable timestamped session-state snapshot
+├── .claude/
+│   ├── commands/
+│   │   └── standards-review.md   # independent preflight review protocol
+│   └── skills -> ../agents/skills    # Claude Code discovery link
+├── .agents/
+│   └── skills -> ../agents/skills    # Codex repository discovery link
+└── .codex/
+    └── skills -> ../agents/skills    # Codex discovery link
 ```
+
+The skills live once, in `agents/skills/`. Each agent finds them through a relative symlink
+in its own folder, so every agent reads the same files (WDR 008, Decision 2). When you vendor
+the skills, keep `agents/skills/` as the real folder and recreate the links. A link must stay
+relative, so that it works in every clone.
 
 ### Baseline records
 
@@ -100,9 +111,10 @@ hook path). To adopt into an *existing* repo instead, vendor the pieces manually
 
 1. **Vendor** `docs/architecture/adr/`, `docs/product/pdr/`,
    `docs/engineering/wdr/`, `.claude/commands/standards-review.md`, the
-   `refusal-review` skill, and the other `.claude/skills/` you want (`standards-audit`,
+   `refusal-review` skill, and the other `agents/skills/` you want (`standards-audit`,
    `refusal-audit`, `record`, `sprint`, `handoff`) into your repo. Keep the `LICENSE` file
-   in the `refusal-audit` folder.
+   in the `refusal-audit` folder. Add the relative links `.claude/skills`, `.agents/skills`
+   and `.codex/skills` to `../agents/skills`, so that each agent finds the skills.
 2. **Keep** ADR 001.x as-is (the universal code-architecture standards).
 3. **Fill in** the templates for your stack: ADR 002.x (frontend / api /
    backend-persistence) and ADR 004.x (your data-handling specifics).
@@ -185,6 +197,6 @@ Two ways to engage (see [CONTRIBUTING.md](CONTRIBUTING.md)):
 
 [MIT](LICENSE) © Stratovera.
 
-The [`refusal-audit`](.claude/skills/refusal-audit/) skill adapts its method from the
+The [`refusal-audit`](agents/skills/refusal-audit/) skill adapts its method from the
 [Koinon](https://github.com/rwcii/koinon) `refusal-review` skill, also MIT licensed. Its folder
 carries the Koinon license notice.
