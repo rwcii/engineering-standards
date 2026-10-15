@@ -1,6 +1,6 @@
 ---
 name: refusal-audit
-description: "Audit a whole repository for refusal traps: text, settings, hooks, code conditions and tests that make agents refuse, delay or ask again for work that the owner already approved, with no source that covers the case. Produces one evidence-backed inventory grouped by root cause, and one fix proposal for each root cause. Use on request, when agents in a repository refuse legitimate work or ask for the same approval again and again."
+description: "Audit a whole repository for refusal traps, once and on request. A refusal trap is text, a setting, a hook, a code condition or a test that blocks approved work with no source. Produces one inventory grouped by root cause, and one fix proposal for each root cause. Use when agents refuse legitimate work or ask for the same approval again and again."
 ---
 
 # Refusal audit
@@ -37,9 +37,15 @@ This is a one-time audit that you run by hand, on request. The agent that receiv
 runs it locally, from start to end. It is not a CI job or a merge check.
 
 The audit applies one rule to the content that is already in a repository: each constraint
-needs a source that covers its case. In the Engineering Standards kit, that rule is WDR 005,
-Decision 4. The diff-level partner of this audit is the `refusal-review` skill, or your
-project's equivalent. That review checks only what each change adds or changes.
+needs a source that covers its case. The diff-level partner of this audit is the
+`refusal-review` skill, or your project's equivalent. That review checks only what each change
+adds or changes.
+
+The public Engineering Standards kit records this rule as WDR 005, Decision 4:
+https://github.com/rwcii/engineering-standards, file
+`docs/engineering/wdr/005-independent-review-and-control-plane.md` at commit
+`ba3ece5f7124e7f0fa91a88c478692739ff96015`. If your project has its own record for the rule,
+cite that record instead.
 
 ## Adopting this skill
 
@@ -79,15 +85,15 @@ Outputs, in the audit's artifact folder (step 1):
 
 1. Record the repository, the branch and the full Git object ID of the commit. Audit that
    commit only. Read files with `git show <hash>:<path>` or in a clean checkout at that hash.
-2. Choose the artifact folder for the audit, and set `out` to it. Use the place that the project
-   names for private working files, such as an ignored task folder. If it names none, use a
-   folder outside the repository. The inventory can quote private sessions or messages. Keep the
-   original evidence unchanged. Keep secrets out of any report that you publish. Follow the
-   project's rules for private data.
-3. Record the owner's request with its date. The request authorizes the audit and its report.
+2. Choose the artifact folder for the audit. Use the place that the project names for private
+   working files, such as an ignored task folder. If it names none, use a folder outside the
+   repository. Set `out` to that folder.
+3. Keep the original evidence unchanged. The inventory can quote private sessions or messages.
+   Keep secrets out of any report that you publish. Follow the project's rules for private data.
+4. Record the owner's request with its date. The request authorizes the audit and its report.
    Fixes, pushes, settings changes and publication follow the authority of the task and the
    project's normal process (step 9). This audit adds no approval step to them.
-4. Make an **authority map**. List where the owner's decisions live in this project. List the
+5. Make an **authority map**. List where the owner's decisions live in this project. List the
    files that the owner wrote. List the sources that the project's rules accept as authority.
    Examples are adopted records, or recorded words that a named relay passed on. Use the map in
    step 4.
@@ -167,9 +173,11 @@ For each candidate, write one row with these fields. See
 
 An optional second read makes the result stronger. Do it when the owner asks for it. A second
 reader audits the same hash in a fresh context, with no access to the first inventory. A reader
-from a different model family catches different traps. Compare the two inventories row by row.
-Merge them into one list. Settle each difference with evidence from the files and sources.
-Record in `coverage.md` who read what, and from which model family.
+from a different model family catches different traps.
+
+After a second read, compare the two inventories row by row. Merge them into one list. Settle
+each difference with evidence from the files and sources. Record in `coverage.md` who read
+what, and from which model family.
 
 ## Step 7: Classify each root
 
