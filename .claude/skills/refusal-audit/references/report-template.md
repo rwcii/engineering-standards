@@ -10,14 +10,14 @@ Start with the audit header, then one table for each root cause.
 - Repository: <owner/name>
 - Commit: <full Git object ID>
 - Owner's request: <date, and a locator>
-- Readers: <reader 1 and its model family>, <reader 2 and its model family>
+- Auditor: <agent and its model family>; second reader, if one ran: <agent and its model family>
 - Roots: <count>; rows: <count>
 
 ## Root R01: <short name of the root text>
 
 Root text: `<file>:<line>` "<exact text>"
 
-| Row | File:line | Text | Kind | Effect (example of blocked work) | Reader | Source (locator, revision, quote) | Provenance | Disposition and reason |
+| Row | File:line | Text | Kind | Effect (example of blocked work) | Read by | Source (locator, revision, quote) | Provenance | Disposition and reason |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | C001 | ... | ... | ... | ... | ... | ... | ... | keep / narrow / cite / remove / owner decision, with the reason |
 ```
@@ -51,7 +51,7 @@ Only the items that need the owner. One item at a time, each with a recommendati
 
 **What stays:** the part that may protect something, and why we keep it or ask.
 
-**Disagreements:** any point where the two readers still disagree.
+**Disagreements:** if a second reader ran, any point where the two readers still disagree.
 ```
 
 ## coverage.md

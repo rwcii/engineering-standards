@@ -18,7 +18,7 @@ Plus a set of agent tools: a [`standards-review`](.claude/commands/standards-rev
 command — an independent preflight review agent that checks a branch against the records
 before push/PR; a [`refusal-review`](.claude/skills/refusal-review/) skill — an
 independent preflight agent that traces every refusal, gate or limit a branch adds to a
-source; a [`refusal-audit`](.claude/skills/refusal-audit/) skill that audits a whole existing
+source; a [`refusal-audit`](.claude/skills/refusal-audit/) skill, run once on request, that audits a whole existing
 repo for refusal traps already in it and proposes a fix for each root cause; a
 [`standards-audit`](.claude/skills/standards-audit/) skill that
 mines an existing repo for decisions that should become ADR/PDR/WDR records; a
@@ -62,7 +62,7 @@ your own enforcement.
     └── skills/
         ├── standards-audit/      # mine a repo for candidate ADR/PDR/WDR records
         ├── refusal-review/       # preflight: every new constraint has a source
-        ├── refusal-audit/        # audit a whole repo for existing refusal traps
+        ├── refusal-audit/        # one-time audit of a whole repo for existing refusal traps
         ├── record/              # author & maintain ADR/PDR/WDR records
         ├── sprint/              # scope a deliverable before building it
         └── handoff/              # write an immutable timestamped session-state snapshot

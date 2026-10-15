@@ -43,7 +43,7 @@ project's enforcement section, not here.
 | `docs/engineering/wdr/`       | WDRs + `WDR_PROCESS.md` + index `README.md`        |
 | `.claude/commands/standards-review.md` | The preflight review protocol             |
 | `.claude/skills/refusal-review/` | Skill: preflight that every new constraint has a source (WDR 005) |
-| `.claude/skills/refusal-audit/` | Skill: audit a whole repo for refusal traps already in it (MIT notice of its source in the folder) |
+| `.claude/skills/refusal-audit/` | Skill: one-time audit, on request, of a whole repo for refusal traps already in it (MIT notice of its source in the folder) |
 | `.claude/skills/standards-audit/` | Skill: mine a repo for candidate ADR/PDR/WDR records |
 | `.claude/skills/record/`      | Skill: author & maintain ADR/PDR/WDR records       |
 | `.claude/skills/sprint/`      | Skill: scope a deliverable before building it      |

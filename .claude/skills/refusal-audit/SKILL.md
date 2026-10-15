@@ -1,9 +1,12 @@
 ---
 name: refusal-audit
-description: "Audit a whole repository for refusal traps: text, settings, hooks, code conditions and tests that make agents refuse, delay or ask again for work that the owner already approved, with no source that covers the case. Produces one evidence-backed inventory grouped by root cause, and one fix proposal for each root cause. Use when agents in a repository refuse legitimate work, ask for the same approval again and again, or when you adopt a refusal-review gate and must clean up the old content first."
+description: "Audit a whole repository for refusal traps: text, settings, hooks, code conditions and tests that make agents refuse, delay or ask again for work that the owner already approved, with no source that covers the case. Produces one evidence-backed inventory grouped by root cause, and one fix proposal for each root cause. Use on request, when agents in a repository refuse legitimate work or ask for the same approval again and again."
 ---
 
 # Refusal audit
+
+Read the project's root instructions first. Also read the instruction file of its skill
+directory, when one exists. Follow the procedures that they name.
 
 ## What this audit finds
 
@@ -26,6 +29,9 @@ A trap can be in any of these carriers:
 - code conditions that refuse, skip or fall back, and their error texts;
 - tests that assert a refusal or a limit;
 - issue bodies, pull request templates and other text that agents read as instructions.
+
+This is a one-time audit that you run by hand, on request. The agent that receives the request
+runs it locally, from start to end. It is not a CI job or a merge check.
 
 This audit is the whole-repository partner of a diff-level refusal review. The review stops new
 traps in each change. The audit finds the traps that are already in the repository.
@@ -57,7 +63,7 @@ Outputs, in the audit's artifact folder (step 1):
 - `inventory.md`: one row for each constraint, grouped by root cause;
 - `proposals.md`: one fix proposal for each root cause that needs a change;
 - `owner-decisions.md`: only the items that need the owner's decision;
-- `coverage.md`: what each reader read, what it did not read, and why.
+- `coverage.md`: what the audit read, what it did not read, and why.
 
 ## Step 1: Set up
 
@@ -71,10 +77,10 @@ Outputs, in the audit's artifact folder (step 1):
 3. Record the owner's request with its date. The request authorizes the audit and its report.
    Fixes, pushes, settings changes and publication follow the authority of the task and the
    project's normal process (step 9). This audit adds no approval step to them.
-4. Make an **authority map**: list where the owner's decisions live in this project, which
-   files the owner wrote, and which sources the project's own rules accept as authority (for
-   example adopted records, or recorded words that a named relay passed on). Use it in step 4.
-5. Read the project's own instruction files first. They tell you how the project works.
+4. Make an **authority map**. List where the owner's decisions live in this project. List the
+   files that the owner wrote. List the sources that the project's rules accept as authority.
+   Examples are adopted records, or recorded words that a named relay passed on. Use the map in
+   step 4.
 
 ## Step 2: Find the candidates
 
@@ -94,8 +100,8 @@ Outputs, in the audit's artifact folder (step 1):
    git grep -n -i -E '<pattern list>' <hash> -- . > "$out/candidates.txt"
    ```
 
-4. Prove that each search can fail. Before you trust a "not found" result, run the same search on
-   a file where you know a match exists, and confirm that it finds it.
+4. Prove that each search can fail. Run the same search on a file with a known match. Confirm
+   that it finds the match. Only then trust a "not found" result.
 5. Read the tests and code conditions that refuse, skip or fall back. Find them through their
    error texts, exit codes and early returns, not only through words.
 
@@ -109,7 +115,7 @@ For each candidate, write one row with these fields. See
    that leaves a case out, code condition, test, setting, or hook.
 3. **Effect:** what work it stops, delays or sends back for approval. Give one concrete example
    of legitimate work that it blocks. Judge what it does, not its wording.
-4. **Reader:** who reads it and when, such as every agent at session start, or one skill.
+4. **Read by:** who reads it and when, such as every agent at session start, or one skill.
 
 ## Step 4: Find and check the source
 
@@ -132,8 +138,8 @@ For each candidate, write one row with these fields. See
    - a plan proposal, a non-goal of an old plan, or a hypothetical risk.
 7. Label an original that you cannot find as unverifiable. Do not ask the owner to approve a
    settled rule again only because its original is not available.
-8. For each row, record the source with its locator, revision and quote, its provenance label,
-   and the reason for its disposition. A "keep" row needs this evidence too.
+8. For each row, record the source with its locator, revision and quote. Also record its
+   provenance label and the reason for its disposition. A "keep" row needs this evidence too.
 
 ## Step 5: Group by root cause
 
@@ -142,16 +148,17 @@ For each candidate, write one row with these fields. See
 3. Count roots, not rows. A long list of rows is not actionable. A short list of root causes
    with their copies is.
 
-## Step 6: Use a second, independent reader
+## Step 6: Record the coverage
 
-1. Have a second reader audit the same hash in a fresh context, with no access to the first
-   inventory. The method uses a reader from a different model family. If none is available,
-   follow the project's rule for that case. Record a same-family second reader in
-   `coverage.md` as reduced coverage. It does not count as a cross-family read.
-2. Compare the two inventories row by row. Merge them into one list.
-3. Settle each difference with evidence from the files and sources, not with a vote.
-4. Record what each reader read in full, what it read only through search, and what it did not
-   read. A partial read stays partial. A label does not turn it into full coverage.
+1. Record what you read in full, what you read only through search, and what you did not read.
+   A partial read stays partial. A label does not turn it into full coverage.
+2. Record each search that returned nothing, with its known-positive check.
+
+An optional second read makes the result stronger. Do it when the owner asks for it. A second
+reader audits the same hash in a fresh context, with no access to the first inventory. A reader
+from a different model family catches different traps. Compare the two inventories row by row.
+Merge them into one list. Settle each difference with evidence from the files and sources.
+Record in `coverage.md` who read what, and from which model family.
 
 ## Step 7: Classify each root
 
@@ -193,8 +200,8 @@ Do this step when the task includes the fixes.
 
 1. Send each fix through the project's normal change, review and recheck process.
 2. Put the evidence in the change: the root cause, the source check and the copies changed.
-3. Keep the sourced duties: review gates, security checks, product requirements and settings
-   rules that have a source stay as they are.
+3. Keep the sourced duties as they are. Examples are review gates, security checks, product
+   requirements and settings rules that have a source.
 4. Name each removed check in the change, with its reason.
 5. Do not add an unsourced rule while you remove an old one. Cite the source, or describe the
    current behavior with its reason ("the tool does X because Y"). Where the remedy is a change
@@ -203,8 +210,8 @@ Do this step when the task includes the fixes.
 7. If a tool refuses an action, record its exact message and its kind. Leave the refused action
    undone. Do not do it another way, and do not ask a peer to do it. Continue the work that does
    not depend on it.
-8. Close out: give every inventory row a final disposition, and record the actual outcome of
-   each fix: its review, its merge and its tracker item.
+8. Close out. Give every inventory row a final disposition. Record the actual outcome of each
+   fix: its review, its merge and its tracker item.
 
 ## Mistakes to avoid
 
@@ -222,8 +229,8 @@ Do this step when the task includes the fixes.
 
 ## Credits
 
-The method is adapted from the `refusal-review` skill
-(`agents/skills/refusal-review/SKILL.md`) and the decision-record practice of the public Koinon
-project, https://github.com/rwcii/koinon, at commit
-`8f366cb37e4eeaf29241e6e11486a1f1ae13013d`, under the MIT license. The license notice is in
-[LICENSE](LICENSE). The method also uses the lessons of two repository-wide refusal sweeps.
+The method is adapted from the public Koinon project, https://github.com/rwcii/koinon, at
+commit `8f366cb37e4eeaf29241e6e11486a1f1ae13013d`. Its sources are the `refusal-review` skill
+(`agents/skills/refusal-review/SKILL.md`) and the decision-record practice of that project.
+Koinon uses the MIT license. The license notice is in [LICENSE](LICENSE). The method also uses
+the lessons of two repository-wide refusal sweeps.
