@@ -50,7 +50,8 @@ incomplete (it did not run, with the reason; never a pass, WDR 004 Decision 8) o
   `m=$(gh pr view <number> --json mergeCommit -q .mergeCommit.oid)`, then `git fetch origin`.
   For a feature, the squash's tree is the expected candidate for its actual first parent:
   `git rev-parse <m>^{tree}` equals `git merge-tree --write-tree <m>^ <approved head>` (Git 2.38 or
-  later); when `<m>^` is the reviewed base, it also equals `git rev-parse <approved head>^{tree}`.
+  later); when `<m>^` is an ancestor of the approved head, it also equals
+  `git rev-parse <approved head>^{tree}`.
   For a release, `git rev-parse <m>^2` is the pin.
 ## Required CI
 On every pull request into `develop` or `main`, with no path filters, and again when its base
