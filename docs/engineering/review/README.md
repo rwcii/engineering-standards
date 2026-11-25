@@ -87,6 +87,19 @@ the right approver (WDR 005, Decision 2).
   for decision attribution. Adopters point this check to their own governing rules.
 - Record the outcome of each finding: fixed, accepted with a reason, or moved to a tracked issue.
   A finding is never dropped silently.
+- Post the verdict as a commit status on the exact head, so the merge gate can read it
+  (WDR 010, Decision 3). The context is the lens name, `standards-review` or `refusal-review`.
+  APPROVE posts `success`; REQUEST CHANGES or BLOCK posts `failure`. The description names the
+  verdict and the link points to the review summary. The author posts it from the unedited
+  report; a status on any other commit, or one with no posted report behind it, is not a verdict:
+
+  ```sh
+  gh api "repos/OWNER/REPO/statuses/<full head hash>" -f context=standards-review \
+    -f state=success -f description="APPROVE" -f target_url="<review summary URL>"
+  ```
+
+  A new head has no status until its own review or recheck approves it. An adopter whose merge
+  gate does not read statuses skips this step.
 
 ## Decision attribution in refusal review
 

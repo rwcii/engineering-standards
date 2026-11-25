@@ -1,0 +1,42 @@
+# Required checks of this repository (WDR 010, Decision 3). The job names are the required
+# status contexts that scripts/setup-repo.sh declares; renaming a job breaks the merge gate.
+# No path filters: a required check reports on every pull request.
+name: checks
+
+on:
+  pull_request:
+    branches: [develop, main]
+
+permissions:
+  contents: read
+
+jobs:
+  repo-checks:
+    name: repo-checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Checks
+        run: bash scripts/check-repo.sh "origin/${{ github.base_ref }}"
+      - name: The checks can fail
+        run: bash scripts/check-repo.test.sh
+
+  promotion-source:
+    name: promotion-source
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: A pull request into main comes from this repository's develop
+        env:
+          BASE: ${{ github.base_ref }}
+          HEAD_REF: ${{ github.head_ref }}
+          HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
+          THIS_REPO: ${{ github.repository }}
+        run: bash scripts/check-promotion-source.sh "$BASE" "$HEAD_REF" "$HEAD_REPO" "$THIS_REPO"

@@ -1,9 +1,9 @@
 ---
 wdr: "004"
 title: "Verification & Testing Discipline"
-status: accepted
+status: modified
 created: "2026-05-31"
-updated: "2026-05-31"
+updated: "2026-11-25"
 parent_wdr: ""
 authors:
   - "Robert Capps"
@@ -13,6 +13,7 @@ superseded_by: ""
 related:
   - "003"
   - "005"
+  - "010"
 tags:
   - workflow
   - agentic
@@ -22,7 +23,7 @@ tags:
 # WDR 004: Verification & Testing Discipline
 
 **Date:** 2026-05-31
-**Status:** Accepted
+**Status:** Modified
 **Authors:** Robert Capps
 
 ---
@@ -34,7 +35,9 @@ that the agent must not game a red signal. This record governs the checks
 themselves, so that "the tests pass" actually means something: **tests fail
 honestly when the behavior they cover breaks; a defect fix ships with a regression
 test; required test depth scales with the change's risk; and the gate is
-deterministic.** Without these, a green signal is a number an agent learns to
+deterministic.** A proof shows that it can fail, on the commit it judges; tests leave no host
+state; the checks that run are chosen from mapped inputs and written in a tracked file; and a
+required proof that did not run is never a pass. Without these, a green signal is a number an agent learns to
 satisfy rather than evidence the system works.
 
 ---
@@ -46,8 +49,12 @@ satisfy rather than evidence the system works.
 3. Decision 2: A Defect Fix Ships With a Regression Test
 4. Decision 3: Required Coverage Scales With Risk
 5. Decision 4: The Gate Is Deterministic
-6. Conclusion
-7. Document History
+6. Decision 5: A Proof Shows It Can Fail, on the Commit It Judges
+7. Decision 6: Tests Leave No Host State and Run Within Limits
+8. Decision 7: Checks Are Selected From Mapped Inputs and Written in a Tracked File
+9. Decision 8: Not Proven Is Not Pass
+10. Conclusion
+11. Document History
 
 ---
 
@@ -207,9 +214,160 @@ Per project: a flakiness policy (quarantine + track, do not retry-to-green);
 deterministic test construction (frozen time, seeded randomness, no live external
 calls); pairs with ADR 003 (environment parity) and ADR 004 for seed/fixture data.
 
+### Amendment (2026-11-25): deterministic proofs and a classified failure
+
+A proof that can be reproduced is written as a deterministic check rather than left to a
+reviewer's judgment; the review verdicts of WDR 005 stay the binding human-style gate and are not
+replaced by checks. When a check fails in CI, the failure is classified first (a defect in the
+change, a defect in the check, an infrastructure fault, or an unknown cause) before any retry. A
+retry is allowed only for an infrastructure fault, within a cap the project sets; a check that
+needs retries to pass is a flaky check under Decision 4.
+
+- **Decided by:** Robert Capps
+- **Date:** 2026-11-25
+- **Context:** Should a red CI run be retried until it passes, retried a fixed number of times,
+  or classified first? And should a reproducible proof be left to review?
+- **Reason and scope:** an unclassified retry hides real failures and teaches that red means
+  "try again"; a reproducible proof is cheaper and more reliable as a check. This governs every
+  automated gate.
+- **Strength:** default; the retry cap is each project's setting.
+
 ---
 
-## 6. Conclusion
+## 6. Decision 5: A Proof Shows It Can Fail, on the Commit It Judges
+
+### Decision
+
+A check that a gate relies on is shown to fail: it has a failure control, such as a seeded
+defect, a mutation, a guard removed, or a fail-on-revert run, that it is observed to catch. A
+"not found" result needs a known positive that the same check does find. The check runs on the
+candidate tree, the exact commit being judged (WDR 010, Decision 2). When the proof and the work it
+proves need different trust or different runners, they run as separate jobs, so that the job under
+test cannot change its own verdict.
+
+- **Decided by:** Robert Capps
+- **Date:** 2026-11-25
+- **Context:** Is a check that passes evidence, or must it also be shown able to fail? The options
+  were to trust a passing check, to require a failure control only for new checks of high-risk
+  paths, or to require one for every check a gate relies on.
+- **Reason and scope:** a check that has never failed may be unable to fail; it then reports
+  safety that does not exist. This governs every check that a merge gate relies on.
+- **Strength:** hard rule.
+
+### Alternatives Considered
+
+| Alternative | Description | Why Rejected |
+| ----------- | ----------- | ------------ |
+| Trust a passing check | A green check is evidence enough | A check with a broken pattern or a wrong path passes forever |
+| Failure controls for high-risk checks only | Show failure only where risk is high | Gate checks of every tier can be silently dead |
+
+### Enforcement
+
+Per project: each gate check has a committed failure control that runs with it; a "not found"
+check names its known positive; proofs that need separate trust run in their own job.
+
+---
+
+## 7. Decision 6: Tests Leave No Host State and Run Within Limits
+
+### Decision
+
+A test creates nothing outside its own temporary space: no files in the user's home or the
+repository, no global configuration, no services left running, no network writes. A suite that
+can exhaust a host runs under process, memory and time limits. Where a test controls which
+programs run (stubs, scheduled jobs, pipes), it names them by absolute path so a stub on the
+search path cannot stand in for the real program.
+
+- **Decided by:** Robert Capps
+- **Date:** 2026-11-25
+- **Context:** May a test rely on or change the host it runs on? The options were to allow it
+  with cleanup, to allow it only in CI, or to forbid host state outright.
+- **Reason and scope:** host state makes a result depend on what ran before, and agents run many
+  suites on shared hosts. This governs all tests.
+- **Strength:** hard rule; absolute command paths are a technique for controlled execution and
+  a default.
+
+### Alternatives Considered
+
+| Alternative | Description | Why Rejected |
+| ----------- | ----------- | ------------ |
+| Allow host state with cleanup | Tests may write anywhere if they clean up | A failed or killed run leaves state behind that changes the next result |
+| Allow host state in CI only | Ephemeral runners make it harmless | Local runs are where agents test first; the same suite must be safe there |
+
+### Enforcement
+
+Per project: tests write only under a temporary folder they create; resource limits for suites
+that need them; a review finding for a test that writes outside its folder.
+
+---
+
+## 8. Decision 7: Checks Are Selected From Mapped Inputs and Written in a Tracked File
+
+### Decision
+
+When a project runs only some checks for a change, it selects them from a tracked map of inputs
+to checks. A rename, a shared path or a path the map does not know runs the checks broadly; a
+release runs every check. The gate's commands live in a tracked file that agents read, such as the
+project's check facts, not only in handoffs or chat.
+
+- **Decided by:** Robert Capps
+- **Date:** 2026-11-25
+- **Context:** How should a change decide which checks to run, and where do the commands live?
+  The options were running everything always, choosing by judgment, or selecting from a tracked
+  map with broad fallbacks.
+- **Reason and scope:** selection by judgment skips the check that mattered; a map is reviewable
+  and fails safe toward running more. Commands in a tracked file stay the same for every agent
+  and session. This governs every gate that selects checks.
+- **Strength:** default.
+
+### Alternatives Considered
+
+| Alternative | Description | Why Rejected |
+| ----------- | ----------- | ------------ |
+| Run everything always | No selection | Correct but slow enough that agents skip the local run |
+| Select by judgment | The author decides what to run | The skipped check is the one the change broke |
+
+### Enforcement
+
+Per project: the map and the commands are tracked files; review checks that a change to a mapped
+input runs its checks.
+
+---
+
+## 9. Decision 8: Not Proven Is Not Pass
+
+### Decision
+
+A gate has three outcomes: **pass**, **fail**, and **incomplete**. A required proof that did not
+run — missing input, a tool not installed, a base that could not be read — makes the gate
+incomplete, with its own non-zero outcome; it is never reported as a pass. An intentional
+out-of-scope skip, with its reason recorded, is a fourth, separate result and does not make the
+gate incomplete.
+
+- **Decided by:** Robert Capps
+- **Date:** 2026-11-25
+- **Context:** What does a gate report when a required check could not run? The options were to
+  report pass with a warning, fail, or a distinct incomplete outcome.
+- **Reason and scope:** a check that did not run proves nothing; a pass with a warning is read as
+  a pass. A distinct outcome keeps "could not check" apart from "found a defect". This governs
+  every gate and every report of one.
+- **Strength:** hard rule.
+
+### Alternatives Considered
+
+| Alternative | Description | Why Rejected |
+| ----------- | ----------- | ------------ |
+| Pass with a warning | Skip the missing check and pass | Warnings are not read; an unproven change merges |
+| Report it as a failure | Treat "did not run" as "found a defect" | Hides the real cause and sends the author to fix code that may be fine |
+
+### Enforcement
+
+Per project: gate scripts exit with a distinct status for incomplete; reports list each check as
+passed, failed, incomplete or skipped with its reason.
+
+---
+
+## 10. Conclusion
 
 Verification discipline makes a green signal trustworthy: tests fail honestly,
 fixes carry regression proof, coverage depth tracks risk, and the gate's verdict is
@@ -217,7 +375,9 @@ deterministic. Together with the operating loop's "verify by execution" (WDR 003
 this is what lets the independent review (WDR 005) and CI rely on a passing gate as
 real evidence rather than a number the agent learned to satisfy. The concrete test
 frameworks, coverage tools, risk-tier mapping, and flakiness tracking are each
-adopting project's enforcement.
+adopting project's enforcement. Each gate check shows it can fail, runs on the commit it judges and
+leaves no host state; the checks are chosen from a tracked map; and a proof that did not run is
+reported as incomplete, never as a pass.
 
 ---
 
@@ -226,3 +386,4 @@ adopting project's enforcement.
 | Date       | Change           |
 | ---------- | ---------------- |
 | 2026-05-31 | Initial creation |
+| 2026-11-25 | Decision 4 amendment: deterministic proofs and classified failures. Decisions 5–8: failure controls on the candidate tree, no host state, mapped selection with tracked commands, and the incomplete outcome |

@@ -237,7 +237,23 @@ scripts/setup-repo.sh
 
 # ...or target a specific repo
 scripts/setup-repo.sh owner/repo
+
+# read the live settings and report each difference from the policy; changes nothing
+scripts/setup-repo.sh --check owner/repo
 ```
+
+The script also requires `jq`. It declares the required status checks of each branch
+(WDR 010, Decision 3). This repository's are `repo-checks`, `promotion-source`,
+`standards-review` and `refusal-review` on `develop`, and `repo-checks` and `promotion-source`
+on `main`. A required check must report on every pull request to its branch, or it blocks every
+merge, so set your own before applying:
+
+```bash
+REQUIRED_DEVELOP="build test" REQUIRED_MAIN="build test" scripts/setup-repo.sh owner/repo
+```
+
+An empty `REQUIRED_DEVELOP` sets no required checks and leaves auto-merge off. Without a required
+check, GitHub would merge an auto-merge pull request at once.
 
 ### What it applies — and what your account type limits
 
@@ -245,8 +261,9 @@ scripts/setup-repo.sh owner/repo
 | ------- | :-------------: | :------------------------: | :--------------: |
 | Merge methods — squash + merge on, rebase off, squash uses PR title/body | yes | yes | yes |
 | Auto-delete head branch on merge | yes | yes | yes |
+| Auto-merge, when `develop` has required checks | yes | yes | **no** (off: no ruleset requires a check) |
 | Local `pre-commit` hook path (`core.hooksPath=.githooks`) | yes | yes | yes |
-| Branch-protection **rulesets** — `develop` squash-only + PR, `main` merge-only + PR, block force-push & deletion | yes | yes | **no** |
+| Branch-protection **rulesets** — `develop` squash-only + PR, `main` merge-only + PR, block force-push & deletion, required checks with no up-to-date requirement | yes | yes | **no** |
 
 GitHub **branch protection and rulesets are not available on free _private_ repositories**.
 On a free private repo the script applies everything else and **skips the rulesets with a
