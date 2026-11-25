@@ -257,7 +257,9 @@ The script updates live rulesets in place, and turns auto-merge on only after re
 every ruleset and required check is in force; a partial apply exits non-zero with auto-merge off.
 An empty `REQUIRED_DEVELOP` sets no required checks and leaves auto-merge off. Without a required
 check, GitHub would merge an auto-merge pull request at once. `--check` exits 0 when the live
-settings match, 1 when one differs and 2 when they cannot be read.
+settings match, 1 when one differs and 2 when they cannot be read. For a first rollout, apply with
+`AUTO_MERGE=off`, prove the gate with a probe pull request (WDR 010, Enforcement), then re-run
+without it.
 
 ### What it applies — and what your account type limits
 

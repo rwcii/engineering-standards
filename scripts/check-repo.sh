@@ -114,7 +114,17 @@ if inventory files links '*.md'; then
     while IFS= read -r f; do
       readable "$f" links || { links_done=0; continue; }
       d="$(dirname "$f")"
-      targets="$(sed 's/`[^`]*`//g' "$f" | grep -o '\](\([^) ]*\))' | sed 's/^](\(.*\))$/\1/')" || true
+      # read the file, then extract links; grep's "no match" (1) is a valid empty result, any other
+      # failure of a step is INCOMPLETE
+      if ! text="$(sed 's/`[^`]*`//g' "$f")"; then
+        echo "INCOMPLETE  links: cannot parse $f"; incomplete=1; links_done=0; continue
+      fi
+      found="$(printf '%s\n' "$text" | grep -o '\](\([^) ]*\))')"; rc=$?
+      if [ "$rc" -gt 1 ]; then
+        echo "INCOMPLETE  links: cannot parse $f"; incomplete=1; links_done=0; continue
+      fi
+      targets="$(printf '%s\n' "$found" | sed 's/^](\(.*\))$/\1/')" \
+        || { echo "INCOMPLETE  links: cannot parse $f"; incomplete=1; links_done=0; continue; }
       while IFS= read -r target; do
         path="${target%%#*}"
         case "$target" in ''|'#'*|http://*|https://*|mailto:*) continue ;; esac

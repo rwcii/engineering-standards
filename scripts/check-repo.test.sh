@@ -75,6 +75,18 @@ else
   echo "ok    failed file listing prints no PASS for shell, records or links"; pass=$((pass + 1))
 fi
 
+# a link parser that fails on a Markdown file is INCOMPLETE, never PASS
+real_sed="$(command -v sed)"
+mkdir -p "$tmp/sedshim"
+printf '#!/bin/sh\nfor a in "$@"; do case "$a" in *.md) echo "sed: simulated read error" >&2; exit 2 ;; esac; done\nexec "%s" "$@"\n' "$real_sed" > "$tmp/sedshim/sed"
+chmod +x "$tmp/sedshim/sed"
+setup; SHIM="$tmp/sedshim" expect "failed link parsing is INCOMPLETE" 2 "INCOMPLETE  links: cannot parse"
+if grep -q '^PASS  links' "$tmp/out"; then
+  echo "FAIL  failed link parsing still printed PASS links"; fails=$((fails + 1))
+else
+  echo "ok    failed link parsing prints no PASS links"; pass=$((pass + 1))
+fi
+
 # a tracked file that cannot be read is INCOMPLETE (skipped when running as root)
 if [ "$(id -u)" != 0 ]; then
   setup; chmod 000 "$tmp/repo/CONTRIBUTING.md"

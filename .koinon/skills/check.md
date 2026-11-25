@@ -26,8 +26,9 @@ check
 At the exact head, run these and report each check as passed, failed (with its evidence),
 incomplete (it did not run, with the reason; never a pass, WDR 004 Decision 8) or not needed
 (with the reason):
-1. `bash scripts/check-repo.sh origin/develop`: whitespace, shell syntax, record frontmatter and
-   index status, and relative links. Exit 0 passes, 1 fails, 2 is incomplete.
+1. `bash scripts/check-repo.sh <base>`, where `<base>` is the pull request's base: `origin/develop`
+   for a feature, `origin/main` for a release. It checks whitespace, shell syntax, record
+   frontmatter and index status, and relative links. Exit 0 passes, 1 fails, 2 is incomplete.
 2. `bash scripts/check-repo.test.sh` and `bash scripts/setup-repo.test.sh`: each check above, the
    promotion-source check and the settings check fail on a seeded defect.
 3. The record checks of .koinon/skills/record.md § Record checks that the script does not cover,
@@ -39,8 +40,6 @@ incomplete (it did not run, with the reason; never a pass, WDR 004 Decision 8) o
 - A change to `scripts/setup-repo.sh`: `bash scripts/setup-repo.test.sh`.
 - A release pull request into `main` (WDR 010, Decision 5), at the pinned commit:
   - `git rev-parse origin/develop` equals the pin, and the pull request's head equals it;
-  - `bash scripts/check-repo.sh origin/main` and `bash scripts/check-repo.test.sh`, against `main`,
-    the base the release merges into;
   - `bash scripts/check-promotion-source.sh main develop <this repo> <this repo>`.
   If `develop` moves before the merge, the pin is void: cut the release again at the new commit.
 ## Required CI

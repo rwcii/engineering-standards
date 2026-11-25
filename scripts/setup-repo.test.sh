@@ -29,6 +29,10 @@ while [ $# -gt 0 ]; do
   esac
 done
 if [ -f "$FAKE/fail-$method" ]; then cat "$FAKE/fail-$method" >&2; exit 1; fi
+if [ "$method" = GET ] && [ -f "$FAKE/fail-GET-after-auto" ] && [ "$(jq -r .allow_auto_merge "$FAKE/repos_o_r.json")" = true ] \
+   && grep -q 'allow_auto_merge=true' "$FAKE/fields" 2>/dev/null; then
+  echo "HTTP 502: simulated read failure" >&2; exit 1
+fi
 file="$FAKE/$(printf '%s' "$path" | tr '/' '_').json"
 case "$method" in
   GET)
@@ -90,7 +94,7 @@ mutate() {  # mutate FILE JQ
 
 run() {  # run EXPECTED NAME ARGS... — run setup-repo.sh against the fake
   local want="$1" name="$2" got=0; shift 2
-  (cd "$src" && FAKE="$tmp/fake" PATH="$tmp/bin:$PATH" bash "$src/scripts/setup-repo.sh" "$@" >"$tmp/out" 2>&1) || got=$?
+  (cd "$tmp/checkout" && FAKE="$tmp/fake" PATH="$tmp/bin:$PATH" bash "$src/scripts/setup-repo.sh" "$@" >"$tmp/out" 2>&1) || got=$?
   if [ "$got" = "$want" ]; then echo "ok    $name (exit $got)"; pass=$((pass + 1))
   else echo "FAIL  $name: want exit $want, got $got"; sed 's/^/      /' "$tmp/out"; fails=$((fails + 1)); fi
 }
@@ -100,6 +104,10 @@ assert() {  # assert NAME COMMAND...
 }
 
 D=repos_o_r_rulesets_11.json
+
+# apply runs in a scratch checkout: the script sets core.hooksPath in the checkout it runs in
+git init -q "$tmp/checkout"
+src_hooks_before="$(git -C "$src" config --get core.hooksPath || echo unset)"
 
 # --check: each difference is detected ----------------------------------------------------------
 fixture; run 0 "matching live settings pass" --check o/r
@@ -149,6 +157,21 @@ assert "on an unsupported plan auto-merge stays off" bash -c "! grep -q 'allow_a
 fixture; echo '[]' > "$tmp/fake/repos_o_r_rulesets.json"
 run 0 "apply creates missing rulesets" o/r
 assert "missing rulesets are created with POST" bash -c "grep -q -- '--method POST' '$tmp/fake/log'"
+
+fixture; mutate repos_o_r.json '.allow_auto_merge = false'; : > "$tmp/fake/fail-GET-after-auto"
+run 2 "a failed final read-back fails the apply" o/r
+assert "after a failed final read-back auto-merge is turned back off" \
+  bash -c "[ \"\$(jq -r .allow_auto_merge '$tmp/fake/repos_o_r.json')\" = false ]"
+
+fixture; mutate repos_o_r.json '.allow_auto_merge = false'
+AUTO_MERGE=off run 0 "AUTO_MERGE=off applies the gates with auto-merge off" o/r
+assert "AUTO_MERGE=off never turns auto-merge on" bash -c "! grep -q 'allow_auto_merge=true' '$tmp/fake/fields'"
+AUTO_MERGE=off run 0 "AUTO_MERGE=off --check expects auto-merge off" --check o/r
+
+assert "the apply cases set the hook path in the scratch checkout" \
+  bash -c "[ \"\$(git -C '$tmp/checkout' config --get core.hooksPath)\" = .githooks ]"
+assert "the source checkout's git config is unchanged" \
+  bash -c "[ \"\$(git -C '$src' config --get core.hooksPath || echo unset)\" = '$src_hooks_before' ]"
 
 echo "passed $pass, failed $fails"
 [ "$fails" = 0 ]

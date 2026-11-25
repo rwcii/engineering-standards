@@ -155,9 +155,10 @@ head does not carry over.
 
 The gates judge two trees of the same head, and the evidence says which. The reviews read the
 head commit itself. CI on a pull request checks out the candidate merge of the head into its
-base, so it judges the result the merge would produce. Both results are recorded on the head
-commit; none is posted on a test merge commit. A new head therefore has no results until its own
-CI run and reviews report.
+base, so it judges the result the merge would produce. The host records the CI results on the head
+commit, and the review statuses are posted there; none is posted on a test merge commit. A new head
+therefore has no results until its own CI run and reviews report. The rollout check (Enforcement)
+confirms where the host records them before auto-merge is turned on.
 
 - **Decided by:** Robert Capps
 - **Date:** 2026-11-25
@@ -213,9 +214,12 @@ A required check is only as trustworthy as whoever can report it:
   access is limited to the accountable human and the agents acting for them. A review status
   counts only when the pull request holds the posted review summary for the same head
   (the review procedure, § Results).
-- Queued auto-merge does not by itself bind a head. When a new commit is pushed after auto-merge
-  is set, the new head has no review statuses, so the merge waits until the reviews of that head
-  report; the approval of the earlier head does not cover it (Decision 2).
+- Queued auto-merge does not by itself bind a head; the review statuses do. A review status is
+  posted only from an approving review of that exact head, so it is the authorization for that
+  head. When a new commit is pushed after auto-merge is set, the new head has no review statuses
+  and cannot merge until a review of it approves; the approval of the earlier head does not
+  cover it (Decision 2). An agent that pushes a new head turns auto-merge off on that pull request
+  and sets it again only after the new head's reviews approve.
 
 - **Decided by:** Robert Capps
 - **Date:** 2026-11-25
@@ -370,10 +374,11 @@ The bundled tooling implements these decisions; a project that changes the flow 
   auto-merge on only after a read-back shows every gate in force, and fails on a partial apply.
   `scripts/setup-repo.sh --check` reads the live settings and reports each difference without
   changing anything; `scripts/setup-repo.test.sh` shows it detects each difference.
-- **Rollout check:** after the policy is first applied, a probe pull request into `develop` shows
-  the gate working: it is blocked while any of the four checks is missing on its head, a status
-  posted under a CI check's name by hand does not satisfy it, and it becomes mergeable only when
-  all four report success on that head.
+- **Rollout check:** the policy is first applied with auto-merge off (`AUTO_MERGE=off`). A probe
+  pull request into `develop` then shows the gate working: it is blocked while any of the four
+  checks is missing on its head, a status posted under a CI check's name by hand does not satisfy
+  it, and it becomes mergeable only when all four report success on that head. Auto-merge is
+  turned on only after the probe passes.
 - **Review base:** the standards review and the refusal review take `develop` as their base (the
   project's check facts, `.koinon/skills/check.md`).
 - **Compliance:** a merge of a commit other than the approved head, a change that lands on `main`

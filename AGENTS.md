@@ -81,8 +81,8 @@ read it before adding or editing records there.
   Every gate and the merge bind the exact head. Recorded in WDR 010;
   `.githooks/pre-commit` blocks direct commits to `main`. Run `scripts/setup-repo.sh`
   once per repo to apply the hook path and the GitHub-side settings.
-- **Checks:** run `bash scripts/check-repo.sh origin/develop` and `bash scripts/check-repo.test.sh`
-  on the exact commit before opening a pull request (WDR 010, Decision 6; `.koinon/skills/check.md`).
+- **Checks:** run the required checks of `.koinon/skills/check.md` on the exact commit before
+  opening a pull request, against the pull request's base (WDR 010, Decision 6).
 - **Index:** update the module `README.md` table whenever you add a record or
   change its status (hand-maintained until a generator is wired — WDR 002).
 

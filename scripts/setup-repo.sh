@@ -22,6 +22,10 @@
 # Override for a project with other checks:
 #   REQUIRED_DEVELOP="build@15368 test@15368" REQUIRED_MAIN="build@15368" scripts/setup-repo.sh
 # An empty REQUIRED_DEVELOP sets no required checks on develop and leaves auto-merge off.
+#
+# AUTO_MERGE=off applies everything else and keeps auto-merge off (and --check then expects it
+# off). Use it for the first rollout: apply with AUTO_MERGE=off, prove the gate with a probe pull
+# request (WDR 010, Enforcement), then re-run without it to turn auto-merge on.
 REQUIRED_DEVELOP="${REQUIRED_DEVELOP-repo-checks@15368 promotion-source@15368 standards-review refusal-review}"
 REQUIRED_MAIN="${REQUIRED_MAIN-repo-checks@15368 promotion-source@15368}"
 set -uo pipefail
@@ -35,7 +39,7 @@ gh auth status >/dev/null 2>&1 || { echo "error: run 'gh auth login' first"; exi
 
 REPO="${1:-$(gh repo view --json nameWithOwner -q .nameWithOwner)}" || { echo "error: cannot resolve the repository"; exit 2; }
 WANT_AUTO_MERGE=false
-[ -n "${REQUIRED_DEVELOP// /}" ] && WANT_AUTO_MERGE=true
+[ -n "${REQUIRED_DEVELOP// /}" ] && [ "${AUTO_MERGE:-on}" != off ] && WANT_AUTO_MERGE=true
 
 RULESETS="develop integration policy|develop|squash|${REQUIRED_DEVELOP}
 main release policy|main|merge|${REQUIRED_MAIN}"
@@ -168,11 +172,23 @@ fi
 # 4) Read back; turn auto-merge on only when every gate is proven in force.
 verify false; status=$?
 [ "${status}" = 0 ] || { echo "Apply incomplete: the read-back differs; auto-merge stays off."; exit "${status}"; }
-if [ "${WANT_AUTO_MERGE}" = true ]; then
-  gh api --method PATCH "repos/${REPO}" -F allow_auto_merge=true >/dev/null \
-    || { echo "  - FAILED: turning auto-merge on"; exit 1; }
-  echo "  - auto-merge on (develop requires: ${REQUIRED_DEVELOP})"
+if [ "${WANT_AUTO_MERGE}" = false ]; then
+  echo "Done: the live settings match the policy; auto-merge is off."
+  exit 0
 fi
-verify "${WANT_AUTO_MERGE}"; status=$?
-[ "${status}" = 0 ] && echo "Done: the live settings match the policy."
-exit "${status}"
+auto_merge_off() {
+  gh api --method PATCH "repos/${REPO}" -F allow_auto_merge=false >/dev/null \
+    && echo "  - auto-merge turned back off" \
+    || echo "  - WARNING: could not turn auto-merge back off; turn it off by hand"
+}
+if ! gh api --method PATCH "repos/${REPO}" -F allow_auto_merge=true >/dev/null; then
+  echo "  - FAILED: turning auto-merge on"; auto_merge_off; exit 1
+fi
+echo "  - auto-merge on (develop requires: ${REQUIRED_DEVELOP})"
+verify true; status=$?
+if [ "${status}" != 0 ]; then
+  echo "Apply incomplete: the final read-back did not confirm the policy."
+  auto_merge_off
+  exit "${status}"
+fi
+echo "Done: the live settings match the policy."
