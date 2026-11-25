@@ -98,7 +98,8 @@ the right approver (WDR 005, Decision 2).
     -f state=success -f description="APPROVE" -f target_url="<review summary URL>"
   ```
 
-  A new head has no status until its own review or recheck approves it. An adopter whose merge
+  Post it on the head commit only, never on a test merge commit. A new head has no status until
+  its own review or recheck approves it. An adopter whose merge
   gate does not read statuses skips this step.
 
 ## Decision attribution in refusal review

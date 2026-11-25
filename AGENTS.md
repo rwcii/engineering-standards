@@ -58,7 +58,7 @@ project's enforcement section, not here.
 | `docs/engineering/wdr/`       | WDRs + `WDR_PROCESS.md` + index `README.md`        |
 | `docs/engineering/review/`    | Review procedure, standards lens, refusal lens (WDR 005) |
 | `.koinon/skills/`             | Facts the Koinon skills read for this repository (WDR 008, Decision 4) |
-| `scripts/setup-repo.sh`       | Apply the branch/merge policy to a GitHub repo; `--check` reports drift (WDR 010) |
+| `scripts/setup-repo.sh`       | Apply the branch/merge policy to a GitHub repo; `--check` reports drift; `setup-repo.test.sh` shows it detects each difference (WDR 010) |
 | `scripts/check-repo.sh`       | The repository checks (`repo-checks` in CI); `check-repo.test.sh` shows each can fail (WDR 004) |
 | `.github/workflows/checks.yml` | Required checks `repo-checks` and `promotion-source` (WDR 010, Decision 3) |
 | `.githooks/pre-commit`        | Blocks direct commits to `main` (WDR 010)          |

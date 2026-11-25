@@ -153,6 +153,12 @@ not moved, and otherwise contains exactly the approved change; for a release, th
 second parent is the pinned commit. A new head starts the gates again; evidence for an earlier
 head does not carry over.
 
+The gates judge two trees of the same head, and the evidence says which. The reviews read the
+head commit itself. CI on a pull request checks out the candidate merge of the head into its
+base, so it judges the result the merge would produce. Both results are recorded on the head
+commit; none is posted on a test merge commit. A new head therefore has no results until its own
+CI run and reviews report.
+
 - **Decided by:** Robert Capps
 - **Date:** 2026-11-25
 - **Context:** Should the gates bind the pull request, or the exact commit? The options were to
@@ -198,6 +204,18 @@ sets it only on a pull request into `develop` whose exact head both reviews appr
 merge the approval or standing authorization covers; never on a release into `main`. Where a gate
 is not a required check, the pull request is merged by hand once every gate passes on its head.
 Without any required check, auto-merge is left off, because the host would merge at once.
+
+A required check is only as trustworthy as whoever can report it:
+
+- The CI checks are pinned to the CI app, so a status posted by hand under the same name does
+  not satisfy them.
+- Any writer can post a commit status, so the review statuses are trusted only because write
+  access is limited to the accountable human and the agents acting for them. A review status
+  counts only when the pull request holds the posted review summary for the same head
+  (the review procedure, § Results).
+- Queued auto-merge does not by itself bind a head. When a new commit is pushed after auto-merge
+  is set, the new head has no review statuses, so the merge waits until the reviews of that head
+  report; the approval of the earlier head does not cover it (Decision 2).
 
 - **Decided by:** Robert Capps
 - **Date:** 2026-11-25
@@ -261,10 +279,15 @@ merge result, and records why.
 
 A release is one pull request from this repository's `develop` into `main`, cut at a **pinned**
 `develop` commit whose required checks passed. The pull request's head must equal that commit.
+Because the pull request's head is the `develop` branch, it moves when `develop` advances: the
+merge is bound to the pinned commit and refuses any other head, so a release whose head has moved
+does not merge. It is cut again at the new `develop` commit, with fresh evidence.
 All the release evidence names it and is posted in the pull request: the required checks green
 on it, the full local check run at it, and a fresh-context review of the whole `main`...`develop`
 diff. The merge is bound to the pinned head and is a merge commit. The `promotion-source` check
-requires the head to come from this repository's `develop`. After the merge, read back `main` and
+requires the head to come from this repository's `develop`; it proves the source, and the
+merge's head binding proves the pin. The local release check compares the pinned commit with
+`main`, the base it merges into. After the merge, read back `main` and
 confirm that its new merge commit has the pinned commit as its second parent. The tag and the
 host release are created on the released merge commit, under an approval that names them.
 Version numbering and release signing are each project's choice.
@@ -274,9 +297,9 @@ Version numbering and release signing are each project's choice.
 - **Context:** How should `develop` reach `main`? The options were a merge of whatever `develop`
   holds when the merge happens, a fast-forward of `main` to a tested commit, and a release pull
   request pinned to one tested `develop` commit and merged with a merge commit.
-- **Reason and scope:** pinning makes the release exactly the commit that was tested and reviewed,
-  even while features keep landing on `develop`; the merge commit keeps the release point on
-  `main`. This governs releases of this repository and is the adopters' default.
+- **Reason and scope:** pinning makes the release exactly the commit that was tested and reviewed;
+  a commit that lands on `develop` afterwards cannot ride along, because the merge refuses the
+  moved head. The merge commit keeps the release point on `main`. This governs releases of this repository and is the adopters' default.
 - **Strength:** hard rule for this repository; default for adopters.
 
 ### Alternatives Considered
@@ -333,8 +356,8 @@ The bundled tooling implements these decisions; a project that changes the flow 
   Decision 3, with the up-to-date requirement off. Merged head branches are deleted. Rulesets need
   a public repository or a paid plan; without them, the local guard and the convention carry the
   policy, and auto-merge stays off.
-- **Required checks:** `.github/workflows/checks.yml` runs `repo-checks` (`scripts/check-repo.sh`
-  and `scripts/check-repo.test.sh`) and `promotion-source` (`scripts/check-promotion-source.sh`)
+- **Required checks:** `.github/workflows/checks.yml` runs `repo-checks` (`scripts/check-repo.sh`,
+  `scripts/check-repo.test.sh` and `scripts/setup-repo.test.sh`) and `promotion-source` (`scripts/check-promotion-source.sh`)
   on every pull request into `develop` or `main`. A pull request can change the workflow it runs,
   so a change to `.github/`, `scripts/` or `.githooks/` is a gate-document change and gets the
   stricter review of WDR 005, Decision 3.
@@ -343,8 +366,14 @@ The bundled tooling implements these decisions; a project that changes the flow 
 - **Local guard:** `.githooks/pre-commit` blocks a direct (non-merge) commit on `main`; enable it
   once per clone with `git config core.hooksPath .githooks`.
 - **Setup (config-as-code):** `scripts/setup-repo.sh` applies the merge methods, auto-delete,
-  auto-merge, rulesets and required checks, and the local hook path. `scripts/setup-repo.sh --check`
-  reads the live settings and reports each difference without changing anything.
+  rulesets, required checks and the local hook path, updating live rulesets in place. It turns
+  auto-merge on only after a read-back shows every gate in force, and fails on a partial apply.
+  `scripts/setup-repo.sh --check` reads the live settings and reports each difference without
+  changing anything; `scripts/setup-repo.test.sh` shows it detects each difference.
+- **Rollout check:** after the policy is first applied, a probe pull request into `develop` shows
+  the gate working: it is blocked while any of the four checks is missing on its head, a status
+  posted under a CI check's name by hand does not satisfy it, and it becomes mergeable only when
+  all four report success on that head.
 - **Review base:** the standards review and the refusal review take `develop` as their base (the
   project's check facts, `.koinon/skills/check.md`).
 - **Compliance:** a merge of a commit other than the approved head, a change that lands on `main`

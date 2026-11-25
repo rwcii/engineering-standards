@@ -245,15 +245,19 @@ scripts/setup-repo.sh --check owner/repo
 The script also requires `jq`. It declares the required status checks of each branch
 (WDR 010, Decision 3). This repository's are `repo-checks`, `promotion-source`,
 `standards-review` and `refusal-review` on `develop`, and `repo-checks` and `promotion-source`
-on `main`. A required check must report on every pull request to its branch, or it blocks every
-merge, so set your own before applying:
+on `main`. `NAME@15368` pins a check to GitHub Actions, so a status posted by hand under that name
+does not satisfy it. A required check must report on every pull request to its branch, or it
+blocks every merge, so set your own before applying:
 
 ```bash
-REQUIRED_DEVELOP="build test" REQUIRED_MAIN="build test" scripts/setup-repo.sh owner/repo
+REQUIRED_DEVELOP="build@15368 test@15368" REQUIRED_MAIN="build@15368" scripts/setup-repo.sh owner/repo
 ```
 
+The script updates live rulesets in place, and turns auto-merge on only after reading back that
+every ruleset and required check is in force; a partial apply exits non-zero with auto-merge off.
 An empty `REQUIRED_DEVELOP` sets no required checks and leaves auto-merge off. Without a required
-check, GitHub would merge an auto-merge pull request at once.
+check, GitHub would merge an auto-merge pull request at once. `--check` exits 0 when the live
+settings match, 1 when one differs and 2 when they cannot be read.
 
 ### What it applies — and what your account type limits
 

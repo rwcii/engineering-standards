@@ -24,6 +24,8 @@ jobs:
         run: bash scripts/check-repo.sh "origin/${{ github.base_ref }}"
       - name: The checks can fail
         run: bash scripts/check-repo.test.sh
+      - name: The settings check detects each difference
+        run: bash scripts/setup-repo.test.sh
 
   promotion-source:
     name: promotion-source

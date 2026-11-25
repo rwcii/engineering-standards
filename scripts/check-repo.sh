@@ -34,21 +34,51 @@ else
   echo "PASS  whitespace"
 fi
 
+# Each check reads its inventory from `git ls-files`. A listing that fails, a required inventory
+# that is empty, or a listed file that cannot be read makes that check INCOMPLETE, never PASS.
+inventory() {  # inventory VAR CHECK PATHSPEC...
+  local var="$1" check="$2" out; shift 2
+  if ! out="$(git ls-files -- "$@" 2>&1)"; then
+    echo "INCOMPLETE  ${check}: cannot list tracked files: ${out}"; incomplete=1; return 1
+  fi
+  printf -v "$var" '%s' "$out"
+}
+readable() {  # readable FILE CHECK
+  [ -f "$1" ] && [ -r "$1" ] && return 0
+  echo "INCOMPLETE  $2: cannot read $1"; incomplete=1; return 1
+}
+report() {  # report CHECK OK DONE
+  [ "$3" = 1 ] || return 0
+  [ "$2" = 1 ] && echo "PASS  $1"
+}
+
 # shell ------------------------------------------------------------------------------
-shell_ok=1
-while IFS= read -r f; do
-  [ -f "$f" ] || continue
-  if ! err="$(bash -n "$f" 2>&1)"; then fail shell "$f: $err"; shell_ok=0; fi
-done < <(git ls-files -- '*.sh' '.githooks/*')
-[ "$shell_ok" = 1 ] && echo "PASS  shell"
+shell_ok=1; shell_done=0
+if inventory files shell '*.sh' '.githooks/*'; then
+  if [ -z "$files" ]; then
+    echo "INCOMPLETE  shell: no tracked shell scripts found"; incomplete=1
+  else
+    shell_done=1
+    while IFS= read -r f; do
+      readable "$f" shell || { shell_done=0; continue; }
+      if ! err="$(bash -n "$f" 2>&1)"; then fail shell "$f: $err"; shell_ok=0; fi
+    done <<< "$files"
+  fi
+fi
+report shell "$shell_ok" "$shell_done"
 
 # records ----------------------------------------------------------------------------
-records_ok=1
+records_ok=1; records_done=1
 for module in docs/architecture/adr:adr docs/product/pdr:pdr docs/engineering/wdr:wdr; do
   dir="${module%%:*}"; key="${module##*:}"
   index="$dir/README.md"
   [ -f "$index" ] || { fail records "$index is missing"; records_ok=0; continue; }
+  readable "$index" records || { records_done=0; continue; }
+  inventory files records "$dir/[0-9]*.md" || { records_done=0; continue; }
+  # a module with no records yet is valid (an empty listing that succeeded)
+  [ -n "$files" ] || continue
   while IFS= read -r f; do
+    readable "$f" records || { records_done=0; continue; }
     name="$(basename "$f")"
     num="${name%%-*}"
     case "$num" in 000) continue ;; esac
@@ -70,22 +100,31 @@ for module in docs/architecture/adr:adr docs/product/pdr:pdr docs/engineering/wd
       [ "$(printf '%s' "$listed" | tr -d '_')" = "$want" ] \
         || { fail records "$f: status '${status}', $index lists '${listed}'"; records_ok=0; }
     fi
-  done < <(git ls-files -- "$dir/[0-9]*.md")
+  done <<< "$files"
 done
-[ "$records_ok" = 1 ] && echo "PASS  records"
+report records "$records_ok" "$records_done"
 
 # links ------------------------------------------------------------------------------
-links_ok=1
-while IFS= read -r f; do
-  d="$(dirname "$f")"
-  while IFS= read -r target; do
-    path="${target%%#*}"
-    case "$target" in ''|'#'*|http://*|https://*|mailto:*) continue ;; esac
-    [ -n "$path" ] || continue
-    [ -e "$d/$path" ] || { fail links "$f: '$target' does not exist"; links_ok=0; }
-  done < <(sed 's/`[^`]*`//g' "$f" | grep -o '\](\([^) ]*\))' | sed 's/^](\(.*\))$/\1/')
-done < <(git ls-files -- '*.md')
-[ "$links_ok" = 1 ] && echo "PASS  links"
+links_ok=1; links_done=0
+if inventory files links '*.md'; then
+  if [ -z "$files" ]; then
+    echo "INCOMPLETE  links: no tracked Markdown files found"; incomplete=1
+  else
+    links_done=1
+    while IFS= read -r f; do
+      readable "$f" links || { links_done=0; continue; }
+      d="$(dirname "$f")"
+      targets="$(sed 's/`[^`]*`//g' "$f" | grep -o '\](\([^) ]*\))' | sed 's/^](\(.*\))$/\1/')" || true
+      while IFS= read -r target; do
+        path="${target%%#*}"
+        case "$target" in ''|'#'*|http://*|https://*|mailto:*) continue ;; esac
+        [ -n "$path" ] || continue
+        [ -e "$d/$path" ] || { fail links "$f: '$target' does not exist"; links_ok=0; }
+      done <<< "$targets"
+    done <<< "$files"
+  fi
+fi
+report links "$links_ok" "$links_done"
 
 if [ "$failed" = 1 ]; then echo "RESULT: FAIL"; exit 1; fi
 if [ "$incomplete" = 1 ]; then echo "RESULT: INCOMPLETE"; exit 2; fi

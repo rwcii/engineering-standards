@@ -28,7 +28,7 @@ seed() {
 # expect NAME EXIT LINE [BASE]: check-repo.sh exits EXIT and prints LINE (a fixed string)
 expect() {
   local name="$1" want="$2" line="$3" ref="${4:-base}" got=0
-  (cd "$tmp/repo" && bash "$src/scripts/check-repo.sh" "$ref" >"$tmp/out" 2>&1) || got=$?
+  (cd "$tmp/repo" && PATH="${SHIM:-}${SHIM:+:}$PATH" bash "$src/scripts/check-repo.sh" "$ref" >"$tmp/out" 2>&1) || got=$?
   if [ "$got" = "$want" ] && grep -qF -- "$line" "$tmp/out"; then
     echo "ok    $name (exit $got)"; pass=$((pass + 1))
   else
@@ -62,6 +62,25 @@ setup; printf '\nSee [gone](no-such-file.md).\n' >> "$tmp/repo/README.md"; seed
 expect "broken relative link fails" 1 "'no-such-file.md' does not exist"
 
 setup; expect "unknown base is INCOMPLETE, not PASS" 2 "RESULT: INCOMPLETE" no-such-ref
+
+# a git that cannot list tracked files: every inventory check is INCOMPLETE, never PASS
+real_git="$(command -v git)"
+mkdir -p "$tmp/shim"
+printf '#!/bin/sh\n[ "$1" = ls-files ] && { echo "fatal: simulated failure" >&2; exit 128; }\nexec "%s" "$@"\n' "$real_git" > "$tmp/shim/git"
+chmod +x "$tmp/shim/git"
+setup; SHIM="$tmp/shim" expect "failed file listing is INCOMPLETE" 2 "INCOMPLETE  shell: cannot list tracked files"
+if grep -q '^PASS  \(shell\|records\|links\)' "$tmp/out"; then
+  echo "FAIL  failed file listing still printed a PASS"; fails=$((fails + 1))
+else
+  echo "ok    failed file listing prints no PASS for shell, records or links"; pass=$((pass + 1))
+fi
+
+# a tracked file that cannot be read is INCOMPLETE (skipped when running as root)
+if [ "$(id -u)" != 0 ]; then
+  setup; chmod 000 "$tmp/repo/CONTRIBUTING.md"
+  expect "unreadable tracked file is INCOMPLETE" 2 "INCOMPLETE  links: cannot read CONTRIBUTING.md"
+  chmod 644 "$tmp/repo/CONTRIBUTING.md"
+fi
 
 # promotion-source: only this repository's develop may open a pull request into main
 promo() {
