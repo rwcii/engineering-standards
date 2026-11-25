@@ -113,5 +113,6 @@ reading above:
 - this file, [standards-lens.md](standards-lens.md) and [refusal-lens.md](refusal-lens.md);
 - the facts files in `.koinon/skills/`;
 - `AGENTS.md`, `CLAUDE.md` and each module's `AGENTS.md`;
+- the [adoption runbook](../../ADOPTING.md);
 - the `*_PROCESS.md` files and record templates;
 - `.githooks/`, `scripts/` and `.github/`.
