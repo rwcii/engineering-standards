@@ -1,8 +1,9 @@
 # Engineering Standards
 
 A portable, stack-agnostic system of **decision records** and independent **standards review**
-and **refusal review** gates, designed to be adopted by any project — copied, or cited against a
-pinned record list — regardless of language or framework.
+and **refusal review** gates. Projects can copy the records or cite them against a pinned list.
+This repository uses [Koinon](https://github.com/rwcii/koinon) for its shared agent skills and
+coordination.
 
 It has three record types and two review gates:
 
@@ -80,66 +81,145 @@ beginning with WDR 001 (the decision-record taxonomy itself). See the
 
 ## Adopting this in a project
 
-**Quickest start — use the template.** This is a GitHub
-[template repository](https://docs.github.com/articles/creating-a-repository-from-a-template):
-click **Use this template** (or `gh repo create <your-repo> --template rwcii/engineering-standards`)
-to get a fresh repo with these files, then run `scripts/setup-repo.sh` to apply the GitHub
-settings a template does not carry (merge methods, auto-delete, branch-protection rulesets,
-hook path). To adopt into an *existing* repo instead, follow the common steps, then the steps of
-the way your project holds the records (WDR 002, Decision 4).
+Start from this [GitHub template](https://docs.github.com/articles/creating-a-repository-from-a-template)
+or adopt the kit into an existing checkout. You can own a copy of the records or cite a pinned
+set. The [adoption runbook](docs/ADOPTING.md) covers both paths, including repository setup and
+verification.
 
-**Common steps**
+## Using Koinon
 
-1. **Install the skills** from a shared catalog for your agents — this repository uses
-   [Koinon](https://github.com/rwcii/koinon) — and copy `docs/engineering/review/` and
-   `.koinon/skills/` into your repo. By default, do not copy the catalog's skill procedures into
-   the repo; a project that cannot install the catalog keeps local skills and says so in its
-   `AGENTS.md` (WDR 008, Decision 4).
-2. **Adapt** the facts in `.koinon/skills/` (your base branch, record folders and check
-   commands) and the review documents in `docs/engineering/review/` (your build/test gate, and
-   an optional project-specific ADR/PDR/WDR checklist in the standards lens).
-3. **Replace** `CONTRIBUTING.md` and `.github/PULL_REQUEST_TEMPLATE.md` with your own —
-   they govern contributions to the *kit itself*. The DCO section and the PR checklist
-   items are reusable starting points you can keep.
-4. **Configure the repo:** run `scripts/setup-repo.sh` to apply the branch/merge policy
-   (merge methods, auto-delete, branch-protection rulesets) and the local hook path —
-   the GitHub settings a clone does not inherit.
+Koinon connects agent sessions, carries review and decision messages, and supplies shared
+skills. A project configures those skills with its own policy and check commands.
 
-**If you copy the records** — you own and adapt them:
+### Import the skills without installing Koinon
 
-1. **Copy** `docs/architecture/adr/`, `docs/product/pdr/` and `docs/engineering/wdr/` into
-   your repo.
-2. **Keep** ADR 001.x as-is (the universal code-architecture standards) and the baseline
-   WDRs 001–009.
-3. **Fill in** the templates for your stack: ADR 002.x (frontend / api /
-   backend-persistence) and ADR 004.x (your data-handling specifics).
-4. **Flesh out** the stubs (ADR 005 Security, 006 Authentication) when those
-   decisions are made — or leave them `draft` until then.
-5. **Add** your project's own ADRs from 007+, your PDRs from 001, and your WDRs from 010.
-   WDR 010 ships as a branch-flow *template* (the worked example of a project-specific WDR):
-   adopt its default flow or replace it with your own.
+Koinon releases from v0.13.0 include a standalone skills archive. No clone or running
+daemon is needed to import it. The example downloads a tagged installer and checks its
+SHA-256 before running it. It needs a POSIX shell, `curl`, `tar`, `awk` and
+`sha256sum` or `shasum`.
 
-**If you cite the records from one source** — you follow them and do not edit them:
+```sh
+version=v0.13.4
+installer_sha256=db78ee19531728a57a2f77e2b1add22293b55283904099dc7cd29a515b71743d
+curl -fsSLO "https://raw.githubusercontent.com/rwcii/koinon/${version}/scripts/install-skills.sh" &&
+  checksum=$(if command -v sha256sum >/dev/null; then
+    sha256sum install-skills.sh
+  else
+    shasum -a 256 install-skills.sh
+  fi) &&
+  [ "${checksum%% *}" = "$installer_sha256" ] &&
+  sh install-skills.sh "$version"
+```
 
-1. **Pin** a list of the source's records at a known version in your repo, and add a check
-   that fails a citation to a record missing from that list. Move the pin only in a reviewed
-   change.
-2. **Cite** each shared record by its source and ID. Point the standards lens and the record
-   facts at the source's record indexes, read at the pinned version.
-3. **Keep your own records** only for decisions that are yours. If you keep any, give them
-   their own series and index, and set `.koinon/skills/record.md` and
-   `.koinon/skills/standards-audit.md` to that series; if you keep none, leave those facts out.
-4. **Rewrite the copied facts and review documents** so that every path they name exists in
-   your repo: replace each reference to a local record (such as a WDR path in a facts file's
-   Sources) with your pinned list or with the source document read at the pin, and remove each
-   reference to a facts file you left out (such as the record checks in `check.md`). Then run
-   the catalog's state check and confirm that every facts file you kept is valid and every
-   Sources path exists. With no own series, the record and standards-audit skills report their
-   facts as missing; that is expected, because they have no series of your own to work on until
-   you keep your own records (step 3).
+The example digest comes from the installer in the signed
+[Koinon v0.13.4 tag](https://github.com/rwcii/koinon/releases/tag/v0.13.4). To change releases,
+update the tag and the corresponding installer digest from a verified upstream source.
 
-Either way, don't hold the records through a live link that follows the source's latest state,
-such as a submodule (WDR 002, Decision 4).
+The script downloads `koinon-skills.tar.gz` and `SHA256SUMS`. It checks the archive
+checksum and validates the entries before writing any skill. Set `KOINON_SKILLS_BASE`
+to use a release mirror. The installer writes each skill as
+`koinon-NAME/SKILL.md` at user scope. The destinations are:
+
+| Agent | Skills directory |
+| ----- | ---------------- |
+| Claude Code | `$CLAUDE_CONFIG_DIR/skills`, or `~/.claude/skills` |
+| Codex | `~/.agents/skills` |
+| OpenCode | `${XDG_CONFIG_HOME:-$HOME/.config}/opencode/skills`, if the configuration directory exists |
+| Antigravity | `~/.gemini/config/skills`, if the configuration directory exists |
+| Grok | `${GROK_HOME:-$HOME/.grok}/skills`, if the configuration directory exists |
+
+The installer skips `koinon-guide`, which needs the Koinon binary. Run it again with a new
+tag to update the copies. To remove the standalone copies, delete the specific
+`koinon-NAME` directories the installer wrote. See the
+[skills-only installation guide](https://github.com/rwcii/koinon/blob/main/docs/INSTALL.md#skills-on-a-computer-with-no-koinon)
+for details.
+
+With the project facts and usual development tools, you can use the check, record, sprint,
+sprint-closeout, standards review and audit, refusal review and audit, peer review, pair,
+release and provenance procedures. Steps that call Koinon tools need the daemon. The
+ship procedure uses the runtime to coordinate publication. Handoff and pickup can use
+local snapshots, but board checks are unavailable. Agent messaging, shared work claims and decision cards need the daemon.
+Team coordination, recovery and session-management skills also depend on it for their
+Koinon-backed steps.
+
+For the optional preflight runner, use the matching release's
+[`scripts/preflight-run.sh`](https://github.com/rwcii/koinon/blob/v0.13.4/scripts/preflight-run.sh)
+and verify its checksum before running it. The signed v0.13.4 tag gives this SHA-256 for
+the runner: `b7a17079dc5425e5cfe8a19f70f82f67f173905111bae0fe69c06d3a50ca9551`.
+It needs Claude Code, `jq` and the project's lens policy. Supply the lens instructions
+locally when the Koinon binary is unavailable.
+
+### Install Koinon with its skills
+
+For messaging, work claims and decision cards, install the Koinon runtime. On macOS or
+Linux with Homebrew, install Koinon and set up Claude Code and Codex:
+
+```sh
+brew install rwcii/koinon/koinon
+"$(brew --prefix)/bin/koinon" install --agent claude --agent codex
+```
+
+You can also download a [release binary](https://github.com/rwcii/koinon/releases) for your
+platform, verify its checksum, and run the same install command with that binary. Use
+`koinon setup FAMILY` to configure another supported family after installation. Koinon writes
+entries named `koinon-NAME` into the agents' user-level skill directories. See the
+[Koinon README](https://github.com/rwcii/koinon) and
+[installation guide](https://github.com/rwcii/koinon/blob/main/docs/INSTALL.md) for supported
+families and installation options.
+
+### Configure a project
+
+Create `.koinon/skills/NAME.md` for the skills your project uses. Set its `Version`, `Skill` and
+`Sources`, then provide the documented facts such as your base branch, check commands and
+review procedures. [This repository's facts](.koinon/skills/) are examples. Check them with
+`library_state` in your Koinon-connected agent, or use the command-line equivalent:
+
+```sh
+koinon library state --scope project --as FAMILY:SESSION_ID
+```
+
+Replace `FAMILY:SESSION_ID` with your registered native session identity. Look for
+`present-valid` in the repository facts report.
+
+Without Koinon, check the facts manually against the installed skill's
+`<!-- koinon:repository-facts -->` schema. Use `Version` 1 and the canonical skill name from the schema filename in
+`Skill`, such as `record` for `.koinon/skills/record.md`. The installed folder uses the
+`koinon-` prefix. Put one repository-relative path per bullet in `Sources` and confirm
+each resolves. Include the required headings and use each heading at most once. Give
+each schema-declared heading a value when you include it. For compatibility headings,
+follow the skill's documented exceptions.
+
+Projects that keep local procedures because
+they cannot install the catalog record that choice in their `AGENTS.md`. See
+[WDR 008](docs/engineering/wdr/008-context-and-memory-engineering.md#5-decision-4-skills-come-from-one-shared-catalog-a-repository-keeps-only-its-facts).
+
+### How this repository uses Koinon
+
+The [task-to-skill table](AGENTS.md#skills) lists this repository's skill entries and their
+project facts. The steps below show where Koinon fits in the development flow.
+
+1. **Plan and branch.** For a multi-PR deliverable, use `koinon-sprint` to agree on acceptance
+   criteria, checks, and the order of increments. Start the work branch from `develop`.
+2. **Build and verify.** Use `koinon-check` to run the project's checks. In paired work,
+   `koinon-pair` guides the driver and observer. The driver edits and commits, and the observer
+   receives a frozen checkpoint through Koinon's message bridge and sends one batch of
+   reproduced findings.
+3. **Review the candidate.** Independent reviewers use `koinon-standards-review` and
+   `koinon-refusal-review` on the same frozen head. Each records a head-bound verdict under the
+   [review procedure](docs/engineering/review/README.md).
+4. **Publish and merge.** Follow [CONTRIBUTING.md](CONTRIBUTING.md) and
+   [WDR 010](docs/engineering/wdr/010-branch-and-merge-flow.md) for publication and merge.
+   When the team asks for approval through Koinon, the decision card names the action and its
+   reviewed head. A team working without Koinon uses its project's approval channel.
+   The PR records the verdicts for that head, and the feature lands in
+   `develop` as a squash.
+5. **Resume a session.** `koinon-handoff` writes a private work snapshot. `koinon-pickup` reads
+   that snapshot and verifies the current state before resuming.
+
+The catalog also offers `koinon-ship` for project publication workflows and
+`koinon-provenance` for projects with usage capture tooling. Their operation depends on the
+adopting project's policy, facts and commands. This repository documents its contribution
+flow in [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Repository setup (`scripts/setup-repo.sh`)
 

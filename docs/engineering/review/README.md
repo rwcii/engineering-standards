@@ -81,10 +81,22 @@ the right approver (WDR 005, Decision 2).
   location, the record or rule it breaks, and the fix. An ID stays the same through the rechecks
   of that review (for example S1, S2 for standards and R1, R2 for refusal).
 - Put the verdict (APPROVE, REQUEST CHANGES or BLOCK), the full head hash and the findings in the
-  pull request's review summary. Before posting, check the text against WDR 007, Decision 4
-  (no private project names).
+  pull request's review summary. Before posting, apply the project's publication rules.
+  This repository follows [WDR 007, Decision 4](../wdr/007-agentic-security.md) for private
+  project names and [WDR 002, Decision 5](../wdr/002-record-system-as-infrastructure.md)
+  for decision attribution. Adopters point this check to their own governing rules.
 - Record the outcome of each finding: fixed, accepted with a reason, or moved to a tracked issue.
   A finding is never dropped silently.
+
+## Decision attribution in refusal review
+
+The reviewer may read direct private evidence to verify a decision's authority, scope and
+wording. For this repository, the named **Decided by** field and the context in the record
+writer's own words satisfy the attribution check. Apply [WDR 002, Decision 5](../wdr/002-record-system-as-infrastructure.md)
+when the shared refusal-review procedure asks for quoted speech in a record. Cite the tracked
+rule and section when available. Otherwise describe the verified source and what it covers
+in your own words. See the [refusal lens](refusal-lens.md#phase-2-find-each-source)
+for how to evaluate the source.
 
 ## Recheck
 
@@ -101,5 +113,6 @@ reading above:
 - this file, [standards-lens.md](standards-lens.md) and [refusal-lens.md](refusal-lens.md);
 - the facts files in `.koinon/skills/`;
 - `AGENTS.md`, `CLAUDE.md` and each module's `AGENTS.md`;
+- the [adoption runbook](../../ADOPTING.md);
 - the `*_PROCESS.md` files and record templates;
 - `.githooks/`, `scripts/` and `.github/`.

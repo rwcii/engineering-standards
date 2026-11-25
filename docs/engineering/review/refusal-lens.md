@@ -42,9 +42,15 @@ Each constraint needs a source that covers its case:
 
 - an accepted decision record (ADR, PDR or WDR) whose scope includes the case;
 - the requirement of the issue or plan that the change delivers;
-- the accountable human's own words (WDR 009), quoted with date and the question they answered;
+- the accountable human's direct decision (WDR 009), with its date and the question it answered;
 - a verified platform, API, storage or protocol contract, or a reproduced correctness or security
   boundary.
+
+When the source is a decision, read its strength, scope and effective period. Use its words
+to verify what it authorizes. For this repository, follow the review procedure's
+[decision attribution rule](README.md#decision-attribution-in-refusal-review) when recording
+the result. A relay may point to evidence, and the source that granted the approval supplies
+its authority.
 
 Needs no further source: routine input validation and a demonstrated capability limit. Neither may
 be turned into a new approval step.
@@ -77,7 +83,7 @@ Is a finding:
 ## Constraints
 | # | File | Constraint (quoted) | Kind | Source | Covers this case? |
 |---|------|---------------------|------|--------|-------------------|
-| 1 | ... | ... | refusal/approval/cap/exclusion/test/code | record, requirement, quote or contract | yes/no/narrower |
+| 1 | ... | ... | refusal/approval/cap/exclusion/test/code | record, requirement, decision or contract | yes/no/narrower |
 
 ## Findings
 | ID | Severity | File and location | Constraint # | Finding | Missing or narrower source | Recommended Fix |

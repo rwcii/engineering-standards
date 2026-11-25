@@ -39,7 +39,8 @@ source of truth and is recorded here as a deliberate decision; and each task wor
 from **durable records plus an explicit scope** rather than an inherited transcript,
 with deliberate handoffs between agents and phases. Agent **skills come from one shared
 catalog**, a repository keeps only the facts those skills read, and each agent hands off
-into its own uncommitted folder.
+into its own uncommitted folder. Each kind of guidance lives with the document that
+serves its reader.
 
 ---
 
@@ -51,8 +52,9 @@ into its own uncommitted folder.
 4. Decision 3: Tasks Work From Records and Scope, Not an Inherited Transcript
 5. Decision 4: Skills Come From One Shared Catalog; a Repository Keeps Only Its Facts
 6. Decision 5: Each Agent Hands Off Into Its Own Uncommitted Folder in the Main Checkout
-7. Conclusion
-8. Document History
+7. Decision 6: Each Document Has an Owner and an Audience
+8. Conclusion
+9. Document History
 
 ---
 
@@ -280,15 +282,56 @@ the handoff and pickup skills read the location from the repository's facts.
 
 ---
 
-## 7. Conclusion
+## 7. Decision 6: Each Document Has an Owner and an Audience
+
+### Decision
+
+Keep guidance where its reader looks for it. Point to the document that owns a rule
+when another document needs to mention it.
+
+| Document | What belongs there |
+| -------- | ------------------ |
+| README | What the project is, how people use it, and links to adoption or contribution guidance. |
+| Scoped `AGENTS.md` and `CLAUDE.md` | `AGENTS.md` holds operating steps, applicable gates and pointers to governing records. `CLAUDE.md` points to it as described in Decision 2. |
+| Decision records | Durable choices, rationale, applicability, and the decisions they replace. |
+| Skill facts | Project values the shared procedure reads, such as paths and check commands. |
+| Ignored working notes and handoffs | Private session state, provisional plans and evidence used to resume work. |
+
+A project may set budgets for its instruction files.
+
+- **Decided by:** Robert Capps
+- **Date:** 2026-11-25
+- **Context:** Where should adoption guidance, operating rules, decisions and temporary work
+  live? The options were one combined handbook, repeated guidance at each entry point,
+  or documents scoped by audience with links to the owning rule.
+- **Reason and scope:** Readers can find a rule without loading unrelated material. One
+  owner per rule reduces drift. This governs repository guidance and session notes.
+- **Review when:** readers repeatedly miss a rule or find contradictory copies.
+
+### Alternatives Considered
+
+| Alternative | Description | Reason declined |
+| ----------- | ----------- | --------------- |
+| Combined handbook | Put all guidance in one document | Loads instructions and project history into the same entry point for every reader |
+| Repeat governing text | Copy the rule to each entry point | Copies drift and obscure which one governs |
+
+### Enforcement
+
+Review checks placement and links when guidance changes. The project names its
+instruction entry points and the paths where skills find project data.
+
+---
+
+## 8. Conclusion
 
 Context is engineered, not incidental: the always-loaded tier is budgeted to durable
 rules and pointers, the `AGENTS.md`/`CLAUDE.md` convention gives that tier a portable
 and tiered shape, and tasks run from current records and scope rather than an
 accreted transcript. Together these keep an agent's attention on what is true and
 relevant, which is the precondition for every other standard to actually be followed.
-The records this guidance routes to are governed by WDR 002; concrete compaction and
-summary mechanics are each adopting project's enforcement.
+Each entry point serves its audience and links to the document that owns the rule.
+WDR 002 governs the linked records. Concrete compaction and summary mechanics are each
+adopting project's enforcement.
 
 ---
 
@@ -299,3 +342,4 @@ summary mechanics are each adopting project's enforcement.
 | 2026-05-31 | Initial creation |
 | 2026-06-19 | Generalized convention wording for vendoring; removed self-referential example |
 | 2026-11-25 | Decision 4: skills come from one shared catalog; a repository keeps only its facts. Decision 5: each agent hands off into its own uncommitted folder in the main checkout |
+| 2026-11-25 | Decision 6 defines document roles and how to point to the owning rule. |

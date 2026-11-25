@@ -12,6 +12,7 @@ supersedes: ""
 superseded_by: ""
 related:
   - "001"
+  - "005"
   - "008"
 tags:
   - workflow
@@ -41,7 +42,9 @@ generated from it, never hand-maintained); records carry **applicability metadat
 so the governing set is *selected by narrowing* rather than read in full; and the
 record graph maintains **referential integrity and freshness**, so a stale or
 orphaned record is a defect, not background noise. A project that adopts shared records
-**copies them or cites them against a pinned list**, never through a live link.
+**copies them or cites them against a pinned list**, never through a live link. The owning
+record attributes the decision by name and preserves earlier decisions when their scope,
+strength or status changes.
 
 ---
 
@@ -52,8 +55,10 @@ orphaned record is a defect, not background noise. A project that adopts shared 
 3. Decision 2: Records Are Selected by Applicability, Not Read Wholesale
 4. Decision 3: The Record Graph Stays Referentially Sound and Current
 5. Decision 4: Shared Records Are Copied or Cited Against a Pinned List
-6. Conclusion
-7. Document History
+6. Decision 5: Attribute Decisions by Name in the Owning Record
+7. Decision 6: Preserve and Revisit the Decisions That Govern the Work
+8. Conclusion
+9. Document History
 
 ---
 
@@ -251,15 +256,126 @@ a citation missing from the pinned list, and moves the pin only in a reviewed ch
 
 ---
 
-## 6. Conclusion
+## 6. Decision 5: Attribute Decisions by Name in the Owning Record
+
+### Decision
+
+Each new or substantively amended decision states the decider's name, the date,
+the question and options in the writer's own words, the decision, and its reason and scope.
+Include a review trigger when known. Use the **Decided by** field for attribution.
+
+This repository paraphrases chat and decision-card text in its records and cites tracked
+governing documents. Keep private card, verdict, chat and message identifiers in working
+notes when needed. The record carries decision attribution. Keep that attribution and
+the private approval material out of public READMEs, commit messages, pull requests and
+release notes. WDR 009 governs the separate provenance of the work, including who is
+accountable for it.
+
+- **Decided by:** Robert Capps
+- **Date:** 2026-11-25
+- **Context:** How should a public decision record attribute a choice? The options were
+  verbatim quotes, attributed paraphrases, and a named field with the decision explained
+  in the record writer's own words.
+- **Reason and scope:** The named field preserves accountability and lets the public record
+  stand on its own. Paraphrased context keeps private conversation out of the record. This
+  governs decision attribution in this repository and its published material.
+- **Strength:** hard rule.
+
+### Alternatives Considered
+
+| Alternative | Description | Reason declined |
+| ----------- | ----------- | --------------- |
+| Verbatim quotation | Use the decider's words in the body | Exposes private text and makes a relayed quote hard to verify |
+| Attributed paraphrase | Name the decider again in the body | Repeats the attribution and makes the summary read as the decider's wording |
+
+### Enforcement
+
+The record forms carry these fields. Review checks the record against the decision source.
+In the published result, cite the tracked rule and section when available. For a verified
+source without a tracked rule, describe the source and what it covers in your own words.
+WDR 005, Decision 4 defines valid sources.
+
+---
+
+## 7. Decision 6: Preserve and Revisit the Decisions That Govern the Work
+
+### Decision
+
+Write a durable decision in the document that owns the rule, in the change that implements
+it. Use its stable identifier or section in later references. Keep proposals marked as drafts.
+Working notes may track decisions in progress. The governing record carries the operative
+decision and replaces the need for a running decision log. Keep any approval relay in working
+notes as evidence. Its authority still comes from the source that granted it.
+
+Put a substantive replacement in a dated section or a separate record. Mark the earlier
+decision as replaced and link both directions. Retire a record by marking it deprecated or
+superseded with a reason. Preserve its identifier and a resolvable entry while references
+remain. Use a point record when a refinement has its own scope and decision. Clarifications
+can amend the owning record without allocating another identifier.
+
+Cite a shared decision by its source, record identifier, pinned revision and relevant
+section. A local record may link to a shared baseline at its pinned revision without
+editing the baseline to add a backlink. When replacing a local decision, keep the reciprocal
+supersession links.
+
+Record **Strength** when it helps a reader apply a decision, especially one that authorizes
+a constraint. The field is optional. It can take these values.
+
+| Strength | Effect |
+| -------- | ------ |
+| Hard rule | Governs all cases within its stated scope. |
+| Default | Applies unless the project or task records a reason to vary it. |
+| Preference | Guides the choice when several options remain valid. |
+| One-off | Applies only to the case it names. |
+
+For a decision without the field, read its wording, authority and scope. An omitted
+label neither widens a one-off nor weakens a binding rule. **Review when** marks a reason to
+reconsider. **Expires** marks when the decision stops applying. Record material accepted
+exceptions with their date, scope and closure condition.
+
+Revisit a governing decision when its premises change, the same workaround recurs, or a
+later decision conflicts with it. Bring one recommendation with the evidence and keep
+independent authorized work moving.
+
+- **Decided by:** Robert Capps
+- **Date:** 2026-11-25
+- **Context:** Where should decisions live, and how should later readers handle a changed or
+  case-specific rule? The options were a central log, overwriting earlier wording in place,
+  or one governing document with explicit scope, strength and replacement links.
+- **Reason and scope:** Readers need the authority that governs the present case and a way to
+  find what changed. This decision covers how this repository records, cites, replaces and
+  revisits durable decisions. It also covers material exceptions to those decisions and how
+  working notes handle relayed evidence. WDR 005, Decision 4 governs other source kinds.
+- **Review when:** a decision cannot be located from a citation or the form repeatedly fails
+  to show whether a constraint applies.
+
+### Alternatives Considered
+
+| Alternative | Description | Reason declined |
+| ----------- | ----------- | --------------- |
+| Running decision log | Put authority in a separate chronological log | The log and the governing document can disagree |
+| Overwrite on replacement | Replace earlier text in place | Hides which rule applied to earlier work and breaks references |
+| Uniform strength | Assign the same strength to every decision | Turns case-specific judgments into general restrictions or weakens existing rules |
+
+### Enforcement
+
+Check frontmatter and identifier consistency, index and status alignment, local links,
+pinned citations, and reciprocal supersession. Check public text for the project's
+prohibited attribution and private references. A project may automate these checks and
+should verify that an invalid example fails any validator it adopts.
+
+---
+
+## 8. Conclusion
 
 Treated as infrastructure, the record set is machine-readable (a frontmatter
 contract with a generated index), selectable (applicability metadata, narrow before
 deep-read), and sound (a referentially consistent graph kept current with the code).
 These properties are what let the records serve as an agent's interface and memory
 at scale, and what let the standards review validate against them without reading the
-entire corpus. The concrete schema, validator, generator, and filters are each
-adopting project's enforcement.
+entire corpus. The record provides a named attribution, and dated replacements keep
+earlier decisions findable. The concrete schema, validator, generator, and filters are
+each adopting project's enforcement.
 
 ---
 
@@ -269,3 +385,4 @@ adopting project's enforcement.
 | ---------- | ---------------- |
 | 2026-05-31 | Initial creation |
 | 2026-11-25 | Decision 4: shared records are copied or cited against a pinned list; the review is named as the standards review, not a local skill |
+| 2026-11-25 | Decisions 5 and 6 record attribution, decision scope and strength, lifecycle, and record checks. |

@@ -1,8 +1,8 @@
 # Contributing
 
 > **Adopting this kit?** This file governs contributions to the **engineering-standards
-> kit itself** (the canonical repository). If you vendored the kit — forked it or used
-> *"Use this template"* — **replace this file with your own project's contribution
+> kit itself** (the canonical repository). If you adopted the kit, including by forking it or using
+> *"Use this template"*, **replace this file with your own project's contribution
 > policy**. The Developer Certificate of Origin section below is a reusable starting
 > point you can keep as-is.
 
@@ -26,7 +26,7 @@ adopters:
 ## 2. Contribute back to the canonical kit (maintainer-curated)
 
 Changes to *this* repository are curated, to keep the standard set coherent for everyone
-who vendors it:
+who adopts it:
 
 - **Open an issue or discussion first**, describing the change and the decision behind
   it. Pull requests are accepted **by invitation**, once there is agreement — please

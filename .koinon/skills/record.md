@@ -11,6 +11,7 @@ record
 - docs/product/pdr/PDR_PROCESS.md
 - docs/product/pdr/README.md
 - docs/engineering/wdr/WDR_PROCESS.md
+- docs/engineering/wdr/002-record-system-as-infrastructure.md
 - docs/engineering/wdr/README.md
 
 ## Record kinds and folders
@@ -35,6 +36,11 @@ No automated record check exists yet. Check by hand, and report each check as pa
 - each relative link that the change adds or changes resolves to an existing file;
 - the cardinal rules of AGENTS.md hold: no AI or bot attribution, no line numbers or counts, no
   volatile implementation detail, no toolchain names in a universal record;
-- no reference to a scratch or git-ignored working file, such as a handoff snapshot.
+- new or substantively amended decisions use the attribution fields in WDR 002, Decision 5.
+  When a decision states its strength, check the value and scope against Decision 6. Check
+  pinned citations, resolvable retired identifiers and reciprocal supersession where applicable;
+- no references to scratch or Git-ignored files, including working notes and handoff
+  snapshots. No quoted private text or private card, verdict, chat or message identifiers
+  (WDR 002, Decision 5).
 ## Commit subject pattern
 `docs(adr): ...`, `docs(pdr): ...` or `docs(wdr): ...` (AGENTS.md § Working Conventions).

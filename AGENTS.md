@@ -1,5 +1,7 @@
 # AGENTS.md — Engineering Standards
 
+For adoption into another project, agents follow [docs/ADOPTING.md](docs/ADOPTING.md). The instructions below govern changes to this repository.
+
 ## What This Repository Is
 
 A portable, stack-agnostic system of decision records and a review gate, meant to

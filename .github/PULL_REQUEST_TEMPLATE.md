@@ -1,7 +1,7 @@
 <!--
 Adopting this kit? This PR template governs PRs to the engineering-standards kit itself.
-If you vendored the kit, replace it with your project's own PR checklist — the items below
-are a reusable starting point (they map to the WDRs you vendored).
+If you adopted the kit, use your project's own PR checklist. The items below map to
+the WDRs this repository uses.
 
 Canonical-kit PRs are maintainer-curated (see CONTRIBUTING.md): please open an issue or discussion
 first — PRs are accepted by invitation, once there's agreement. To use the kit for your

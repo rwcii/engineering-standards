@@ -63,13 +63,21 @@ tags:
 
 [Clear statement of what was decided about product behavior.]
 
+- **Decided by:** [Name of the person who made the decision]
+- **Date:** [YYYY-MM-DD]
+- **Context:** [Question and options, in the writer's words]
+- **Reason and scope:** [Why the choice was made and what it covers]
+- **Strength:** [Optional: hard rule | default | preference | one-off]
+- **Review when:** [Trigger to reconsider, if known]
+- **Expires:** [End condition or date, when known]
+
 ### Alternatives Considered
 
 | Alternative | Description  | Why Rejected                    |
 | ----------- | ------------ | ------------------------------- |
 | [Name]      | [What it is] | [Specific reason for rejection] |
 
-### Rationale
+### Rationale (optional)
 
 1. [Reason — user research, product goal, UX principle]
 
