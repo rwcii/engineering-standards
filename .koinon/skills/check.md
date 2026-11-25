@@ -48,9 +48,10 @@ incomplete (it did not run, with the reason; never a pass, WDR 004 Decision 8) o
 - After a merge (bound to the approved head with `--match-head-commit`, WDR 010 Enforcement), read
   back the merge commit that the pull request records, not the branch tip:
   `m=$(gh pr view <number> --json mergeCommit -q .mergeCommit.oid)`, then `git fetch origin`.
-  For a feature, `git diff <m>^ <m>` equals `git diff <base at approval> <approved head>` (and
-  when the base had not moved, `git rev-parse <m>^{tree}` equals `git rev-parse <approved head>^{tree}`);
-  for a release, `git rev-parse <m>^2` is the pin.
+  For a feature, the squash's tree is the expected candidate for its actual first parent:
+  `git rev-parse <m>^{tree}` equals `git merge-tree --write-tree <m>^ <approved head>` (Git 2.38 or
+  later); when `<m>^` is the reviewed base, it also equals `git rev-parse <approved head>^{tree}`.
+  For a release, `git rev-parse <m>^2` is the pin.
 ## Required CI
 On every pull request into `develop` or `main`, with no path filters, and again when its base
 changes:

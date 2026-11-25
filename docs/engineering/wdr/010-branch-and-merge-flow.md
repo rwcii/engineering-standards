@@ -375,8 +375,9 @@ The bundled tooling implements these decisions; a project that changes the flow 
   <approved head>`, and a release with `gh pr merge <number> --merge --match-head-commit <pin>`;
   the host refuses the merge if the head has moved. Then read back the merge commit the pull
   request records (`gh pr view <number> --json mergeCommit`), not the branch tip, which a later
-  merge may have moved, and compare it as Decision 2 says: its changes against its first parent
-  equal the approved change, or for a release, its second parent is the pin.
+  merge may have moved, and compare it as Decision 2 says: a squash's tree equals the merge of the
+  approved head into the squash's actual first parent (`git merge-tree --write-tree`), or for a
+  release, its second parent is the pin.
 - **Review statuses:** the review procedure (§ Results) posts `standards-review` and
   `refusal-review` on the exact head from each approving report.
 - **Local guard:** `.githooks/pre-commit` blocks a direct (non-merge) commit on `main`; enable it
@@ -394,7 +395,9 @@ The bundled tooling implements these decisions; a project that changes the flow 
      `AUTO_MERGE=off REQUIRED_DEVELOP="repo-checks@15368 standards-review refusal-review"
      REQUIRED_MAIN="repo-checks@15368" scripts/setup-repo.sh`.
   2. Release `develop` into `main` under Decision 5, so the trusted branch carries the workflow and
-     the script.
+     the script. On this first release the hosted `promotion-source` cannot run yet, so the release
+     takes its source check locally, with the pull request's actual source
+     (`.koinon/skills/check.md`, Conditional checks), beside the checks that step 1 requires.
   3. Apply the full policy with auto-merge off (`AUTO_MERGE=off scripts/setup-repo.sh`).
   4. Probe: a pull request into `develop` is blocked while any of the four checks is missing on its
      head, a status posted under a CI check's name by hand does not satisfy it, and it becomes
