@@ -339,7 +339,8 @@ same commit. The rule applies to every pull request into `develop` or `main`.
 - **Date:** 2026-11-25
 - **Context:** Should a pull request open first and let CI find the failures, or open only after
   the full local check passes? The options were CI only, a partial local check, or the full
-  local check on the exact commit.
+  local check on the exact commit. The full local check was first listed as a proposed rule; the
+  question was then whether to adopt it as a rule or keep it as a proposal, and it was adopted.
 - **Reason and scope:** a pull request that fails its first check wastes review and starts the
   gates again on a new head; the local check is fast and deterministic (WDR 004). This governs
   this repository's pull requests.
@@ -352,6 +353,7 @@ same commit. The rule applies to every pull request into `develop` or `main`.
 | ----------- | ----------- | ------------ |
 | CI only | Open the pull request and let CI report | Spends a review cycle and a new head on failures found in seconds locally |
 | A partial local check | Run the fast checks; leave the rest to CI | The skipped part fails on the host, with the same cost |
+| Keep it as a proposal | Record the practice without making it a rule | Agents read an unadopted proposal as optional, and the failures it prevents keep reaching review |
 
 ---
 
