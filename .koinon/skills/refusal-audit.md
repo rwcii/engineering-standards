@@ -14,5 +14,4 @@ A folder outside the repository. A part of the output that is published follows 
 ## Diff-level review
 refusal-review, with .koinon/skills/refusal-review.md.
 ## Private data
-The repository is public: published text names no private project and quotes no private
-conversation (WDR 007, Decision 4).
+The repository is public: published text names no private project (WDR 007, Decision 4).

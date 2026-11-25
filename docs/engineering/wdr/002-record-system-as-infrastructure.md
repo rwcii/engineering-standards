@@ -206,7 +206,7 @@ system they govern:
 ### Enforcement
 
 Per project: link-graph and status invariants checked in the gate; a
-the standards review finding when a change contradicts an accepted record without
+standards review finding when a change contradicts an accepted record without
 updating it, or when a significant change cites no governing record.
 
 ---

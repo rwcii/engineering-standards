@@ -11,6 +11,7 @@ reviewers: []
 supersedes: ""
 superseded_by: ""
 related:
+  - "005"
   - "006"
 tags:
   - workflow
@@ -36,8 +37,8 @@ and the lethal combination of private data + untrusted content + an exfiltration
 channel is never co-located without a gate**; the agent executes in a **hermetic,
 least-privilege sandbox** with enumerated tools and deny-by-default egress; and
 **no agent-introduced dependency enters the tree unproven, while secrets never flow
-into the agent's context or out into generated artifacts.** Text that an agent publishes
-in a **public repository names no private project and quotes no private conversation.** These are the
+into the agent's context or out into generated artifacts.** Text published in a
+**public repository names no private project.** These are the
 agent-specific complement to the project's general security posture (ADR 005).
 
 ---
@@ -48,7 +49,7 @@ agent-specific complement to the project's general security posture (ADR 005).
 2. Decision 1: Untrusted Content Is Never Instructions
 3. Decision 2: The Agent Executes in a Hermetic, Least-Privilege Sandbox
 4. Decision 3: Dependencies Are Proven and Secrets Never Cross the Boundary
-5. Decision 4: Public Text Names No Private Project and Quotes No Private Conversation
+5. Decision 4: Public Text Names No Private Project
 6. Conclusion
 7. Document History
 
@@ -197,26 +198,26 @@ egress; pairs with ADR 005 (secrets management) and ADR 003 (pinned toolchain).
 
 ---
 
-## 5. Decision 4: Public Text Names No Private Project and Quotes No Private Conversation
+## 5. Decision 4: Public Text Names No Private Project
 
 ### Decision
 
-Text that goes into a public repository — files, commit messages, pull request text, review
-summaries and posted evidence — names no private project, repository, host or person's private
-detail, and quotes no private conversation (chat, decision-board text or agent messages). A
-practice learned in a private project is carried as the general practice, without its source's
-name.
+This repository and everything it publishes — files, commit messages, pull request text, review
+summaries and posted evidence — name no non-public project. A practice learned in a private
+project is carried as the general practice, without its source's name. Public projects, such as
+the skill catalog this repository uses, may be named. An adopting project applies the same rule
+to its own public repositories by default.
 
 - **Decided by:** Robert Capps
 - **Date:** 2026-11-25
-- **Context:** what may public text say about the private projects and conversations that shaped
-  it? The options were to name sources freely, to redact them when a review finds them, or to
-  carry only the general practice.
-- **Reason and scope:** a public repository is copied and indexed; a private name or a quoted
-  conversation in it cannot be withdrawn. It covers public repositories and their public
-  artifacts. It does not cover a private repository's own records, and it does not stop naming
-  public projects.
-- **Strength:** hard rule.
+- **Context:** may this public repository name the private projects whose practices shaped it?
+  The options were to name them freely, to remove names when a review finds them, or to carry
+  only the general practice.
+- **Reason and scope:** a public repository is copied and indexed, so a private name in it
+  cannot be withdrawn. It covers this repository and its public artifacts as a hard rule, and an
+  adopter's public repositories as a default. It does not cover private repositories, it does
+  not stop naming public projects, and it does not set how a record attributes a decision.
+- **Strength:** hard rule for this repository; default for an adopting project.
 - **Review when:** none known.
 
 ### Alternatives Considered
@@ -224,7 +225,7 @@ name.
 | Alternative | Description | Why Rejected |
 | ----------- | ----------- | ------------ |
 | Name sources freely | Cite the private project a practice came from | Exposes private work in a public, copied place |
-| Redact at review time | Write freely, and remove names when a review finds them | A missed name is already published; review becomes the only guard |
+| Remove names at review time | Write freely, and remove names when a review finds them | A missed name is already published; review becomes the only guard |
 | Carry the general practice only | Chosen | Chosen |
 
 ### Enforcement
@@ -253,4 +254,4 @@ enforcement.
 | Date       | Change           |
 | ---------- | ---------------- |
 | 2026-05-31 | Initial creation |
-| 2026-11-25 | Decision 4: public text names no private project and quotes no private conversation |
+| 2026-11-25 | Decision 4: public text names no private project |

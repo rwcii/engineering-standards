@@ -3,7 +3,7 @@ wdr: "001"
 title: "Decision-Record Taxonomy & the WDR Series"
 status: accepted
 created: "2026-05-31"
-updated: "2026-05-31"
+updated: "2026-11-25"
 parent_wdr: ""
 authors:
   - "Robert Capps"
@@ -109,7 +109,8 @@ operating loop, the review and enforcement gates, and the record system itself.
 The WDR **reuses the ADR machinery** rather than inventing its own — the same
 template, the same `draft → under_review → accepted → modified →
 deprecated/superseded` lifecycle, the same cardinal rules, and the same
-`standards-review` path (which gains a WDR-compliance phase). Only the *scope* and
+standards review path (the review procedure in `docs/engineering/review/`, whose standards lens
+has a WDR-compliance phase). Only the *scope* and
 the frontmatter key (`wdr`/`parent_wdr`, plus the `workflow`/`agentic` tags) differ.
 ADR scope is unchanged and remains strictly architectural.
 
@@ -200,3 +201,4 @@ decision to exactly one type, deterministically enough for an agent to apply.
 | Date       | Change           |
 | ---------- | ---------------- |
 | 2026-05-31 | Initial creation |
+| 2026-11-25 | The review path names the review procedure, not a local skill (WDR 008, Decision 4) |

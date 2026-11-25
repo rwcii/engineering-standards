@@ -82,7 +82,7 @@ the right approver (WDR 005, Decision 2).
   of that review (for example S1, S2 for standards and R1, R2 for refusal).
 - Put the verdict (APPROVE, REQUEST CHANGES or BLOCK), the full head hash and the findings in the
   pull request's review summary. Before posting, check the text against WDR 007, Decision 4
-  (no private project names, no quoted private conversation).
+  (no private project names).
 - Record the outcome of each finding: fixed, accepted with a reason, or moved to a tracked issue.
   A finding is never dropped silently.
 

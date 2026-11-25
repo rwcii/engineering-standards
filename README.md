@@ -1,8 +1,8 @@
 # Engineering Standards
 
-A portable, stack-agnostic system of **decision records** and automated
-**standards-review** and **refusal-review** gates, designed to be vendored into any project regardless
-of language or framework.
+A portable, stack-agnostic system of **decision records** and independent **standards review**
+and **refusal review** gates, designed to be adopted by any project — copied, or cited against a
+pinned record list — regardless of language or framework.
 
 It has three record types and two review gates:
 
@@ -129,6 +129,12 @@ the way your project holds the records (WDR 002, Decision 4).
 3. **Keep your own records** only for decisions that are yours. If you keep any, give them
    their own series and index, and set `.koinon/skills/record.md` and
    `.koinon/skills/standards-audit.md` to that series; if you keep none, leave those facts out.
+4. **Rewrite the copied facts and review documents** so that every path they name exists in
+   your repo: replace each reference to a local record (such as a WDR path in a facts file's
+   Sources) with your pinned list or with the source document read at the pin, and remove each
+   reference to a facts file you left out (such as the record checks in `check.md`). Then run
+   the catalog's state check and confirm that every facts file is valid and every Sources path
+   exists.
 
 Either way, don't hold the records through a live link that follows the source's latest state,
 such as a submodule (WDR 002, Decision 4).
