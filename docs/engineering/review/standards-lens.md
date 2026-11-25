@@ -56,7 +56,9 @@ git log --oneline <base>...<head>
 ```
 
 1. Identify all changed files and commits.
-2. **Read EVERY changed file completely** with a file read — not grep, not search.
+2. **Read EVERY changed file completely** with a file read — not grep, not search. Read each
+   file in the tree that the [review procedure](README.md#which-tree-to-read) names: an added
+   file at the head, a deleted file at the base, and both sides of a moved or replaced file.
 3. Identify the **applicable records**: read the ADR, PDR, and WDR indexes (each
    module's `README.md`) and select the records whose scope the change touches — by tag,
    area, and change type — then deep-read the selected records in full (per WDR 002). You
@@ -256,7 +258,9 @@ The review agent MUST output this structured report:
 ```
 ## Scope
 - Branch: [branch name]
-- Base: [base branch]
+- Base: [full base hash]
+- Head: [full head hash]
+- Kind: full review / recheck of [earlier finding IDs]
 - Files changed: N
 - Commits: N
 
@@ -304,9 +308,12 @@ The review agent MUST output this structured report:
 | CI | adequate/gaps | ... |
 
 ## Findings
-| # | Severity | File | Description | Recommended Fix |
-|---|----------|------|-------------|-----------------|
-| 1 | critical/high/medium/low/note | ... | ... | ... |
+| ID | Severity | File and location | Rule or record broken | Description | Recommended Fix |
+|----|----------|-------------------|-----------------------|-------------|-----------------|
+| S1 | critical/high/medium/low/note | ... | ... | ... | ... |
+
+A recheck states for each earlier ID whether it is closed or open, and gives a new ID to each new
+finding.
 
 ## Documentation Impact
 - [ ] docs updates needed: [list or "none"]
@@ -318,6 +325,12 @@ The review agent MUST output this structured report:
 | # | Issue | Tracked? | Reference |
 |---|-------|----------|-----------|
 | 1 | ... | yes/no | ... |
+
+## Coverage
+- Read in full: [files and records]
+- Read in part: [files, and why]
+- Not read: [files, and why]
+- Reviewer: [model, effort setting, tool limits]
 
 ## Summary
 - Total findings: N (X critical, Y high, Z medium)

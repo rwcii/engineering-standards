@@ -7,6 +7,7 @@ standards-review
 ## Sources
 - docs/engineering/review/README.md
 - docs/engineering/review/standards-lens.md
+- docs/engineering/review/refusal-lens.md
 - docs/engineering/wdr/005-independent-review-and-control-plane.md
 
 ## Review procedure

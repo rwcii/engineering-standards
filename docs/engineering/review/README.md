@@ -14,7 +14,8 @@ that are its own (base branch, where results go).
   - **standards**: the change against the ADR, PDR and WDR records, with the
     [standards lens](standards-lens.md);
   - **refusal**: every refusal, gate, limit or approval step that the change adds or changes
-    has a source that covers its case, with the procedure of `koinon-refusal-review`.
+    has a source that covers its case, with the procedure of `koinon-refusal-review` and the
+    [refusal lens](refusal-lens.md).
 - The base branch is `develop`, read as `origin/develop`.
 
 ## Reviewer
@@ -24,6 +25,16 @@ that are its own (base branch, where results go).
 - Record the reviewer's model, its effort setting and its tool limits beside the verdict.
 - A change to a gate document (see below) is judged by the rules at the base commit, read with
   `git show <base>:<path>`. A change does not judge itself by its own new rules.
+- When the change adds or moves a gate document, so that it has no copy at the base, the reviewer
+  judges it by the governing records at the base (WDR 005) and by the documents it replaces, read at
+  the base. The head's new procedure, lens and facts only start and shape the review.
+
+## Which tree to read
+
+- An added file: read it at the head.
+- A deleted file: read it at the base. A removed check, guard or rule is reviewable only there.
+- A renamed, moved or replaced file: read both sides and compare them. Report what the new side
+  drops, narrows or widens.
 
 ## Brief
 
@@ -64,6 +75,10 @@ the right approver (WDR 005, Decision 2).
 ## Results
 
 - Keep each reviewer's full report unedited, in a local folder outside version control.
+- A report names the full base and head hashes, the reviewer's coverage (read in full, in part,
+  not read, with the reason), and for each finding a stable ID, its severity, its file and
+  location, the record or rule it breaks, and the fix. An ID stays the same through the rechecks
+  of that review (for example S1, S2 for standards and R1, R2 for refusal).
 - Put the verdict (APPROVE, REQUEST CHANGES or BLOCK), the full head hash and the findings in the
   pull request's review summary. Before posting, scan the text for private data.
 - Record the outcome of each finding: fixed, accepted with a reason, or moved to a tracked issue.
@@ -80,7 +95,8 @@ new finding that a fix adds. The base of the full review stays the base of every
 A change to one of these is a control-plane change (WDR 005, Decision 3) and gets the stricter
 reading above:
 
-- this file and [standards-lens.md](standards-lens.md);
+- the decision records (ADR, PDR and WDR) and their `README.md` indexes;
+- this file, [standards-lens.md](standards-lens.md) and [refusal-lens.md](refusal-lens.md);
 - the facts files in `.koinon/skills/`;
 - `AGENTS.md`, `CLAUDE.md` and each module's `AGENTS.md`;
 - the `*_PROCESS.md` files and record templates;

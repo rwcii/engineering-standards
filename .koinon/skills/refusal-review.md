@@ -6,10 +6,11 @@
 refusal-review
 ## Sources
 - docs/engineering/review/README.md
+- docs/engineering/review/refusal-lens.md
 - docs/engineering/wdr/005-independent-review-and-control-plane.md
 
 ## Verdict format
-docs/engineering/review/README.md § Severity and the merge block (the two refusal-lens levels) and
-§ Results. The verdict is APPROVE or REQUEST CHANGES, bound to the full head hash, with a table of
-the constraints reviewed (file, constraint, kind, source, covers this case) and a table of findings
-(severity, file, finding, fix). An empty constraints table is a valid result.
+The output format of docs/engineering/review/refusal-lens.md, with the levels of
+docs/engineering/review/README.md § Severity and the merge block and the rules of § Results. The
+verdict is APPROVE or REQUEST CHANGES, bound to the full head hash. Give the reviewer
+refusal-lens.md to read in full beside this skill's procedure.
