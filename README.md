@@ -218,8 +218,10 @@ project facts. The steps below show where Koinon fits in the development flow.
 
 The catalog also offers `koinon-ship` for project publication workflows and
 `koinon-provenance` for projects with usage capture tooling. Their operation depends on the
-adopting project's policy, facts and commands. This repository documents its contribution
-flow in [CONTRIBUTING.md](CONTRIBUTING.md).
+adopting project's policy, facts and commands. Engineering Standards starts collecting usage
+for new work after the modernization reaches `main`. See
+[WDR 009.1](docs/engineering/wdr/009.1-track-raw-development-usage.md) for the usage policy.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for this repository's contribution flow.
 
 ## Repository setup (`scripts/setup-repo.sh`)
 

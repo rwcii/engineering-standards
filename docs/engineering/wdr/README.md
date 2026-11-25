@@ -23,6 +23,7 @@ because it governs how the team and its agents work — is a WDR.
 | 007    | [Agentic Security](007-agentic-security.md)                                  | Modified |
 | 008    | [Context & Memory Engineering](008-context-and-memory-engineering.md)        | Modified |
 | 009    | [AI Provenance & Accountability](009-ai-provenance-and-accountability.md)    | Accepted |
+| 009.1  | [Track Raw Development Usage](009.1-track-raw-development-usage.md) | Accepted |
 
 The baseline set (001–009) is complete and universal. Project-specific WDRs begin at
 **010**.
