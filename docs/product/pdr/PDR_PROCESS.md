@@ -85,7 +85,10 @@ draft → under_review → accepted → modified
 ## PDR Template
 
 A ready-to-copy template lives at [`000-template.md`](000-template.md). The required
-structure:
+structure below uses the decision form from the
+[ADR template](../../architecture/adr/ADR_PROCESS.md#adr-template), with product-specific
+sections. Use it for a new decision or a substantive amendment. See
+[WDR 002](../../engineering/wdr/002-record-system-as-infrastructure.md) for the governing rule.
 
 ```markdown
 ---
@@ -149,13 +152,21 @@ tags:
 
 [Clear statement of what was decided about product behavior.]
 
+- **Decided by:** [Name of the person who made the decision]
+- **Date:** [YYYY-MM-DD]
+- **Context:** [Question and options, in the writer's words]
+- **Reason and scope:** [Why the choice was made and what it covers]
+- **Strength:** [Optional: hard rule | default | preference | one-off]
+- **Review when:** [Trigger to reconsider, if known]
+- **Expires:** [End condition or date, when known]
+
 ### Alternatives Considered
 
 | Alternative | Description  | Why Rejected                    |
 | ----------- | ------------ | ------------------------------- |
 | [Name]      | [What it is] | [Specific reason for rejection] |
 
-### Rationale
+### Rationale (optional)
 
 [Numbered list — user research, product goals, UX principles.]
 
@@ -196,7 +207,7 @@ tags:
 | Header                        | Yes      | Human-readable duplicate of key fields           |
 | Executive Summary             | Yes      | 1–2 paragraphs                                   |
 | Problem Context               | Yes      | Include specific user scenarios                  |
-| At least one Decision section | Yes      | Each with Decision, Alternatives, Rationale      |
+| At least one Decision section | Yes      | Include the decision form and alternatives. Reason and scope states the rationale.       |
 | Alternatives Considered table | Yes      | Per decision                                     |
 | User Impact                   | Yes      | How the experience changes                       |
 | Success Criteria              | No       | Include when measurable                          |
@@ -243,7 +254,7 @@ Document History entry, update the index, commit `docs(pdr): update NNN [title]`
 | -------------------------------------- | ----------------------------------------- |
 | Typo, clarification, formatting        | Update in place (keep `accepted`)         |
 | New decision added to existing context | Update in place (change to `modified`)    |
-| Fundamental change to a prior decision | Create new PDR; set old to `superseded`   |
+| Fundamental change to a prior decision | Add a dated replacement section or create a new PDR. Mark the earlier decision as replaced and link both ways. Set a replaced record to `superseded`. |
 | Decision no longer relevant            | Set `status: deprecated` with explanation |
 
 **Reference** from code with a short comment, from docs with a link, and to the

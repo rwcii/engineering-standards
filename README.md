@@ -1,8 +1,9 @@
 # Engineering Standards
 
-A portable, stack-agnostic system of **decision records** and automated
-**standards-review** and **refusal-review** gates, designed to be vendored into any project regardless
-of language or framework.
+A portable, stack-agnostic system of **decision records** and independent **standards review**
+and **refusal review** gates. Projects can copy the records or cite them against a pinned list.
+This repository uses [Koinon](https://github.com/rwcii/koinon) for its shared agent skills and
+coordination.
 
 It has three record types and two review gates:
 
@@ -14,21 +15,13 @@ It has three record types and two review gates:
   workflow, the agent operating loop, the review/enforcement gates, and the record
   system itself. See [`docs/engineering/wdr/`](docs/engineering/wdr/).
 
-Plus a set of agent skills: a [`standards-review`](agents/skills/standards-review/)
-skill — an independent preflight review agent that checks a branch against the records
-before push/PR; a [`refusal-review`](agents/skills/refusal-review/) skill — an
-independent preflight agent that traces every refusal, gate or limit a branch adds to a
-source; a [`refusal-audit`](agents/skills/refusal-audit/) skill, run once on request,
-that audits a whole existing
-repo for refusal traps already in it and proposes a fix for each root cause; a
-[`standards-audit`](agents/skills/standards-audit/) skill that
-mines an existing repo for decisions that should become ADR/PDR/WDR records; a
-[`record`](agents/skills/record/) skill that authors and maintains ADR/PDR/WDR records to
-the template and house rules; a [`sprint`](agents/skills/sprint/) skill that scopes a
-deliverable (decision → definition-of-done → adversarially-reviewed chunk plan) before any
-code is written; and a [`handoff`](agents/skills/handoff/) skill that writes an immutable,
-timestamp-named snapshot of the current work's state so the next session or agent can resume
-with full context.
+Plus a [review procedure](docs/engineering/review/README.md) with two reviewer lenses — a
+[standards lens](docs/engineering/review/standards-lens.md) that checks a branch against the
+records, and a [refusal lens](docs/engineering/review/refusal-lens.md) that traces every refusal,
+gate or limit a branch adds to a source. The agent skills that run these reviews, write records,
+plan sprints and hand off work come from the shared [Koinon](https://github.com/rwcii/koinon)
+catalog; this repository keeps only the facts those skills read, in
+[`.koinon/skills/`](.koinon/skills/) (WDR 008, Decision 4).
 
 ## The core idea: principle vs. enforcement
 
@@ -52,32 +45,19 @@ your own enforcement.
 ├── docs/
 │   ├── architecture/adr/     # Architecture Decision Records + process
 │   ├── product/pdr/          # Product Decision Records + process
-│   └── engineering/wdr/      # Workflow Decision Records + process
+│   └── engineering/
+│       ├── wdr/              # Workflow Decision Records + process
+│       └── review/           # review procedure, standards lens, refusal lens
 ├── scripts/
 │   └── setup-repo.sh         # apply the branch/merge policy to a GitHub repo (WDR 010)
 ├── .githooks/
 │   └── pre-commit            # blocks direct commits to main (WDR 010)
-├── agents/
-│   └── skills/               # the one home of the skills, for every agent
-│       ├── standards-review/     # independent preflight review protocol
-│       ├── standards-audit/      # mine a repo for candidate ADR/PDR/WDR records
-│       ├── refusal-review/       # preflight: every new constraint has a source
-│       ├── refusal-audit/        # one-time audit of a whole repo for existing refusal traps
-│       ├── record/               # author & maintain ADR/PDR/WDR records
-│       ├── sprint/               # scope a deliverable before building it
-│       └── handoff/              # write an immutable timestamped session-state snapshot
-├── .claude/
-│   └── skills -> ../agents/skills    # Claude Code discovery link
-├── .agents/
-│   └── skills -> ../agents/skills    # Codex repository discovery link
-└── .codex/
-    └── skills -> ../agents/skills    # Codex discovery link
+└── .koinon/skills/           # facts the shared Koinon skills read for this repository
 ```
 
-The skills live once, in `agents/skills/`. Each agent finds them through a relative symlink
-in its own folder, so every agent reads the same files. This applies the principle of WDR 008,
-Decision 2. When you vendor the skills, keep `agents/skills/` as the real folder and recreate
-the links. A link must stay relative, so that it works in every clone.
+The skills are not kept in this repository. Agents use the Koinon skills installed on the
+machine, and each skill reads this repository's values from its facts file in `.koinon/skills/`
+(see the skill table in [AGENTS.md](AGENTS.md)).
 
 ### Baseline records
 
@@ -101,41 +81,147 @@ beginning with WDR 001 (the decision-record taxonomy itself). See the
 
 ## Adopting this in a project
 
-**Quickest start — use the template.** This is a GitHub
-[template repository](https://docs.github.com/articles/creating-a-repository-from-a-template):
-click **Use this template** (or `gh repo create <your-repo> --template rwcii/engineering-standards`)
-to get a fresh repo with these files, then run `scripts/setup-repo.sh` to apply the GitHub
-settings a template does not carry (merge methods, auto-delete, branch-protection rulesets,
-hook path). To adopt into an *existing* repo instead, vendor the pieces manually:
+Start from this [GitHub template](https://docs.github.com/articles/creating-a-repository-from-a-template)
+or adopt the kit into an existing checkout. You can own a copy of the records or cite a pinned
+set. The [adoption runbook](docs/ADOPTING.md) covers both paths, including repository setup and
+verification.
 
-1. **Vendor** `docs/architecture/adr/`, `docs/product/pdr/`,
-   `docs/engineering/wdr/`, the `standards-review` skill, the
-   `refusal-review` skill, and the other `agents/skills/` you want (`standards-audit`,
-   `refusal-audit`, `record`, `sprint`, `handoff`) into your repo. Keep the `LICENSE` file
-   in the `refusal-audit` folder. Add the relative links `.claude/skills`, `.agents/skills`
-   and `.codex/skills` to `../agents/skills`, so that each agent finds the skills.
-2. **Keep** ADR 001.x as-is (the universal code-architecture standards).
-3. **Fill in** the templates for your stack: ADR 002.x (frontend / api /
-   backend-persistence) and ADR 004.x (your data-handling specifics).
-4. **Flesh out** the stubs (ADR 005 Security, 006 Authentication) when those
-   decisions are made — or leave them `draft` until then.
-5. **Add** your project's own ADRs from 007+, your PDRs from 001, and your WDRs from 010.
-   Baseline WDRs 001–009 are universal — keep them. WDR 010 ships as a branch-flow
-   *template* (the worked example of a project-specific WDR): adopt its default flow or
-   replace it with your own.
-6. **Adapt** the `standards-review` skill (`agents/skills/standards-review/SKILL.md`): set
-   your base branch, your build/test gate,
-   and the project-specific ADR/PDR/WDR checklist. Set the base branch in
-   the `refusal-review` skill too.
-7. **Replace** `CONTRIBUTING.md` and `.github/PULL_REQUEST_TEMPLATE.md` with your own —
-   they govern contributions to the *kit itself*. The DCO section and the PR checklist
-   items are reusable starting points you can keep.
-8. **Configure the repo:** run `scripts/setup-repo.sh` to apply the branch/merge policy
-   (merge methods, auto-delete, branch-protection rulesets) and the local hook path —
-   the GitHub settings a clone does not inherit.
+## Using Koinon
 
-The records are a starting template you own and adapt — not a runtime dependency.
-Vendor and customize; don't submodule.
+Koinon connects agent sessions, carries review and decision messages, and supplies shared
+skills. A project configures those skills with its own policy and check commands.
+
+### Import the skills without installing Koinon
+
+Koinon releases from v0.13.0 include a standalone skills archive. No clone or running
+daemon is needed to import it. The example downloads a tagged installer and checks its
+SHA-256 before running it. It needs a POSIX shell, `curl`, `tar`, `awk` and
+`sha256sum` or `shasum`.
+
+```sh
+version=v0.13.4
+installer_sha256=db78ee19531728a57a2f77e2b1add22293b55283904099dc7cd29a515b71743d
+curl -fsSLO "https://raw.githubusercontent.com/rwcii/koinon/${version}/scripts/install-skills.sh" &&
+  checksum=$(if command -v sha256sum >/dev/null; then
+    sha256sum install-skills.sh
+  else
+    shasum -a 256 install-skills.sh
+  fi) &&
+  [ "${checksum%% *}" = "$installer_sha256" ] &&
+  sh install-skills.sh "$version"
+```
+
+The example digest comes from the installer in the signed
+[Koinon v0.13.4 tag](https://github.com/rwcii/koinon/releases/tag/v0.13.4). To change releases,
+update the tag and the corresponding installer digest from a verified upstream source.
+
+The script downloads `koinon-skills.tar.gz` and `SHA256SUMS`. It checks the archive
+checksum and validates the entries before writing any skill. Set `KOINON_SKILLS_BASE`
+to use a release mirror. The installer writes each skill as
+`koinon-NAME/SKILL.md` at user scope. The destinations are:
+
+| Agent | Skills directory |
+| ----- | ---------------- |
+| Claude Code | `$CLAUDE_CONFIG_DIR/skills`, or `~/.claude/skills` |
+| Codex | `~/.agents/skills` |
+| OpenCode | `${XDG_CONFIG_HOME:-$HOME/.config}/opencode/skills`, if the configuration directory exists |
+| Antigravity | `~/.gemini/config/skills`, if the configuration directory exists |
+| Grok | `${GROK_HOME:-$HOME/.grok}/skills`, if the configuration directory exists |
+
+The installer skips `koinon-guide`, which needs the Koinon binary. Run it again with a new
+tag to update the copies. To remove the standalone copies, delete the specific
+`koinon-NAME` directories the installer wrote. See the
+[skills-only installation guide](https://github.com/rwcii/koinon/blob/main/docs/INSTALL.md#skills-on-a-computer-with-no-koinon)
+for details.
+
+With the project facts and usual development tools, you can use the check, record, sprint,
+sprint-closeout, standards review and audit, refusal review and audit, peer review, pair,
+release and provenance procedures. Steps that call Koinon tools need the daemon. The
+ship procedure uses the runtime to coordinate publication. Handoff and pickup can use
+local snapshots, but board checks are unavailable. Agent messaging, shared work claims and decision cards need the daemon.
+Team coordination, recovery and session-management skills also depend on it for their
+Koinon-backed steps.
+
+For the optional preflight runner, use the matching release's
+[`scripts/preflight-run.sh`](https://github.com/rwcii/koinon/blob/v0.13.4/scripts/preflight-run.sh)
+and verify its checksum before running it. The signed v0.13.4 tag gives this SHA-256 for
+the runner: `b7a17079dc5425e5cfe8a19f70f82f67f173905111bae0fe69c06d3a50ca9551`.
+It needs Claude Code, `jq` and the project's lens policy. Supply the lens instructions
+locally when the Koinon binary is unavailable.
+
+### Install Koinon with its skills
+
+For messaging, work claims and decision cards, install the Koinon runtime. On macOS or
+Linux with Homebrew, install Koinon and set up Claude Code and Codex:
+
+```sh
+brew install rwcii/koinon/koinon
+"$(brew --prefix)/bin/koinon" install --agent claude --agent codex
+```
+
+You can also download a [release binary](https://github.com/rwcii/koinon/releases) for your
+platform, verify its checksum, and run the same install command with that binary. Use
+`koinon setup FAMILY` to configure another supported family after installation. Koinon writes
+entries named `koinon-NAME` into the agents' user-level skill directories. See the
+[Koinon README](https://github.com/rwcii/koinon) and
+[installation guide](https://github.com/rwcii/koinon/blob/main/docs/INSTALL.md) for supported
+families and installation options.
+
+### Configure a project
+
+Create `.koinon/skills/NAME.md` for the skills your project uses. Set its `Version`, `Skill` and
+`Sources`, then provide the documented facts such as your base branch, check commands and
+review procedures. [This repository's facts](.koinon/skills/) are examples. Check them with
+`library_state` in your Koinon-connected agent, or use the command-line equivalent:
+
+```sh
+koinon library state --scope project --as FAMILY:SESSION_ID
+```
+
+Replace `FAMILY:SESSION_ID` with your registered native session identity. Look for
+`present-valid` in the repository facts report.
+
+Without Koinon, check the facts manually against the installed skill's
+`<!-- koinon:repository-facts -->` schema. Use `Version` 1 and the canonical skill name from the schema filename in
+`Skill`, such as `record` for `.koinon/skills/record.md`. The installed folder uses the
+`koinon-` prefix. Put one repository-relative path per bullet in `Sources` and confirm
+each resolves. Include the required headings and use each heading at most once. Give
+each schema-declared heading a value when you include it. For compatibility headings,
+follow the skill's documented exceptions.
+
+Projects that keep local procedures because
+they cannot install the catalog record that choice in their `AGENTS.md`. See
+[WDR 008](docs/engineering/wdr/008-context-and-memory-engineering.md#5-decision-4-skills-come-from-one-shared-catalog-a-repository-keeps-only-its-facts).
+
+### How this repository uses Koinon
+
+The [task-to-skill table](AGENTS.md#skills) lists this repository's skill entries and their
+project facts. The steps below show where Koinon fits in the development flow.
+
+1. **Plan and branch.** For a multi-PR deliverable, use `koinon-sprint` to agree on acceptance
+   criteria, checks, and the order of increments. Start the work branch from `develop`.
+2. **Build and verify.** Use `koinon-check` to run the project's checks. In paired work,
+   `koinon-pair` guides the driver and observer. The driver edits and commits, and the observer
+   receives a frozen checkpoint through Koinon's message bridge and sends one batch of
+   reproduced findings.
+3. **Review the candidate.** Independent reviewers use `koinon-standards-review` and
+   `koinon-refusal-review` on the same frozen head. Each records a head-bound verdict under the
+   [review procedure](docs/engineering/review/README.md).
+4. **Publish and merge.** Follow [CONTRIBUTING.md](CONTRIBUTING.md) and
+   [WDR 010](docs/engineering/wdr/010-branch-and-merge-flow.md) for publication and merge.
+   When the team asks for approval through Koinon, the decision card names the action and its
+   reviewed head. A team working without Koinon uses its project's approval channel.
+   The PR records the verdicts for that head, and the feature lands in
+   `develop` as a squash.
+5. **Resume a session.** `koinon-handoff` writes a private work snapshot. `koinon-pickup` reads
+   that snapshot and verifies the current state before resuming.
+
+The catalog also offers `koinon-ship` for project publication workflows and
+`koinon-provenance` for projects with usage capture tooling. Their operation depends on the
+adopting project's policy, facts and commands. Engineering Standards starts collecting usage
+for new work after the modernization reaches `main`. See
+[WDR 009.1](docs/engineering/wdr/009.1-track-raw-development-usage.md) for the usage policy.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for this repository's contribution flow.
 
 ## Repository setup (`scripts/setup-repo.sh`)
 
@@ -153,7 +239,29 @@ scripts/setup-repo.sh
 
 # ...or target a specific repo
 scripts/setup-repo.sh owner/repo
+
+# read the live settings and report each difference from the policy; changes nothing
+scripts/setup-repo.sh --check owner/repo
 ```
+
+The script also requires `jq`. It declares the required status checks of each branch, as
+[WDR 010, Decision 3](docs/engineering/wdr/010-branch-and-merge-flow.md#4-decision-3-required-checks-gate-the-merge-auto-merge-only-when-every-gate-is-required)
+decides; the lists are at the top of the script. `NAME@15368` pins a check to GitHub Actions, so a status posted by hand under that name
+does not satisfy it. A required check must report on every pull request to its branch, or it
+blocks every merge, so set your own before applying:
+
+```bash
+REQUIRED_DEVELOP="build@15368 test@15368" REQUIRED_MAIN="build@15368" scripts/setup-repo.sh owner/repo
+```
+
+The script updates live rulesets in place, and turns auto-merge on only after reading back that
+every ruleset and required check is in force. A partial apply exits non-zero and turns auto-merge
+off; if turning it off also fails, the script says so and the setting must be checked by hand.
+An empty `REQUIRED_DEVELOP` sets no required checks and leaves auto-merge off. Without a required
+check, GitHub would merge an auto-merge pull request at once. `--check` exits 0 when the live
+settings match, 1 when one differs and 2 when they cannot be read. A first rollout is staged,
+because `promotion-source` runs from the default branch and does not exist there until the first
+release carries it: follow the bootstrap steps in WDR 010, Enforcement.
 
 ### What it applies — and what your account type limits
 
@@ -161,8 +269,9 @@ scripts/setup-repo.sh owner/repo
 | ------- | :-------------: | :------------------------: | :--------------: |
 | Merge methods — squash + merge on, rebase off, squash uses PR title/body | yes | yes | yes |
 | Auto-delete head branch on merge | yes | yes | yes |
+| Auto-merge, when `develop` has required checks | yes | yes | **no** (off: no ruleset requires a check) |
 | Local `pre-commit` hook path (`core.hooksPath=.githooks`) | yes | yes | yes |
-| Branch-protection **rulesets** — `develop` squash-only + PR, `main` merge-only + PR, block force-push & deletion | yes | yes | **no** |
+| Branch-protection **rulesets** — `develop` squash-only + PR, `main` merge-only + PR, block force-push & deletion, required checks with no up-to-date requirement | yes | yes | **no** |
 
 GitHub **branch protection and rulesets are not available on free _private_ repositories**.
 On a free private repo the script applies everything else and **skips the rulesets with a
@@ -190,13 +299,9 @@ Two ways to engage (see [CONTRIBUTING.md](CONTRIBUTING.md)):
   fork, run `scripts/setup-repo.sh`, and make it yours. No permission needed.
 - **Contribute back — maintainer-curated.** Open an issue first; PRs are by invitation,
   follow the [WDR 010](docs/engineering/wdr/010-branch-and-merge-flow.md) branch flow,
-  pass `standards-review` and `refusal-review`, and carry signed commits with a
+  pass the standards review and the refusal review, and carry signed commits with a
   [DCO](https://developercertificate.org/) sign-off (`git commit -s`).
 
 ## License
 
 [MIT](LICENSE) © Stratovera.
-
-The [`refusal-audit`](agents/skills/refusal-audit/) skill adapts its method from the
-[Koinon](https://github.com/rwcii/koinon) `refusal-review` skill, also MIT licensed. Its folder
-carries the Koinon license notice.

@@ -1,9 +1,9 @@
 ---
 wdr: "006"
 title: "Agent Autonomy & Guardrails"
-status: accepted
+status: modified
 created: "2026-05-31"
-updated: "2026-05-31"
+updated: "2026-11-25"
 parent_wdr: ""
 authors:
   - "Robert Capps"
@@ -22,7 +22,7 @@ tags:
 # WDR 006: Agent Autonomy & Guardrails
 
 **Date:** 2026-05-31
-**Status:** Accepted
+**Status:** Modified
 **Authors:** Robert Capps
 
 ---
@@ -34,7 +34,8 @@ is bounded only by the guardrails around it. This record draws those bounds:
 **actions are tiered by reversibility and blast radius, with the most dangerous tier
 denied by default and gated on explicit authorization; every run has hard
 resource ceilings that terminate it automatically; and the agent halts and hands back
-on defined triggers rather than pressing through.** The merge gate (WDR 005) reviews
+on defined triggers rather than pressing through. While a decision waits for a human,
+reversible work continues and the hard-to-undo steps wait.** The merge gate (WDR 005) reviews
 a finished diff; it cannot stop an agent that has already force-pushed, dropped a
 table, or spent the budget in a loop. These guardrails operate while the agent is
 still acting.
@@ -47,8 +48,9 @@ still acting.
 2. Decision 1: Actions Are Tiered by Blast Radius; the Top Tier Is Deny-by-Default
 3. Decision 2: Every Run Has Hard Resource Ceilings With Automatic Termination
 4. Decision 3: The Agent Halts and Escalates on Defined Triggers
-5. Conclusion
-6. Document History
+5. Decision 4: While a Decision Waits, Reversible Work Continues
+6. Conclusion
+7. Document History
 
 ---
 
@@ -191,11 +193,54 @@ rather than loops.
 
 ---
 
-## 5. Conclusion
+## 5. Decision 4: While a Decision Waits, Reversible Work Continues
+
+### Decision
+
+When the agent has put a decision request to a human on the project's decision channel, such as a
+decision card (Decision 3), and the verdict has not come:
+
+- It continues independent work that is already authorized.
+- It continues reversible work on the option it recommended, on its work branch only.
+- These wait for the decision: a merge, a push to a base branch, a release, a settings change, a
+  deletion, a change to a live host or production, and any external or paid action.
+- When the decision picks another option, the agent discards or reverts the branch work on the
+  recommended option, without asking again.
+- A pending request alone does not authorize work outside the assigned task, and it does not stop
+  unrelated work.
+
+- **Decided by:** Robert Capps
+- **Date:** 2026-11-25
+- **Context:** What may an agent do while a decision it asked for is pending? The options were to
+  stop all dependent work, to continue only work that needs no new authority, or to continue
+  reversible work on the recommended option while the hard-to-undo steps wait.
+- **Reason and scope:** decisions can wait for hours, and branch work is cheap to discard; the
+  steps that are hard to undo still wait, so the decision keeps its authority. This governs a
+  decision request the agent has put on the project's decision channel, such as a decision card,
+  while it waits for the verdict.
+- **Strength:** default.
+- **Review when:** discarded work on a declined option becomes a recurring cost.
+
+### Alternatives Considered
+
+| Alternative | Description | Why Rejected |
+| ----------- | ----------- | ------------ |
+| Stop dependent work until the decision | Pause everything that relates to the pending question | Idle hours on work that is cheap to discard |
+| Continue only work that needs no new authority | Wait for the decision before building a proposed choice that needs it; the hard-to-undo steps follow their own authorization rules | Keeps the decision ahead of the build, but idles the agent on the recommended path, and differs from the practice several projects already follow |
+
+### Enforcement
+
+Per project: the list of waiting actions in the agent instructions; the base branches protected so
+a push or merge needs its own authorization (the project's branch and merge record).
+
+---
+
+## 6. Conclusion
 
 Autonomy is made safe by bounding it: tier actions by blast radius and deny the
 dangerous tier by default, cap every run with ceilings that terminate it
-automatically, and require the agent to halt and ask on defined triggers. These are
+automatically, and require the agent to halt and ask on defined triggers. While the answer is
+pending, reversible work continues and the hard-to-undo steps wait. These are
 agent-time guardrails — they act while the agent is still working, where the
 merge-time review (WDR 005) cannot reach — and they pair with the containment the
 execution sandbox provides (WDR 007). Concrete tiers, budgets, limits, and triggers
@@ -208,3 +253,4 @@ are each adopting project's enforcement.
 | Date       | Change           |
 | ---------- | ---------------- |
 | 2026-05-31 | Initial creation |
+| 2026-11-25 | Decision 4: work while a decision waits |

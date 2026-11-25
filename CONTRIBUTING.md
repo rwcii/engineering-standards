@@ -1,8 +1,8 @@
 # Contributing
 
 > **Adopting this kit?** This file governs contributions to the **engineering-standards
-> kit itself** (the canonical repository). If you vendored the kit — forked it or used
-> *"Use this template"* — **replace this file with your own project's contribution
+> kit itself** (the canonical repository). If you adopted the kit, including by forking it or using
+> *"Use this template"*, **replace this file with your own project's contribution
 > policy**. The Developer Certificate of Origin section below is a reusable starting
 > point you can keep as-is.
 
@@ -26,7 +26,7 @@ adopters:
 ## 2. Contribute back to the canonical kit (maintainer-curated)
 
 Changes to *this* repository are curated, to keep the standard set coherent for everyone
-who vendors it:
+who adopts it:
 
 - **Open an issue or discussion first**, describing the change and the decision behind
   it. Pull requests are accepted **by invitation**, once there is agreement — please
@@ -34,9 +34,9 @@ who vendors it:
 - **Follow the branch & merge flow** ([WDR 010](docs/engineering/wdr/010-branch-and-merge-flow.md)):
   branch off `develop`, keep the change scoped (no drive-by edits), and target `develop`
   with a **squash** PR. `develop` is promoted to `main` by the maintainer.
-- **Run the preflight:** `standards-review` and `refusal-review` against `develop` — both
-  must pass (see [`agents/skills/standards-review/`](agents/skills/standards-review/)
-  and [`agents/skills/refusal-review/`](agents/skills/refusal-review/)).
+- **Run the preflight:** the standards review and the refusal review against `develop` — both
+  must pass (see the [review procedure](docs/engineering/review/README.md); the
+  `koinon-standards-review` and `koinon-refusal-review` skills run them).
 - **Records follow their process docs** (`ADR_PROCESS.md` / `PDR_PROCESS.md` /
   `WDR_PROCESS.md`) and the cardinal rules: no AI/bot attribution, no line numbers or
   volatile details, and every record is a *decision with genuine alternatives*. Use the

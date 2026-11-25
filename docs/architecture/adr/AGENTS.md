@@ -12,7 +12,7 @@ Decision Records (WDRs, `docs/engineering/wdr/`).
 - Before changing how subsystems interact (service boundaries, data access, auth flow)
 - Before introducing a new pattern, technology, or cross-cutting mechanism
 - Before adding a new variant to an extensible system (provider, adapter, object type)
-- When `standards-review` runs Phase 2 (ADR Compliance)
+- When the standards review runs Phase 2 (ADR Compliance) of the standards lens (`docs/engineering/review/standards-lens.md`)
 
 ## Key Constraints
 

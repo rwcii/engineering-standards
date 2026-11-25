@@ -62,7 +62,7 @@ standard (ADR 001.1) applied to the record system:
 - **Same cardinal rules** — no AI/bot attribution; no line numbers or volatile
   details; principle-level and stack-agnostic, with concrete tooling pushed to
   each adopting project's enforcement.
-- **Same review path** — `standards-review` validates changes against accepted
+- **Same review path** — the standards review (`docs/engineering/review/`) validates changes against accepted
   WDRs in its WDR-compliance phase.
 
 ### Frontmatter differences from an ADR
@@ -72,6 +72,16 @@ standard (ADR 001.1) applied to the record system:
 | `wdr`        | the WDR number (replaces `adr`)                             |
 | `parent_wdr` | parent WDR number on point versions (replaces `parent_adr`) |
 | `tags`       | include `workflow`; add `agentic` for AI-specific decisions |
+
+### Decision form
+
+Use the Decision section in the shared
+[ADR template](../../architecture/adr/ADR_PROCESS.md#adr-template), including **Decided by**,
+**Date**, **Context**, the decision text, and **Reason and scope**. **Strength** (hard rule,
+default, preference, or one-off) is optional and useful when a decision authorizes a
+constraint. Include **Review when** and **Expires** when known. See
+[WDR 002](002-record-system-as-infrastructure.md) for attribution and lifecycle
+and [WDR 005](005-independent-review-and-control-plane.md) for source review.
 
 ### One optional added field
 
@@ -111,6 +121,10 @@ template (with WDR frontmatter) → fill all required sections → add a row to 
 index, commit `docs(wdr): update NNN [title]`. **Reference** from code with
 `// Per WDR 00X, …`, from docs with a link, and between records via the `related`
 frontmatter.
+
+After changing a record, run the **Record checks** in
+[`.koinon/skills/record.md`](../../../.koinon/skills/record.md), which implement
+[WDR 002](002-record-system-as-infrastructure.md), Decision 6.
 
 **Filter** with frontmatter:
 

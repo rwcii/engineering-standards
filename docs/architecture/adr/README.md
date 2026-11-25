@@ -4,7 +4,7 @@ ADRs document **how a system is built** — structure, patterns, boundaries,
 infrastructure. For process rules, the template, naming, and lifecycle, see
 [ADR_PROCESS.md](ADR_PROCESS.md).
 
-This is the **universal baseline** intended to be vendored into a project. Universal
+This is the **universal baseline** available to copy or cite in an adopting project. Universal
 records (001.x, 003) are written at principle level; templates (002.x, 004) and stubs
 (005, 006) are filled in per project. Project-specific ADRs begin at **007**.
 

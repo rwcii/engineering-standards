@@ -14,25 +14,27 @@ because it governs how the team and its agents work — is a WDR.
 
 | Number | Title                                                              | Status   |
 | ------ | ------------------------------------------------------------------ | -------- |
-| 001    | [Decision-Record Taxonomy & the WDR Series](001-decision-record-taxonomy.md) | Accepted |
-| 002    | [Record System as Infrastructure](002-record-system-as-infrastructure.md)    | Accepted |
+| 001    | [Decision-Record Taxonomy & the WDR Series](001-decision-record-taxonomy.md) | Modified |
+| 002    | [Record System as Infrastructure](002-record-system-as-infrastructure.md)    | Modified |
 | 003    | [Agent Operating Loop](003-agent-operating-loop.md)                          | Accepted |
-| 004    | [Verification & Testing Discipline](004-verification-and-testing-discipline.md) | Accepted |
+| 004    | [Verification & Testing Discipline](004-verification-and-testing-discipline.md) | Modified |
 | 005    | [Independent Review & Control-Plane Protection](005-independent-review-and-control-plane.md) | Modified |
-| 006    | [Agent Autonomy & Guardrails](006-agent-autonomy-and-guardrails.md)          | Accepted |
-| 007    | [Agentic Security](007-agentic-security.md)                                  | Accepted |
-| 008    | [Context & Memory Engineering](008-context-and-memory-engineering.md)        | Accepted |
+| 006    | [Agent Autonomy & Guardrails](006-agent-autonomy-and-guardrails.md)          | Modified |
+| 007    | [Agentic Security](007-agentic-security.md)                                  | Modified |
+| 008    | [Context & Memory Engineering](008-context-and-memory-engineering.md)        | Modified |
 | 009    | [AI Provenance & Accountability](009-ai-provenance-and-accountability.md)    | Accepted |
+| 009.1  | [Track Raw Development Usage](009.1-track-raw-development-usage.md) | Accepted |
 
 The baseline set (001–009) is complete and universal. Project-specific WDRs begin at
 **010**.
 
 ## Project-specific (template — replace with your own)
 
-These slots hold *your project's* workflow decisions, not universal standards. WDR 010
-ships as a **worked example/template** — a recommended default you adopt or replace.
+These slots hold *your project's* workflow decisions, not universal standards. WDR 010 is
+this repository's accepted flow and a **worked example** for adopters — a default you adopt,
+change through its named variants, or replace.
 Renumber, rewrite, or remove them as your project requires; add yours from 010 onward.
 
 | Number | Title | Status |
 | ------ | ----- | ------ |
-| 010    | [Branch & Merge Flow](010-branch-and-merge-flow.md) | Draft (template) |
+| 010    | [Branch & Merge Flow](010-branch-and-merge-flow.md) | Accepted (template) |

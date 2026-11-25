@@ -3,7 +3,7 @@ wdr: "009"
 title: "AI Provenance & Accountability"
 status: accepted
 created: "2026-05-31"
-updated: "2026-05-31"
+updated: "2026-11-25"
 parent_wdr: ""
 authors:
   - "Robert Capps"
@@ -284,6 +284,7 @@ to its responsible human. Authorship stays human and bot-attribution-free; proce
 provenance lives out-of-band so the generation fact remains recoverable. The concrete
 provenance channel, principal/mandate representation, log format, and isolation
 mechanics are each adopting project's enforcement.
+[WDR 009.1](009.1-track-raw-development-usage.md) covers raw per-commit usage.
 
 ---
 
@@ -292,3 +293,4 @@ mechanics are each adopting project's enforcement.
 | Date       | Change           |
 | ---------- | ---------------- |
 | 2026-05-31 | Initial creation |
+| 2026-11-25 | Link to WDR 009.1 for raw per-commit usage. |

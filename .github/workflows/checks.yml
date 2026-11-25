@@ -1,0 +1,32 @@
+# repo-checks (WDR 010, Decision 3): the repository checks on the candidate merge of the pull
+# request into its base. The job name is a required status context that scripts/setup-repo.sh
+# declares; renaming it breaks the merge gate. No path filters: a required check reports on every
+# pull request. promotion-source.yml uses the default branch's workflow
+# and runs its check script from the pull request's base commit.
+name: checks
+
+on:
+  pull_request:
+    branches: [develop, main]
+    # edited covers a pull request whose base is changed, so the checks run against the new base
+    types: [opened, synchronize, reopened, edited]
+
+permissions:
+  contents: read
+
+jobs:
+  repo-checks:
+    name: repo-checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Checks
+        run: bash scripts/check-repo.sh "origin/${{ github.base_ref }}"
+      - name: The checks can fail
+        run: bash scripts/check-repo.test.sh
+      - name: The settings check detects each difference
+        run: bash scripts/setup-repo.test.sh

@@ -90,7 +90,10 @@ draft → under_review → accepted → modified
 
 ## ADR Template
 
-The YAML frontmatter and required sections must always be present.
+The YAML frontmatter and required sections must always be present. Use the decision
+form below for a new decision or a substantive amendment. See
+[WDR 002](../../engineering/wdr/002-record-system-as-infrastructure.md) for attribution,
+strength, and how to preserve an earlier decision.
 
 ```markdown
 ---
@@ -107,6 +110,7 @@ supersedes: "" # ADR number if this replaces an older decision
 superseded_by: "" # ADR number if this was replaced
 related:
   - "003" # other ADR numbers
+related_pdrs: [] # related product decisions, when applicable
 tags:
   - architecture
 ---
@@ -153,13 +157,21 @@ tags:
 
 [Clear statement of what was decided.]
 
+- **Decided by:** [Name of the person who made the decision]
+- **Date:** [YYYY-MM-DD]
+- **Context:** [Question and options, in the writer's words]
+- **Reason and scope:** [Why the choice was made and what it covers]
+- **Strength:** [Optional: hard rule | default | preference | one-off]
+- **Review when:** [Trigger to reconsider, if known]
+- **Expires:** [End condition or date, when known]
+
 ### Alternatives Considered
 
 | Alternative | Description  | Why Rejected                    |
 | ----------- | ------------ | ------------------------------- |
 | [Name]      | [What it is] | [Specific reason for rejection] |
 
-### Rationale
+### Rationale (optional)
 
 [Numbered list of reasons supporting the decision.]
 
@@ -203,7 +215,7 @@ project. Optional for non-code decisions.]
 | Header (title/date/status/authors) | Yes    | Human-readable duplicate of key frontmatter fields |
 | Executive Summary                | Yes      | 1–2 paragraphs                                     |
 | Problem Context                  | Yes      | Include specific incidents or requirements         |
-| At least one Decision section    | Yes      | Each with Decision, Alternatives, Rationale        |
+| At least one Decision section    | Yes      | Include the decision form and alternatives. Reason and scope states the rationale.          |
 | Alternatives Considered table    | Yes      | Per decision — always show what was rejected and why |
 | Enforcement                      | No       | Include for decisions that govern code             |
 | Trade-offs Accepted              | No       | Include when downsides exist                       |
@@ -225,6 +237,7 @@ project. Optional for non-code decisions.]
 | `supersedes`    | No       | string | ADR number this decision replaces                    |
 | `superseded_by` | No       | string | ADR number that replaced this decision               |
 | `related`       | No       | list   | Related ADR numbers                                  |
+| `related_pdrs`  | No       | list   | Related PDR numbers                                  |
 | `tags`          | Yes      | list   | At least one tag (see vocabulary)                    |
 
 ### Tag Vocabulary
@@ -262,11 +275,14 @@ Document History entry, update the index, commit `docs(adr): update NNN [title]`
 | -------------------------------------- | ----------------------------------------- |
 | Typo, clarification, formatting        | Update in place (keep `accepted`)         |
 | New decision added to existing context | Update in place (change to `modified`)    |
-| Fundamental change to a prior decision | Create new ADR; set old to `superseded`   |
+| Fundamental change to a prior decision | Add a dated replacement section or create a new ADR. Mark the earlier decision as replaced and link both ways. Set a replaced record to `superseded`. |
 | Decision no longer relevant            | Set `status: deprecated` with explanation |
 
 **Reference** from code with a short comment (`// Per ADR 00X, …`), from docs with a
-link, and between records via the `related` frontmatter.
+link, and between ADRs via the `related` frontmatter. For an ADR paired with a product
+decision, use `related_pdrs` and the PDR's `related_adrs` as described in the
+[PDR index](../../product/pdr/README.md). For pinned citations and
+retired identifiers, see [WDR 002](../../engineering/wdr/002-record-system-as-infrastructure.md).
 
 **Filter** with frontmatter:
 
