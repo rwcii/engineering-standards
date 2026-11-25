@@ -155,6 +155,10 @@ fixture; mutate "$D" '(.rules[] | select(.type == "pull_request") | .parameters.
 run 1 "requiring review thread resolution differs" --check o/r
 fixture; mutate repos_o_r.json '.merge_commit_message = "PR_TITLE"'
 run 1 "a merge commit message source differs" --check o/r
+fixture; mutate repos_o_r.json '.squash_merge_commit_message = "BLANK"'
+run 1 "a squash commit message source differs" --check o/r
+fixture; mutate repos_o_r.json '.merge_commit_title = "MERGE_MESSAGE"'
+run 1 "a merge commit title source differs" --check o/r
 fixture; mutate "$D" '(.rules[] | select(.type == "required_status_checks") | .parameters.do_not_enforce_on_create) = true'
 run 1 "skipping checks on branch creation differs" --check o/r
 fixture; mutate repos_o_r.json '.squash_merge_commit_title = "COMMIT_OR_PR_TITLE"'

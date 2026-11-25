@@ -1,7 +1,7 @@
 ---
 wdr: "009"
 title: "AI Provenance & Accountability"
-status: modified
+status: accepted
 created: "2026-05-31"
 updated: "2026-11-25"
 parent_wdr: ""
@@ -21,7 +21,7 @@ tags:
 # WDR 009: AI Provenance & Accountability
 
 **Date:** 2026-05-31
-**Status:** Modified
+**Status:** Accepted
 **Authors:** Robert Capps
 
 ---
