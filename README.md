@@ -94,14 +94,26 @@ skills. A project configures those skills with its own policy and check commands
 ### Import the skills without installing Koinon
 
 Koinon releases from v0.13.0 include a standalone skills archive. No clone or running
-daemon is needed to import it. Choose a release tag and download that release's installer.
-The example needs a POSIX shell, `curl`, `tar`, `awk` and `sha256sum` or `shasum`.
+daemon is needed to import it. The example downloads a tagged installer and checks its
+SHA-256 before running it. It needs a POSIX shell, `curl`, `tar`, `awk` and
+`sha256sum` or `shasum`.
 
 ```sh
 version=v0.13.4
+installer_sha256=db78ee19531728a57a2f77e2b1add22293b55283904099dc7cd29a515b71743d
 curl -fsSLO "https://raw.githubusercontent.com/rwcii/koinon/${version}/scripts/install-skills.sh" &&
+  checksum=$(if command -v sha256sum >/dev/null; then
+    sha256sum install-skills.sh
+  else
+    shasum -a 256 install-skills.sh
+  fi) &&
+  [ "${checksum%% *}" = "$installer_sha256" ] &&
   sh install-skills.sh "$version"
 ```
+
+The example digest comes from the installer in the signed
+[Koinon v0.13.4 tag](https://github.com/rwcii/koinon/releases/tag/v0.13.4). To change releases,
+update the tag and the corresponding installer digest from a verified upstream source.
 
 The script downloads `koinon-skills.tar.gz` and `SHA256SUMS`. It checks the archive
 checksum and validates the entries before writing any skill. Set `KOINON_SKILLS_BASE`
@@ -124,14 +136,18 @@ for details.
 
 With the project facts and usual development tools, you can use the check, record, sprint,
 sprint-closeout, standards review and audit, refusal review and audit, peer review, pair,
-ship, release and provenance procedures. Any step the project configures to use a Koinon
-tool still needs the daemon. To use the shared preflight runner, get
-[`scripts/preflight-run.sh`](https://github.com/rwcii/koinon/blob/v0.13.4/scripts/preflight-run.sh)
-from the matching release source and supply the lens instructions locally when running
-without the binary. Handoff and pickup can use local snapshots, but board
-checks are unavailable. Agent messaging, shared work claims and decision cards need the daemon.
+release and provenance procedures. Steps that call Koinon tools need the daemon. The
+ship procedure uses the runtime to coordinate publication. Handoff and pickup can use
+local snapshots, but board checks are unavailable. Agent messaging, shared work claims and decision cards need the daemon.
 Team coordination, recovery and session-management skills also depend on it for their
 Koinon-backed steps.
+
+For the optional preflight runner, use the matching release's
+[`scripts/preflight-run.sh`](https://github.com/rwcii/koinon/blob/v0.13.4/scripts/preflight-run.sh)
+and verify its checksum before running it. The signed v0.13.4 tag gives this SHA-256 for
+the runner: `b7a17079dc5425e5cfe8a19f70f82f67f173905111bae0fe69c06d3a50ca9551`.
+It needs Claude Code, `jq` and the project's lens policy. Supply the lens instructions
+locally when the Koinon binary is unavailable.
 
 ### Install Koinon with its skills
 
@@ -166,9 +182,11 @@ Replace `FAMILY:SESSION_ID` with your registered native session identity. Look f
 `present-valid` in the repository facts report.
 
 Without Koinon, check the facts manually against the installed skill's
-`<!-- koinon:repository-facts -->` schema. Use `Version` 1, the schema's skill name in
-`Skill`, and one repository-relative path per bullet in `Sources`. Confirm those paths
-exist, include all required headings, and use each declared heading at most once.
+`<!-- koinon:repository-facts -->` schema. Use `Version` 1 and the canonical skill name from the schema filename in
+`Skill`, such as `record` for `.koinon/skills/record.md`. The installed folder uses the
+`koinon-` prefix. Put one repository-relative path per bullet in `Sources` and confirm
+each resolves. Use the schema's declared headings, supply a value for every required
+heading, and use each heading at most once.
 
 Projects that keep local procedures because
 they cannot install the catalog record that choice in their `AGENTS.md`. See

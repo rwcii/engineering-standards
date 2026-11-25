@@ -24,25 +24,30 @@ adapting the kit.
    record list and use the process guides for any local series the target maintains.
    Keep the target's existing record identifiers and numbering. Resolve collisions in the
    imported set or use qualified citations. Bring in the [review procedure and lenses](engineering/review/)
-   and point them to the target's local indexes or the pinned source.
+   and point them to the target's local indexes or the pinned source. In the copied
+   review procedure, point the gate-document entry for this runbook to the target's
+   adoption guidance. Remove that entry if the target keeps no adoption guidance.
 
    **Verify.** An example citation reaches its governing record, and existing target
-   record IDs still reach the same decisions. The target has both lenses and can find the
-   applicable process guides and indexes.
+   record IDs still reach the same decisions. The target has both lenses. Its review
+   links reach the applicable process guides, indexes and adoption guidance.
 
-3. **Get the skills and adapt their facts.** Choose either path in the
-   [Using Koinon](../README.md#using-koinon). Start from the relevant [skill facts](../.koinon/skills/)
+3. **Get the skills and adapt their facts.** Follow [Using Koinon](../README.md#using-koinon)
+   for the runtime or standalone skills. If the target uses the local-procedure option
+   in step 4, adapt its existing procedures and their inputs instead. For shared skills,
+   start from the relevant [skill facts](../.koinon/skills/)
    and give them the target's base branch, record sources, check commands, review paths,
    and report location. In the cite-only layout, replace local paths that do not exist
    with references to the pinned policy and remove checks that refer to omitted facts.
    Keep record or standards-audit facts when the target has a local series for those
    skills to use.
 
-   **Verify.** The catalog reports the facts as `present-valid`, or a manual comparison
-   against each installed schema passes when using the standalone skills. For a cite-only
-   target without a local series, missing record and standards-audit facts are expected.
-   Each named source path resolves, and each configured check command and report path
-   matches the target's policy.
+   **Verify.** Use the check for the chosen route. With Koinon, check for
+   `present-valid`. With standalone skills, compare the facts against the installed
+   schemas. With local procedures, check their inputs and gates against the target's
+   policy. For a cite-only target without a local series, missing record and standards-audit
+   facts are expected. In each case, confirm that named paths resolve and the configured
+   commands and report locations match the target's policy.
 
 4. **Integrate the agent instructions.** Merge the applicable rules and links into the
    target's `AGENTS.md` and scoped instruction files. Build its task-to-skill table from
@@ -57,14 +62,15 @@ adapting the kit.
    actual branches and gates.
 
 5. **Apply the target's branch policy.** Compare the desired policy with the target's
-   existing settings and hook configuration. If the target adopts this kit's GitHub flow,
-   use [`scripts/setup-repo.sh`](../scripts/setup-repo.sh) from the target checkout,
+   existing settings and hook configuration. Ensure the branches named by the target's
+   policy exist and that the facts name the real review base. If the target adopts this
+   kit's GitHub flow, use [`scripts/setup-repo.sh`](../scripts/setup-repo.sh) from the target checkout,
    together with the matching hook, when the target authorizes those changes. For another
    flow, use the target's setup mechanism. The [repository setup notes](../README.md#repository-setup-scriptssetup-reposh)
    describe the kit script and its GitHub prerequisites.
 
-   **Verify.** Read back the settings and local hook path. Compare merge methods, protected
-   branches and branch rules with the target's policy. Record any unavailable enforcement
+   **Verify.** Check that the named branches exist. Read back the settings and local hook
+   path. Compare merge methods, protected branches and branch rules with the target's policy. Record any unavailable enforcement
    as such in the adoption results.
 
 6. **Apply the target's publication rules.** In the review procedure, review facts,
