@@ -37,8 +37,8 @@ and the lethal combination of private data + untrusted content + an exfiltration
 channel is never co-located without a gate**; the agent executes in a **hermetic,
 least-privilege sandbox** with enumerated tools and deny-by-default egress; and
 **no agent-introduced dependency enters the tree unproven, while secrets never flow
-into the agent's context or out into generated artifacts.** Text published in a
-**public repository names no private project.** These are the
+into the agent's context or out into generated artifacts.** Text that
+**this repository publishes names no private project.** These are the
 agent-specific complement to the project's general security posture (ADR 005).
 
 ---
@@ -205,8 +205,10 @@ egress; pairs with ADR 005 (secrets management) and ADR 003 (pinned toolchain).
 This repository and everything it publishes — files, commit messages, pull request text, review
 summaries and posted evidence — name no non-public project. A practice learned in a private
 project is carried as the general practice, without its source's name. Public projects, such as
-the skill catalog this repository uses, may be named. An adopting project applies the same rule
-to its own public repositories by default.
+the skill catalog this repository uses, may be named.
+
+*Guidance, the authors' recommendation and not part of this decision:* an adopting project can
+apply the same rule to its own public repositories.
 
 - **Decided by:** Robert Capps
 - **Date:** 2026-11-25
@@ -214,10 +216,10 @@ to its own public repositories by default.
   The options were to name them freely, to remove names when a review finds them, or to carry
   only the general practice.
 - **Reason and scope:** a public repository is copied and indexed, so a private name in it
-  cannot be withdrawn. It covers this repository and its public artifacts as a hard rule, and an
-  adopter's public repositories as a default. It does not cover private repositories, it does
-  not stop naming public projects, and it does not set how a record attributes a decision.
-- **Strength:** hard rule for this repository; default for an adopting project.
+  cannot be withdrawn. It covers this repository and its public artifacts. It does not cover an
+  adopting project's repositories, it does not stop naming public projects, and it does not set
+  how a record attributes a decision.
+- **Strength:** hard rule.
 - **Review when:** none known.
 
 ### Alternatives Considered

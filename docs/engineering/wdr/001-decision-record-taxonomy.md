@@ -1,7 +1,7 @@
 ---
 wdr: "001"
 title: "Decision-Record Taxonomy & the WDR Series"
-status: accepted
+status: modified
 created: "2026-05-31"
 updated: "2026-11-25"
 parent_wdr: ""
@@ -19,7 +19,7 @@ tags:
 # WDR 001: Decision-Record Taxonomy & the WDR Series
 
 **Date:** 2026-05-31
-**Status:** Accepted
+**Status:** Modified
 **Authors:** Robert Capps
 
 ---

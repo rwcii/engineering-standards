@@ -135,7 +135,8 @@ the way your project holds the records (WDR 002, Decision 4).
    reference to a facts file you left out (such as the record checks in `check.md`). Then run
    the catalog's state check and confirm that every facts file you kept is valid and every
    Sources path exists. With no own series, the record and standards-audit skills report their
-   facts as missing; that is expected, and those skills are not used in your repo.
+   facts as missing; that is expected, because they have no series of your own to work on until
+   you keep your own records (step 3).
 
 Either way, don't hold the records through a live link that follows the source's latest state,
 such as a submodule (WDR 002, Decision 4).

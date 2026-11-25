@@ -14,7 +14,7 @@ because it governs how the team and its agents work — is a WDR.
 
 | Number | Title                                                              | Status   |
 | ------ | ------------------------------------------------------------------ | -------- |
-| 001    | [Decision-Record Taxonomy & the WDR Series](001-decision-record-taxonomy.md) | Accepted |
+| 001    | [Decision-Record Taxonomy & the WDR Series](001-decision-record-taxonomy.md) | Modified |
 | 002    | [Record System as Infrastructure](002-record-system-as-infrastructure.md)    | Modified |
 | 003    | [Agent Operating Loop](003-agent-operating-loop.md)                          | Accepted |
 | 004    | [Verification & Testing Discipline](004-verification-and-testing-discipline.md) | Accepted |
