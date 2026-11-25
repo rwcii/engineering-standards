@@ -254,7 +254,8 @@ REQUIRED_DEVELOP="build@15368 test@15368" REQUIRED_MAIN="build@15368" scripts/se
 ```
 
 The script updates live rulesets in place, and turns auto-merge on only after reading back that
-every ruleset and required check is in force; a partial apply exits non-zero with auto-merge off.
+every ruleset and required check is in force. A partial apply exits non-zero and turns auto-merge
+off; if turning it off also fails, the script says so and the setting must be checked by hand.
 An empty `REQUIRED_DEVELOP` sets no required checks and leaves auto-merge off. Without a required
 check, GitHub would merge an auto-merge pull request at once. `--check` exits 0 when the live
 settings match, 1 when one differs and 2 when they cannot be read. For a first rollout, apply with

@@ -155,10 +155,10 @@ head does not carry over.
 
 The gates judge two trees of the same head, and the evidence says which. The reviews read the
 head commit itself. CI on a pull request checks out the candidate merge of the head into its
-base, so it judges the result the merge would produce. The host records the CI results on the head
-commit, and the review statuses are posted there; none is posted on a test merge commit. A new head
-therefore has no results until its own CI run and reviews report. The rollout check (Enforcement)
-confirms where the host records them before auto-merge is turned on.
+base, so it judges the result the merge would produce. The gate depends on the host recording the
+CI results on the head commit, where the review statuses are posted; none is posted on a test
+merge commit. The rollout check (Enforcement) verifies that condition before auto-merge is turned
+on. When it holds, a new head has no results until its own CI run and reviews report.
 
 - **Decided by:** Robert Capps
 - **Date:** 2026-11-25
@@ -214,12 +214,13 @@ A required check is only as trustworthy as whoever can report it:
   access is limited to the accountable human and the agents acting for them. A review status
   counts only when the pull request holds the posted review summary for the same head
   (the review procedure, § Results).
-- Queued auto-merge does not by itself bind a head; the review statuses do. A review status is
-  posted only from an approving review of that exact head, so it is the authorization for that
-  head. When a new commit is pushed after auto-merge is set, the new head has no review statuses
-  and cannot merge until a review of it approves; the approval of the earlier head does not
-  cover it (Decision 2). An agent that pushes a new head turns auto-merge off on that pull request
-  and sets it again only after the new head's reviews approve.
+- Queued auto-merge does not by itself bind a head. A review status is posted only from an
+  approving review of that exact head: it proves the review approved that head, and it is not the
+  merge authorization, which comes separately from the approval or standing authorization above.
+  Before pushing a new head to a pull request with auto-merge set, the agent turns auto-merge off
+  and confirms it is off. It sets auto-merge again only when the new head has its own approving
+  reviews and the merge authorization covers it; the earlier head's approval and authorization do
+  not carry over (Decision 2).
 
 - **Decided by:** Robert Capps
 - **Date:** 2026-11-25
