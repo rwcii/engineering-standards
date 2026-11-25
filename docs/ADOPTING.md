@@ -9,10 +9,12 @@ adapting the kit.
    Copy records when the target will own and adapt them. Use a pinned source and record list
    when the target will cite shared rules. Record the choice and its scope in the target's
    governing workflow document. A pinned citation names the source, record ID, revision and
-   applicable section.
+   applicable section. Avoid a live link that follows upstream changes, such as a submodule
+   configured to follow the source's latest state.
 
-   **Verify.** The target records its choice. For a cited set, the record list identifies an exact
-   upstream revision and the citation check rejects an ID missing from that list.
+   **Verify.** The target records its choice and has no live-tracking link to the shared
+   records. For a cited set, the record list identifies an exact upstream revision and the
+   citation check rejects an ID missing from that list.
 
 2. **Bring in the records and review documents.** For the copy path, bring in the
    [ADR](architecture/adr/), [PDR](product/pdr/) and [WDR](engineering/wdr/) records
@@ -29,7 +31,7 @@ adapting the kit.
    applicable process guides and indexes.
 
 3. **Get the skills and adapt their facts.** Choose either path in the
-   [Koinon guide](../README.md#using-koinon). Start from the relevant [skill facts](../.koinon/skills/)
+   [Using Koinon](../README.md#using-koinon). Start from the relevant [skill facts](../.koinon/skills/)
    and give them the target's base branch, record sources, check commands, review paths,
    and report location. In the cite-only layout, replace local paths that do not exist
    with references to the pinned policy and remove checks that refer to omitted facts.
@@ -37,14 +39,18 @@ adapting the kit.
    skills to use.
 
    **Verify.** The catalog reports the facts as `present-valid`, or a manual comparison
-   against each installed schema passes when using the standalone skills. Each named
-   source path resolves, and each configured check command and report path matches the
-   target's policy.
+   against each installed schema passes when using the standalone skills. For a cite-only
+   target without a local series, missing record and standards-audit facts are expected.
+   Each named source path resolves, and each configured check command and report path
+   matches the target's policy.
 
 4. **Integrate the agent instructions.** Merge the applicable rules and links into the
    target's `AGENTS.md` and scoped instruction files. Build its task-to-skill table from
    the skills it uses and the facts it maintains. Keep native agent entry files as
-   pointers to the owning instructions where the target uses that convention.
+   pointers to the owning instructions where the target uses that convention. If the
+   target keeps local skill procedures under
+   [WDR 008, Decision 4](engineering/wdr/008-context-and-memory-engineering.md#5-decision-4-skills-come-from-one-shared-catalog-a-repository-keeps-only-its-facts),
+   record that choice in the target's `AGENTS.md`.
 
    **Verify.** A reader starting at the target's `AGENTS.md` reaches the right record,
    skill and facts for a representative task. The instructions describe the target's
