@@ -3,7 +3,7 @@ wdr: "005"
 title: "Independent Review & Control-Plane Protection"
 status: modified
 created: "2026-05-31"
-updated: "2026-10-12"
+updated: "2026-11-25"
 parent_wdr: ""
 authors:
   - "Robert Capps"
@@ -88,7 +88,8 @@ refuse work and ask again for approval the task already gave.
 
 Covers the review gate and protection of the control plane. The agent's own
 pre-review verification is WDR 003; test integrity feeding the gate is WDR 004; the
-review protocol's concrete steps live in `standards-review` and `refusal-review`.
+review protocol's concrete steps live in each project's review procedure and lenses, run by its
+standards review and refusal review.
 
 ---
 
@@ -251,8 +252,8 @@ merge-time counterpart to the agent-time operating loop (WDR 003) and testing
 discipline (WDR 004): the agent verifies its own work, then an independent reviewer
 verifies it again with no shared context, and every limit the change adds is traced
 to a decision. The concrete review protocol, severity scale, waiver mechanism, and
-control-plane guards are each adopting project's enforcement, with `standards-review`
-and `refusal-review` as the reference implementations.
+control-plane guards are each adopting project's enforcement, with this repository's review
+procedure and lenses (`docs/engineering/review/`) as the reference implementation.
 
 ---
 
@@ -262,3 +263,4 @@ and `refusal-review` as the reference implementations.
 | ---------- | ---------------- |
 | 2026-05-31 | Initial creation |
 | 2026-10-12 | Decision 4: new constraints pass their own source review (`refusal-review`) |
+| 2026-11-25 | Scope and conclusion point to the review procedure and lenses in `docs/engineering/review/`; the skills that run them come from the shared catalog (WDR 008, Decision 4) |

@@ -14,21 +14,13 @@ It has three record types and two review gates:
   workflow, the agent operating loop, the review/enforcement gates, and the record
   system itself. See [`docs/engineering/wdr/`](docs/engineering/wdr/).
 
-Plus a set of agent skills: a [`standards-review`](agents/skills/standards-review/)
-skill — an independent preflight review agent that checks a branch against the records
-before push/PR; a [`refusal-review`](agents/skills/refusal-review/) skill — an
-independent preflight agent that traces every refusal, gate or limit a branch adds to a
-source; a [`refusal-audit`](agents/skills/refusal-audit/) skill, run once on request,
-that audits a whole existing
-repo for refusal traps already in it and proposes a fix for each root cause; a
-[`standards-audit`](agents/skills/standards-audit/) skill that
-mines an existing repo for decisions that should become ADR/PDR/WDR records; a
-[`record`](agents/skills/record/) skill that authors and maintains ADR/PDR/WDR records to
-the template and house rules; a [`sprint`](agents/skills/sprint/) skill that scopes a
-deliverable (decision → definition-of-done → adversarially-reviewed chunk plan) before any
-code is written; and a [`handoff`](agents/skills/handoff/) skill that writes an immutable,
-timestamp-named snapshot of the current work's state so the next session or agent can resume
-with full context.
+Plus a [review procedure](docs/engineering/review/README.md) with two reviewer lenses — a
+[standards lens](docs/engineering/review/standards-lens.md) that checks a branch against the
+records, and a [refusal lens](docs/engineering/review/refusal-lens.md) that traces every refusal,
+gate or limit a branch adds to a source. The agent skills that run these reviews, write records,
+plan sprints and hand off work come from the shared [Koinon](https://github.com/rwcii/koinon)
+catalog; this repository keeps only the facts those skills read, in
+[`.koinon/skills/`](.koinon/skills/) (WDR 008, Decision 4).
 
 ## The core idea: principle vs. enforcement
 
@@ -52,32 +44,19 @@ your own enforcement.
 ├── docs/
 │   ├── architecture/adr/     # Architecture Decision Records + process
 │   ├── product/pdr/          # Product Decision Records + process
-│   └── engineering/wdr/      # Workflow Decision Records + process
+│   └── engineering/
+│       ├── wdr/              # Workflow Decision Records + process
+│       └── review/           # review procedure, standards lens, refusal lens
 ├── scripts/
 │   └── setup-repo.sh         # apply the branch/merge policy to a GitHub repo (WDR 010)
 ├── .githooks/
 │   └── pre-commit            # blocks direct commits to main (WDR 010)
-├── agents/
-│   └── skills/               # the one home of the skills, for every agent
-│       ├── standards-review/     # independent preflight review protocol
-│       ├── standards-audit/      # mine a repo for candidate ADR/PDR/WDR records
-│       ├── refusal-review/       # preflight: every new constraint has a source
-│       ├── refusal-audit/        # one-time audit of a whole repo for existing refusal traps
-│       ├── record/               # author & maintain ADR/PDR/WDR records
-│       ├── sprint/               # scope a deliverable before building it
-│       └── handoff/              # write an immutable timestamped session-state snapshot
-├── .claude/
-│   └── skills -> ../agents/skills    # Claude Code discovery link
-├── .agents/
-│   └── skills -> ../agents/skills    # Codex repository discovery link
-└── .codex/
-    └── skills -> ../agents/skills    # Codex discovery link
+└── .koinon/skills/           # facts the shared Koinon skills read for this repository
 ```
 
-The skills live once, in `agents/skills/`. Each agent finds them through a relative symlink
-in its own folder, so every agent reads the same files. This applies the principle of WDR 008,
-Decision 2. When you vendor the skills, keep `agents/skills/` as the real folder and recreate
-the links. A link must stay relative, so that it works in every clone.
+The skills are not kept in this repository. Agents use the Koinon skills installed on the
+machine, and each skill reads this repository's values from its facts file in `.koinon/skills/`
+(see the skill table in [AGENTS.md](AGENTS.md)).
 
 ### Baseline records
 
@@ -106,14 +85,20 @@ beginning with WDR 001 (the decision-record taxonomy itself). See the
 click **Use this template** (or `gh repo create <your-repo> --template rwcii/engineering-standards`)
 to get a fresh repo with these files, then run `scripts/setup-repo.sh` to apply the GitHub
 settings a template does not carry (merge methods, auto-delete, branch-protection rulesets,
-hook path). To adopt into an *existing* repo instead, vendor the pieces manually:
+hook path). To adopt into an *existing* repo instead, choose how your project holds the
+records, then add the pieces:
 
-1. **Vendor** `docs/architecture/adr/`, `docs/product/pdr/`,
-   `docs/engineering/wdr/`, the `standards-review` skill, the
-   `refusal-review` skill, and the other `agents/skills/` you want (`standards-audit`,
-   `refusal-audit`, `record`, `sprint`, `handoff`) into your repo. Keep the `LICENSE` file
-   in the `refusal-audit` folder. Add the relative links `.claude/skills`, `.agents/skills`
-   and `.codex/skills` to `../agents/skills`, so that each agent finds the skills.
+- **Records only (copy).** Copy `docs/architecture/adr/`, `docs/product/pdr/` and
+  `docs/engineering/wdr/` into your repo, and own them from there.
+- **Cite only (no copy).** Keep the records in one source repository. Your repo cites each
+  record it relies on, and a check compares those citations against a pinned list of the
+  source's records, so a citation to a record that does not exist fails.
+
+Then:
+
+1. **Install the skills** from the [Koinon](https://github.com/rwcii/koinon) catalog for your
+   agents, and copy `docs/engineering/review/` and `.koinon/skills/` into your repo. Do not copy
+   skill procedures into the repo (WDR 008, Decision 4).
 2. **Keep** ADR 001.x as-is (the universal code-architecture standards).
 3. **Fill in** the templates for your stack: ADR 002.x (frontend / api /
    backend-persistence) and ADR 004.x (your data-handling specifics).
@@ -123,10 +108,9 @@ hook path). To adopt into an *existing* repo instead, vendor the pieces manually
    Baseline WDRs 001–009 are universal — keep them. WDR 010 ships as a branch-flow
    *template* (the worked example of a project-specific WDR): adopt its default flow or
    replace it with your own.
-6. **Adapt** the `standards-review` skill (`agents/skills/standards-review/SKILL.md`): set
-   your base branch, your build/test gate,
-   and the project-specific ADR/PDR/WDR checklist. Set the base branch in
-   the `refusal-review` skill too.
+6. **Adapt** the facts in `.koinon/skills/` (your base branch, record folders and check
+   commands) and the review documents in `docs/engineering/review/` (your build/test gate,
+   and an optional project-specific ADR/PDR/WDR checklist in the standards lens).
 7. **Replace** `CONTRIBUTING.md` and `.github/PULL_REQUEST_TEMPLATE.md` with your own —
    they govern contributions to the *kit itself*. The DCO section and the PR checklist
    items are reusable starting points you can keep.
@@ -134,8 +118,8 @@ hook path). To adopt into an *existing* repo instead, vendor the pieces manually
    (merge methods, auto-delete, branch-protection rulesets) and the local hook path —
    the GitHub settings a clone does not inherit.
 
-The records are a starting template you own and adapt — not a runtime dependency.
-Vendor and customize; don't submodule.
+The records are a starting template you own and adapt — not a runtime dependency. Copy and
+customize them, or cite them from one source with a pinned record list; don't submodule.
 
 ## Repository setup (`scripts/setup-repo.sh`)
 
@@ -190,13 +174,9 @@ Two ways to engage (see [CONTRIBUTING.md](CONTRIBUTING.md)):
   fork, run `scripts/setup-repo.sh`, and make it yours. No permission needed.
 - **Contribute back — maintainer-curated.** Open an issue first; PRs are by invitation,
   follow the [WDR 010](docs/engineering/wdr/010-branch-and-merge-flow.md) branch flow,
-  pass `standards-review` and `refusal-review`, and carry signed commits with a
+  pass the standards review and the refusal review, and carry signed commits with a
   [DCO](https://developercertificate.org/) sign-off (`git commit -s`).
 
 ## License
 
 [MIT](LICENSE) © Stratovera.
-
-The [`refusal-audit`](agents/skills/refusal-audit/) skill adapts its method from the
-[Koinon](https://github.com/rwcii/koinon) `refusal-review` skill, also MIT licensed. Its folder
-carries the Koinon license notice.

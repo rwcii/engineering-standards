@@ -8,13 +8,24 @@ be **vendored into other projects**. It contains:
 - **ADRs** (`docs/architecture/adr/`) — how a system is built (structure, patterns, boundaries)
 - **PDRs** (`docs/product/pdr/`) — how a product behaves (flows, UX contracts, voice)
 - **WDRs** (`docs/engineering/wdr/`) — how the work is done (workflow, agent operating loop, review/enforcement gates, the record system itself)
-- **`standards-review`** (`agents/skills/standards-review/`) — a skill: an independent preflight review protocol
-- **`refusal-review`** (`agents/skills/refusal-review/`) — a skill: an independent preflight that traces every new refusal, gate or limit to a source
-- **`refusal-audit`** (`agents/skills/refusal-audit/`) — a skill: a one-time audit, on request, of a whole repo for refusal traps already in it (WDR 005)
-- **`standards-audit`** (`agents/skills/standards-audit/`) — a skill that mines a repo for candidate ADR/PDR/WDR records
-- **`record`** (`agents/skills/record/`) — a skill that authors and maintains ADR/PDR/WDR records to template and house rules
-- **`sprint`** (`agents/skills/sprint/`) — a skill that scopes a deliverable (decision → DoD → chunk plan, adversarially reviewed) before any code
-- **`handoff`** (`agents/skills/handoff/`) — a skill that writes an immutable, timestamped snapshot of the current work state
+- **The review procedure** (`docs/engineering/review/`) — when the standards review and the refusal review run, the brief, severity, results, and the two reviewer lenses
+- **Skill facts** (`.koinon/skills/`) — this repository's values for the shared [Koinon](https://github.com/rwcii/koinon) skills; the skills themselves are not kept here (WDR 008, Decision 4)
+
+## Skills
+
+Agents use the Koinon skills installed on the machine. Each reads its facts file in
+`.koinon/skills/`:
+
+| Task | Skill | Facts |
+| ---- | ----- | ----- |
+| Standards review of a branch | `koinon-standards-review` | `.koinon/skills/standards-review.md` |
+| Refusal review of a branch | `koinon-refusal-review` | `.koinon/skills/refusal-review.md` |
+| Write or change a record | `koinon-record` | `.koinon/skills/record.md` |
+| Find decisions with no record | `koinon-standards-audit` | `.koinon/skills/standards-audit.md` |
+| Audit a repo for refusal traps | `koinon-refusal-audit` | `.koinon/skills/refusal-audit.md` |
+| Plan a multi-PR deliverable | `koinon-sprint` | `.koinon/skills/sprint.md` |
+| Run the checks of a change | `koinon-check` | `.koinon/skills/check.md` |
+| Hand off or pick up work | `koinon-handoff`, `koinon-pickup` | `.koinon/skills/handoff.md`, `.koinon/skills/pickup.md` |
 
 ## The One Principle to Internalize
 
@@ -42,15 +53,8 @@ project's enforcement section, not here.
 | `docs/architecture/adr/`      | ADRs + `ADR_PROCESS.md` + index `README.md`        |
 | `docs/product/pdr/`           | PDRs + `PDR_PROCESS.md` + index `README.md`        |
 | `docs/engineering/wdr/`       | WDRs + `WDR_PROCESS.md` + index `README.md`        |
-| `agents/skills/standards-review/` | Skill: the preflight review protocol             |
-| `agents/skills/`              | The one home of the skills, for every agent (WDR 008) |
-| `.claude/skills`, `.agents/skills`, `.codex/skills` | Relative symlinks to `../agents/skills`, so Claude Code and Codex find the same skills |
-| `agents/skills/refusal-review/` | Skill: preflight that every new constraint has a source (WDR 005) |
-| `agents/skills/refusal-audit/` | Skill: one-time audit, on request, of a whole repo for refusal traps already in it (WDR 005; MIT notice of its source in the folder) |
-| `agents/skills/standards-audit/` | Skill: mine a repo for candidate ADR/PDR/WDR records |
-| `agents/skills/record/`      | Skill: author & maintain ADR/PDR/WDR records       |
-| `agents/skills/sprint/`      | Skill: scope a deliverable before building it      |
-| `agents/skills/handoff/`     | Skill: snapshot current work state for the next session |
+| `docs/engineering/review/`    | Review procedure, standards lens, refusal lens (WDR 005) |
+| `.koinon/skills/`             | Facts the Koinon skills read for this repository (WDR 008, Decision 4) |
 | `scripts/setup-repo.sh`       | Apply the branch/merge policy to a GitHub repo (WDR 010) |
 | `.githooks/pre-commit`        | Blocks direct commits to `main` (WDR 010)          |
 | `CONTRIBUTING.md`             | How to fork/extend or contribute back; DCO sign-off |

@@ -1,9 +1,9 @@
 ---
 wdr: "008"
 title: "Context & Memory Engineering"
-status: accepted
+status: modified
 created: "2026-05-31"
-updated: "2026-06-19"
+updated: "2026-11-25"
 parent_wdr: ""
 authors:
   - "Robert Capps"
@@ -21,7 +21,7 @@ tags:
 # WDR 008: Context & Memory Engineering
 
 **Date:** 2026-05-31
-**Status:** Accepted
+**Status:** Modified
 **Authors:** Robert Capps
 
 ---
@@ -36,7 +36,8 @@ budgeted resource that states durable rules and routes to records rather than
 duplicating them; the **`AGENTS.md` / `CLAUDE.md` convention** is the portable, tiered
 source of truth and is recorded here as a deliberate decision; and each task works
 from **durable records plus an explicit scope** rather than an inherited transcript,
-with deliberate handoffs between agents and phases.
+with deliberate handoffs between agents and phases. Agent **skills come from one shared
+catalog**, and a repository keeps only the facts those skills read.
 
 ---
 
@@ -46,8 +47,9 @@ with deliberate handoffs between agents and phases.
 2. Decision 1: The Always-Loaded Context Is a Budgeted Resource
 3. Decision 2: The AGENTS.md / CLAUDE.md Convention Is the Portable Source of Truth
 4. Decision 3: Tasks Work From Records and Scope, Not an Inherited Transcript
-5. Conclusion
-6. Document History
+5. Decision 4: Skills Come From One Shared Catalog; a Repository Keeps Only Its Facts
+6. Conclusion
+7. Document History
 
 ---
 
@@ -187,7 +189,56 @@ ends; fresh context for independent review.
 
 ---
 
-## 5. Conclusion
+## 5. Decision 4: Skills Come From One Shared Catalog; a Repository Keeps Only Its Facts
+
+### Decision
+
+Agent skills — the procedures for review, record writing, sprint planning, handoff and the
+like — come from **one shared, versioned catalog** that is installed for the agents on a
+machine. A repository does **not** keep its own copy of a skill's procedure. It keeps only a
+**facts file** per skill it uses: the repository's own values that the skill reads, such as its
+base branch, its record folders, its check commands, and the documents that hold its review
+procedure. Procedure text that is the project's own (a review lens, a check list) lives in a
+tracked document that the facts file names. Session handoffs live in a **per-agent folder in
+the main checkout that is never committed**.
+
+- **Decided by:** Robert Capps
+- **Date:** 2026-11-25
+- **Context:** this repository shipped its skills as files in the repository, linked into each
+  agent's discovery folder, for adopters to vendor. The shared catalog shipped newer versions of
+  the same skills. The options were to keep the repository copies, to keep both, or to use the
+  catalog with per-repository facts.
+- **Strength:** default. A project that cannot install the catalog keeps local skills, and says
+  so in its `AGENTS.md`.
+- **Review when:** the catalog stops shipping a skill that projects need, or a supported agent
+  can no longer read the catalog.
+
+### Alternatives Considered
+
+| Alternative | Description | Why Rejected |
+| ----------- | ----------- | ------------ |
+| Skills vendored into each repository | Each repository keeps a copy of every skill, linked into each agent's folder | Copies drift from the catalog and from each other; agents see two skills for one job and pick by wording |
+| Repository copies beside the catalog | Keep both, and let the agent choose | Two procedures for one step; which one governs depends on the trigger words |
+| One shared catalog plus per-repository facts | The catalog holds the procedure; the repository holds its values | Chosen |
+
+### Rationale
+
+1. One copy of each procedure is DRY across every repository (ADR 001.1): a fix reaches every
+   adopter when the catalog updates.
+2. Facts separate what is the project's own from what is shared, so the skill text stays
+   generic and the repository states only what is true for it.
+3. One handoff location per agent stops one agent from resuming another's work by mistake.
+
+### Enforcement
+
+Per project: the catalog installed for each agent family; one facts file per skill the
+repository uses, checked by the catalog's state report; no skill procedure committed in the
+repository; handoff folders excluded from version control. This repository realizes it with
+the [Koinon](https://github.com/rwcii/koinon) catalog and the facts in `.koinon/skills/`.
+
+---
+
+## 6. Conclusion
 
 Context is engineered, not incidental: the always-loaded tier is budgeted to durable
 rules and pointers, the `AGENTS.md`/`CLAUDE.md` convention gives that tier a portable
@@ -205,3 +256,4 @@ summary mechanics are each adopting project's enforcement.
 | ---------- | ---------------- |
 | 2026-05-31 | Initial creation |
 | 2026-06-19 | Generalized convention wording for vendoring; removed self-referential example |
+| 2026-11-25 | Decision 4: skills come from one shared catalog; a repository keeps only its facts |

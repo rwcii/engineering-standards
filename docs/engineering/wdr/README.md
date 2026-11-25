@@ -21,7 +21,7 @@ because it governs how the team and its agents work — is a WDR.
 | 005    | [Independent Review & Control-Plane Protection](005-independent-review-and-control-plane.md) | Modified |
 | 006    | [Agent Autonomy & Guardrails](006-agent-autonomy-and-guardrails.md)          | Accepted |
 | 007    | [Agentic Security](007-agentic-security.md)                                  | Accepted |
-| 008    | [Context & Memory Engineering](008-context-and-memory-engineering.md)        | Accepted |
+| 008    | [Context & Memory Engineering](008-context-and-memory-engineering.md)        | Modified |
 | 009    | [AI Provenance & Accountability](009-ai-provenance-and-accountability.md)    | Accepted |
 
 The baseline set (001–009) is complete and universal. Project-specific WDRs begin at
