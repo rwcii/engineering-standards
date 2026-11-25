@@ -46,8 +46,11 @@ incomplete (it did not run, with the reason; never a pass, WDR 004 Decision 8) o
     `bash scripts/check-promotion-source.sh main "$(gh pr view <number> --json headRefName -q .headRefName)" "$(gh pr view <number> --json headRepositoryOwner,headRepository -q '.headRepositoryOwner.login + "/" + .headRepository.name')" "$(gh repo view --json nameWithOwner -q .nameWithOwner)"`.
   If `develop` moves before the merge, the pin is void: cut the release again at the new commit.
 - After a merge (bound to the approved head with `--match-head-commit`, WDR 010 Enforcement), read
-  back the result: for a feature, the tree of `origin/develop` equals the approved head's tree when
-  `develop` had not moved; for a release, the second parent of `origin/main` is the pin.
+  back the merge commit that the pull request records, not the branch tip:
+  `m=$(gh pr view <number> --json mergeCommit -q .mergeCommit.oid)`, then `git fetch origin`.
+  For a feature, `git diff <m>^ <m>` equals `git diff <base at approval> <approved head>` (and
+  when the base had not moved, `git rev-parse <m>^{tree}` equals `git rev-parse <approved head>^{tree}`);
+  for a release, `git rev-parse <m>^2` is the pin.
 ## Required CI
 On every pull request into `develop` or `main`, with no path filters, and again when its base
 changes:

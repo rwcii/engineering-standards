@@ -373,8 +373,10 @@ The bundled tooling implements these decisions; a project that changes the flow 
   `pull_request_target`, with no code from the pull request, so a pull request cannot change it.
 - **Head-bound merge:** a feature merges with `gh pr merge <number> --squash --match-head-commit
   <approved head>`, and a release with `gh pr merge <number> --merge --match-head-commit <pin>`;
-  the host refuses the merge if the head has moved. Then read back the result as Decision 2 says
-  (`gh pr view <number> --json state,mergeCommit` and a tree or parent comparison).
+  the host refuses the merge if the head has moved. Then read back the merge commit the pull
+  request records (`gh pr view <number> --json mergeCommit`), not the branch tip, which a later
+  merge may have moved, and compare it as Decision 2 says: its changes against its first parent
+  equal the approved change, or for a release, its second parent is the pin.
 - **Review statuses:** the review procedure (§ Results) posts `standards-review` and
   `refusal-review` on the exact head from each approving report.
 - **Local guard:** `.githooks/pre-commit` blocks a direct (non-merge) commit on `main`; enable it
@@ -384,11 +386,22 @@ The bundled tooling implements these decisions; a project that changes the flow 
   auto-merge on only after a read-back shows every gate in force, and fails on a partial apply.
   `scripts/setup-repo.sh --check` reads the live settings and reports each difference without
   changing anything; `scripts/setup-repo.test.sh` shows it detects each difference.
-- **Rollout check:** the policy is first applied with auto-merge off (`AUTO_MERGE=off`). A probe
-  pull request into `develop` then shows the gate working: it is blocked while any of the four
-  checks is missing on its head, a status posted under a CI check's name by hand does not satisfy
-  it, and it becomes mergeable only when all four report success on that head. Retargeted to
-  `main`, it fails `promotion-source`. Auto-merge is turned on only after the probe passes.
+- **Bootstrap and rollout check:** `promotion-source` runs on `pull_request_target`, which takes its
+  workflow from the trusted branch named by the host (the default branch, `main`, in this
+  repository), so the check does not run until that branch carries the workflow and its script.
+  A required check that never runs blocks every merge, so the first rollout is staged:
+  1. Apply the policy with auto-merge off and without `promotion-source`:
+     `AUTO_MERGE=off REQUIRED_DEVELOP="repo-checks@15368 standards-review refusal-review"
+     REQUIRED_MAIN="repo-checks@15368" scripts/setup-repo.sh`.
+  2. Release `develop` into `main` under Decision 5, so the trusted branch carries the workflow and
+     the script.
+  3. Apply the full policy with auto-merge off (`AUTO_MERGE=off scripts/setup-repo.sh`).
+  4. Probe: a pull request into `develop` is blocked while any of the four checks is missing on its
+     head, a status posted under a CI check's name by hand does not satisfy it, and it becomes
+     mergeable only when all four report success on that head; retargeted to `main`, it fails
+     `promotion-source`.
+  5. Turn auto-merge on (`scripts/setup-repo.sh`) only after the probe passes.
+  Each step that changes settings or `main` needs its own authorization.
 - **Review base:** the standards review and the refusal review take `develop` as their base (the
   project's check facts, `.koinon/skills/check.md`).
 - **Compliance:** a merge of a commit other than the approved head, a change that lands on `main`
