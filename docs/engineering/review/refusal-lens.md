@@ -80,9 +80,9 @@ Is a finding:
 | 1 | ... | ... | refusal/approval/cap/exclusion/test/code | record, requirement, quote or contract | yes/no/narrower |
 
 ## Findings
-| ID | Severity | File and location | Finding | Recommended Fix |
-|----|----------|-------------------|---------|-----------------|
-| R1 | high/medium | ... | unsourced/extrapolated/proposal stated as rule/new approval step | remove, narrow, cite, or record the decision |
+| ID | Severity | File and location | Constraint # | Finding | Missing or narrower source | Recommended Fix |
+|----|----------|-------------------|--------------|---------|----------------------------|-----------------|
+| R1 | high/medium | ... | row of the Constraints table | unsourced/extrapolated/proposal stated as rule/new approval step | the authority that is absent, or the narrower case it covers | remove, narrow, cite, or record the decision |
 
 ## Coverage
 - Read in full / in part / not read, with the reason
