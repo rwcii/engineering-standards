@@ -58,7 +58,9 @@ project's enforcement section, not here.
 | `docs/engineering/wdr/`       | WDRs + `WDR_PROCESS.md` + index `README.md`        |
 | `docs/engineering/review/`    | Review procedure, standards lens, refusal lens (WDR 005) |
 | `.koinon/skills/`             | Facts the Koinon skills read for this repository (WDR 008, Decision 4) |
-| `scripts/setup-repo.sh`       | Apply the branch/merge policy to a GitHub repo (WDR 010) |
+| `scripts/setup-repo.sh`       | Apply the branch/merge policy to a GitHub repo; `--check` reports drift; `setup-repo.test.sh` shows it detects each difference (WDR 010) |
+| `scripts/check-repo.sh`       | The repository checks (`repo-checks` in CI); `check-repo.test.sh` shows each can fail (WDR 004) |
+| `.github/workflows/`          | Required checks: `checks.yml` (`repo-checks`) and `promotion-source.yml`, which runs trusted code only: its workflow from the default branch, its script from the base commit (WDR 010, Decision 3) |
 | `.githooks/pre-commit`        | Blocks direct commits to `main` (WDR 010)          |
 | `CONTRIBUTING.md`             | How to fork/extend or contribute back; DCO sign-off |
 | `.github/PULL_REQUEST_TEMPLATE.md` | Curated-contribution PR checklist             |
@@ -75,9 +77,12 @@ read it before adding or editing records there.
 - **Frontmatter:** YAML block required on every record (see the module process doc).
 - **Commits:** signed (SSH); messages `docs(adr): ...` / `docs(pdr): ...` / `docs(wdr): ...`.
 - **Branching:** never commit to `main`. Work on a feature branch off `develop`;
-  squash-merge feature → `develop`, then merge `develop` → `main`. Recorded in WDR 010;
+  squash-merge feature → `develop`; a release merges a pinned `develop` commit into `main`.
+  Every gate and the merge bind the exact head. Recorded in WDR 010;
   `.githooks/pre-commit` blocks direct commits to `main`. Run `scripts/setup-repo.sh`
-  once per repo to apply the hook path and the GitHub-side branch/merge settings.
+  once per repo to apply the hook path and the GitHub-side settings.
+- **Checks:** run the required checks of `.koinon/skills/check.md` on the exact commit before
+  opening a pull request, against the pull request's base (WDR 010, Decision 6).
 - **Index:** update the module `README.md` table whenever you add a record or
   change its status (hand-maintained until a generator is wired — WDR 002).
 

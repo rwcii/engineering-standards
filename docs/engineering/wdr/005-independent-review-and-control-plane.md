@@ -130,6 +130,24 @@ procedure and standards lens) run by a fresh-context agent before push/PR;
 the reviewer reads the actual code and verifies claims; review bounded to
 correctness, requirements, and record compliance.
 
+### Amendment (2026-11-25): one frozen commit, a named reviewer, explicit security scope
+
+Each review judges one frozen commit and names its full hash, which the project's merge binds to
+(its branch and merge record). The standards
+review and the refusal review (Decision 4) give separate verdicts on the same commit. Each report
+states whether security review applies, covering the code and the configuration and data that
+tools read, and says why. The reviewer's family and model follow the project's policy and are
+recorded beside the verdict as evidence.
+
+- **Decided by:** Robert Capps
+- **Date:** 2026-11-25
+- **Context:** What must a review report name for its verdict to count? The options were a
+  verdict on the pull request, a verdict with the head hash, or a verdict with the hash, the
+  reviewer and an explicit security scope.
+- **Reason and scope:** a verdict without its commit cannot gate a merge, and an unstated security
+  scope reads as "checked" when it was not. This governs every review under Decisions 1 and 4.
+- **Strength:** hard rule.
+
 ---
 
 ## 3. Decision 2: The Merge Gate Has a Defined Pass/Fail Contract
@@ -164,6 +182,23 @@ merge: a blocking finding stops the merge until resolved or waived.
 Per project: a documented severity scale and blocking rule (the universal default:
 do not approve with any critical or high finding); a waiver mechanism that records
 the justification and approver; the gate wired to the verdict.
+
+### Amendment (2026-11-25): fix, recheck, stop
+
+After fixes, a recheck reads the fix range: each accepted fix, the code it reaches, and every
+constraint the fixes add. It reports each earlier finding as closed or open and each new finding.
+The review base stays the same through the rechecks. An unresolved blocking finding blocks the
+merge; overriding it needs a waiver recorded under this decision. When the same finding returns
+after repeated fixes, the author stops and escalates (WDR 006, Decision 3) instead of looping.
+
+- **Decided by:** Robert Capps
+- **Date:** 2026-11-25
+- **Context:** How much does a recheck read, and when does the fix loop end? The options were a
+  full new review each round, a recheck of the named findings only, or a recheck of the fix range
+  with an escalation rule.
+- **Reason and scope:** a full review each round is slow and finds new low findings forever; a
+  recheck of the named findings alone misses what the fixes broke. This governs every recheck.
+- **Strength:** default.
 
 ---
 
@@ -280,3 +315,4 @@ procedure and lenses (`docs/engineering/review/`) as the reference implementatio
 | 2026-10-12 | Decision 4: new constraints pass their own source review (`refusal-review`) |
 | 2026-11-25 | Summary, problem, scope, conclusion and the Decision 1 and 4 enforcement point to the review procedure and lenses in `docs/engineering/review/`, run by the shared-catalog skills (WDR 008, Decision 4) |
 | 2026-11-25 | Decision 4 checks the strength and scope of decisions cited as constraint sources. |
+| 2026-11-25 | Decision 1 amendment: one frozen commit, a named reviewer and an explicit security scope. Decision 2 amendment: fix, recheck, stop |

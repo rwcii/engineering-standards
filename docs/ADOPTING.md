@@ -70,8 +70,13 @@ adapting the kit.
    flow, use the target's setup mechanism. The [repository setup notes](../README.md#repository-setup-scriptssetup-reposh)
    describe the kit script and its GitHub prerequisites.
 
+   Set the target's own required checks first (`REQUIRED_DEVELOP`, `REQUIRED_MAIN`): a required
+   check that the target's CI never reports blocks every merge.
+
    **Verify.** Check that the named branches exist. Read back the settings and local hook
-   path. Compare merge methods, protected branches and branch rules with the target's policy. Record any unavailable enforcement
+   path; for the kit's flow, `scripts/setup-repo.sh --check` reports each difference. Compare
+   merge methods, protected branches, required checks and branch rules with the target's policy.
+   Record any unavailable enforcement
    as such in the adoption results.
 
 6. **Apply the target's publication rules.** In the review procedure, review facts,

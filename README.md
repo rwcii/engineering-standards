@@ -237,7 +237,29 @@ scripts/setup-repo.sh
 
 # ...or target a specific repo
 scripts/setup-repo.sh owner/repo
+
+# read the live settings and report each difference from the policy; changes nothing
+scripts/setup-repo.sh --check owner/repo
 ```
+
+The script also requires `jq`. It declares the required status checks of each branch, as
+[WDR 010, Decision 3](docs/engineering/wdr/010-branch-and-merge-flow.md#4-decision-3-required-checks-gate-the-merge-auto-merge-only-when-every-gate-is-required)
+decides; the lists are at the top of the script. `NAME@15368` pins a check to GitHub Actions, so a status posted by hand under that name
+does not satisfy it. A required check must report on every pull request to its branch, or it
+blocks every merge, so set your own before applying:
+
+```bash
+REQUIRED_DEVELOP="build@15368 test@15368" REQUIRED_MAIN="build@15368" scripts/setup-repo.sh owner/repo
+```
+
+The script updates live rulesets in place, and turns auto-merge on only after reading back that
+every ruleset and required check is in force. A partial apply exits non-zero and turns auto-merge
+off; if turning it off also fails, the script says so and the setting must be checked by hand.
+An empty `REQUIRED_DEVELOP` sets no required checks and leaves auto-merge off. Without a required
+check, GitHub would merge an auto-merge pull request at once. `--check` exits 0 when the live
+settings match, 1 when one differs and 2 when they cannot be read. A first rollout is staged,
+because `promotion-source` runs from the default branch and does not exist there until the first
+release carries it: follow the bootstrap steps in WDR 010, Enforcement.
 
 ### What it applies — and what your account type limits
 
@@ -245,8 +267,9 @@ scripts/setup-repo.sh owner/repo
 | ------- | :-------------: | :------------------------: | :--------------: |
 | Merge methods — squash + merge on, rebase off, squash uses PR title/body | yes | yes | yes |
 | Auto-delete head branch on merge | yes | yes | yes |
+| Auto-merge, when `develop` has required checks | yes | yes | **no** (off: no ruleset requires a check) |
 | Local `pre-commit` hook path (`core.hooksPath=.githooks`) | yes | yes | yes |
-| Branch-protection **rulesets** — `develop` squash-only + PR, `main` merge-only + PR, block force-push & deletion | yes | yes | **no** |
+| Branch-protection **rulesets** — `develop` squash-only + PR, `main` merge-only + PR, block force-push & deletion, required checks with no up-to-date requirement | yes | yes | **no** |
 
 GitHub **branch protection and rulesets are not available on free _private_ repositories**.
 On a free private repo the script applies everything else and **skips the rulesets with a
