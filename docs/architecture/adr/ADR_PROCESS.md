@@ -91,7 +91,7 @@ draft → under_review → accepted → modified
 ## ADR Template
 
 The YAML frontmatter and required sections must always be present. Use the decision
-form for a new decision or a substantive amendment. See
+form below for a new decision or a substantive amendment. See
 [WDR 002](../../engineering/wdr/002-record-system-as-infrastructure.md) for attribution,
 strength, and how to preserve an earlier decision.
 
@@ -161,8 +161,8 @@ tags:
 - **Date:** [YYYY-MM-DD]
 - **Context:** [Question and options, in the writer's words]
 - **Reason and scope:** [Why the choice was made and what it covers]
-- **Strength:** [hard rule | default | preference | one-off, required if the decision authorizes a constraint]
-- **Review when:** [Known trigger to reconsider, when known]
+- **Strength:** [Optional: hard rule | default | preference | one-off]
+- **Review when:** [Trigger to reconsider, if known]
 - **Expires:** [End condition or date, when known]
 
 ### Alternatives Considered
@@ -279,7 +279,9 @@ Document History entry, update the index, commit `docs(adr): update NNN [title]`
 | Decision no longer relevant            | Set `status: deprecated` with explanation |
 
 **Reference** from code with a short comment (`// Per ADR 00X, …`), from docs with a
-link, and between records via the `related` frontmatter. For pinned citations and
+link, and between ADRs via the `related` frontmatter. For an ADR paired with a product
+decision, use `related_pdrs` and the PDR's `related_adrs` as described in the
+[PDR index](../../product/pdr/README.md). For pinned citations and
 retired identifiers, see [WDR 002](../../engineering/wdr/002-record-system-as-infrastructure.md).
 
 **Filter** with frontmatter:

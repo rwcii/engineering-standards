@@ -85,9 +85,10 @@ draft → under_review → accepted → modified
 ## PDR Template
 
 A ready-to-copy template lives at [`000-template.md`](000-template.md). The required
-structure follows the shared decision form in
-[WDR 002](../../engineering/wdr/002-record-system-as-infrastructure.md). Use it
-for a new decision or a substantive amendment.
+structure below uses the decision form from the
+[ADR template](../../architecture/adr/ADR_PROCESS.md#adr-template), with product-specific
+sections. Use it for a new decision or a substantive amendment. See
+[WDR 002](../../engineering/wdr/002-record-system-as-infrastructure.md) for the governing rule.
 
 ```markdown
 ---
@@ -155,8 +156,8 @@ tags:
 - **Date:** [YYYY-MM-DD]
 - **Context:** [Question and options, in the writer's words]
 - **Reason and scope:** [Why the choice was made and what it covers]
-- **Strength:** [hard rule | default | preference | one-off, required if the decision authorizes a constraint]
-- **Review when:** [Known trigger to reconsider, when known]
+- **Strength:** [Optional: hard rule | default | preference | one-off]
+- **Review when:** [Trigger to reconsider, if known]
 - **Expires:** [End condition or date, when known]
 
 ### Alternatives Considered

@@ -75,10 +75,11 @@ standard (ADR 001.1) applied to the record system:
 
 ### Decision form
 
-Use the Decision section in the shared ADR template, including **Decided by**,
-**Date**, **Context**, the decision text, and **Reason and scope**. For decisions
-authorizing a constraint, include **Strength** (hard rule, default, preference,
-or one-off). Include **Review when** and **Expires** when known. See
+Use the Decision section in the shared
+[ADR template](../../architecture/adr/ADR_PROCESS.md#adr-template), including **Decided by**,
+**Date**, **Context**, the decision text, and **Reason and scope**. **Strength** (hard rule,
+default, preference, or one-off) is optional and useful when a decision authorizes a
+constraint. Include **Review when** and **Expires** when known. See
 [WDR 002](002-record-system-as-infrastructure.md) for attribution and lifecycle
 and [WDR 005](005-independent-review-and-control-plane.md) for source review.
 

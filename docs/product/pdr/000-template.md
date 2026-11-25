@@ -67,8 +67,8 @@ tags:
 - **Date:** [YYYY-MM-DD]
 - **Context:** [Question and options, in the writer's words]
 - **Reason and scope:** [Why the choice was made and what it covers]
-- **Strength:** [hard rule | default | preference | one-off, required if the decision authorizes a constraint]
-- **Review when:** [Known trigger to reconsider, when known]
+- **Strength:** [Optional: hard rule | default | preference | one-off]
+- **Review when:** [Trigger to reconsider, if known]
 - **Expires:** [End condition or date, when known]
 
 ### Alternatives Considered

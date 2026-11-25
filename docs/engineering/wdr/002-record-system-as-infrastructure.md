@@ -312,7 +312,8 @@ Cite a shared decision by its source, record identifier, pinned revision and rel
 section. A local record may link to a vendored baseline without editing the baseline to
 add a backlink. When replacing a local decision, keep the reciprocal supersession links.
 
-Give each new decision authorizing a constraint a **Strength**:
+Record **Strength** when it helps a reader apply a decision, especially one that authorizes
+a constraint. The field is optional. It can take these values.
 
 | Strength | Effect |
 | -------- | ------ |
@@ -321,7 +322,7 @@ Give each new decision authorizing a constraint a **Strength**:
 | Preference | Guides the choice when several options remain valid. |
 | One-off | Applies only to the case it names. |
 
-For an older decision without the field, read its wording, authority and scope. An omitted
+For a decision without the field, read its wording, authority and scope. An omitted
 label neither widens a one-off nor weakens a binding rule. **Review when** marks a reason to
 reconsider. **Expires** marks when the decision stops applying. Record material accepted
 exceptions with their date, scope and closure condition.
@@ -336,9 +337,11 @@ independent authorized work moving.
   case-specific rule? The options were a central log, overwriting earlier wording in place,
   or one governing document with explicit scope, strength and replacement links.
 - **Reason and scope:** Readers need the authority that governs the present case and a way to
-  find what changed. This applies to durable decisions and how they are cited. Source review
-  still accepts the other applicable sources in WDR 005, Decision 4.
-- **Strength:** hard rule for new records in this repository.
+  find what changed. This decision covers how this repository records, cites, replaces and
+  revisits durable decisions. It also covers material exceptions to those decisions and how
+  working notes handle relayed evidence. WDR 005, Decision 4 governs other source kinds.
+- **Strength:** hard rule for the decision lifecycle and authority rules described here.
+  The optional strength label and review fields guide how individual decisions are written.
 - **Review when:** a decision cannot be located from a citation or the form repeatedly fails
   to show whether a constraint applies.
 

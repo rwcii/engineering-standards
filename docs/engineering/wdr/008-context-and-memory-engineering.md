@@ -291,13 +291,12 @@ when another document needs to mention it.
 | Document | What belongs there |
 | -------- | ------------------ |
 | README | What the project is, how people use it, and links to adoption or contribution guidance. |
-| Agent instructions | Operating steps, applicable gates and pointers to governing records. Scope instructions to the module where they apply. |
+| Scoped `AGENTS.md` and `CLAUDE.md` | `AGENTS.md` holds operating steps, applicable gates and pointers to governing records. `CLAUDE.md` points to it as described in Decision 2. |
 | Decision records | Durable choices, rationale, applicability, and the decisions they replace. |
 | Skill facts | Project values the shared procedure reads, such as paths and check commands. |
 | Ignored working notes and handoffs | Private session state, provisional plans and evidence used to resume work. |
 
-A project may set budgets for its instruction files. It may use a short, sourced
-table in the root instructions to route decisions that need a human.
+A project may set budgets for its instruction files.
 
 - **Decided by:** Robert Capps
 - **Date:** 2026-11-25

@@ -267,7 +267,8 @@ judging machinery itself are held higher than the changes they judge. This is th
 merge-time counterpart to the agent-time operating loop (WDR 003) and testing
 discipline (WDR 004): the agent verifies its own work, then an independent reviewer
 verifies it again with no shared context, and every limit the change adds is traced
-to a decision. The concrete review protocol, severity scale, waiver mechanism, and
+to a source. When that source is a decision, its authority, strength, scope and effective
+period must cover the case. The concrete review protocol, severity scale, waiver mechanism, and
 control-plane guards are each adopting project's enforcement, with this repository's review
 procedure and lenses (`docs/engineering/review/`) as the reference implementation.
 

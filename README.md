@@ -1,8 +1,9 @@
 # Engineering Standards
 
 A portable, stack-agnostic system of **decision records** and independent **standards review**
-and **refusal review** gates, designed to be adopted by any project — copied, or cited against a
-pinned record list — regardless of language or framework.
+and **refusal review** gates. Projects can copy the records or cite them against a pinned list.
+This repository uses [Koinon](https://github.com/rwcii/koinon) for its shared agent skills and
+coordination.
 
 It has three record types and two review gates:
 
@@ -152,7 +153,7 @@ On macOS or Linux with Homebrew, install Koinon and set up Claude Code and Codex
 
 ```sh
 brew install rwcii/koinon/koinon
-koinon install --agent claude --agent codex
+"$(brew --prefix)/bin/koinon" install --agent claude --agent codex
 ```
 
 You can also download a [release binary](https://github.com/rwcii/koinon/releases) for your
@@ -191,12 +192,23 @@ they cannot install the catalog record that choice in their `AGENTS.md`. See
 
 ### How this repository uses Koinon
 
-The [task-to-skill table](AGENTS.md#skills) points agents to the installed entries and the
-facts each reads. The [review procedure](docs/engineering/review/README.md) explains how
-independent standards and refusal reviews evaluate the same frozen commit. In paired work,
-the driver makes changes and the observer reviews named checkpoints. Decision cards carry
-questions and verdicts, while the relevant tracked record carries the resulting rule.
-Handoff and pickup preserve private session state between work sessions.
+The [task-to-skill table](AGENTS.md#skills) links each task to its installed entry and
+project facts. A change moves through the following steps.
+
+1. **Plan and branch.** For a multi-PR deliverable, use `koinon-sprint` to agree on acceptance
+   criteria, checks, and the order of increments. Start the work branch from `develop`.
+2. **Pair and verify.** The driver edits and commits. The observer receives a frozen checkpoint
+   through Koinon's message bridge and sends one batch of reproduced findings. The driver uses
+   `koinon-check` to run the project's checks.
+3. **Review the candidate.** Independent reviewers use `koinon-standards-review` and
+   `koinon-refusal-review` on the same frozen head. Each records a head-bound verdict under the
+   [review procedure](docs/engineering/review/README.md).
+4. **Publish and merge.** A Koinon decision card carries any approval needed to push and open a
+   PR or to merge it. The PR records the review results for that head. The feature lands in
+   `develop` as a squash, following [CONTRIBUTING.md](CONTRIBUTING.md) and
+   [WDR 010](docs/engineering/wdr/010-branch-and-merge-flow.md).
+5. **Resume a session.** `koinon-handoff` writes a private work snapshot. `koinon-pickup` reads
+   that snapshot and verifies the current state before resuming.
 
 The catalog also offers `koinon-ship` for project publication workflows and
 `koinon-provenance` for projects with usage capture tooling. Their operation depends on the
