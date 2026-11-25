@@ -1,7 +1,8 @@
 # repo-checks (WDR 010, Decision 3): the repository checks on the candidate merge of the pull
 # request into its base. The job name is a required status context that scripts/setup-repo.sh
 # declares; renaming it breaks the merge gate. No path filters: a required check reports on every
-# pull request. promotion-source runs from the base branch instead: promotion-source.yml.
+# pull request. promotion-source.yml uses the default branch's workflow
+# and runs its check script from the pull request's base commit.
 name: checks
 
 on:
