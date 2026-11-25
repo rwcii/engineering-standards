@@ -3,7 +3,7 @@ wdr: "005"
 title: "Independent Review & Control-Plane Protection"
 status: modified
 created: "2026-05-31"
-updated: "2026-10-12"
+updated: "2026-11-25"
 parent_wdr: ""
 authors:
   - "Robert Capps"
@@ -14,6 +14,7 @@ related:
   - "002"
   - "003"
   - "004"
+  - "008"
 tags:
   - workflow
   - agentic
@@ -31,9 +32,8 @@ tags:
 
 The single most load-bearing safeguard in this repository is that a change is
 reviewed by an **independent agent** before it merges — a reviewer with no stake in,
-and no context from, the work that produced it. That idea lives today only as an
-instruction inside `standards-review`; it deserves to be the recorded decision that
-command derives from. This record establishes four things: review independence as a
+and no context from, the work that produced it. This record is the decision that
+the project's review procedure and its standards and refusal lenses derive from. This record establishes four things: review independence as a
 hard requirement; a **defined merge-gate contract** (a severity taxonomy, what
 blocks versus advises, and how an override is justified) so author and reviewer
 cannot simply disagree on severity; **heightened protection for the control
@@ -67,7 +67,7 @@ only the diff, not the reasoning, is the one that catches what the author could 
 Two further gaps undermine even an independent review. If "what blocks a merge" is
 undefined, author and reviewer disagree on severity with no tiebreak, and the gate's
 verdict becomes negotiable. And nothing today protects the **control plane** itself:
-the records, CI guards, hooks, and `standards-review` are what judge every change,
+the records, CI guards, hooks, and the review procedure are what judge every change,
 yet an agent can weaken the very guard that would catch its change — in the same
 diff — and nothing flags it.
 
@@ -88,7 +88,8 @@ refuse work and ask again for approval the task already gave.
 
 Covers the review gate and protection of the control plane. The agent's own
 pre-review verification is WDR 003; test integrity feeding the gate is WDR 004; the
-review protocol's concrete steps live in `standards-review` and `refusal-review`.
+review protocol's concrete steps live in each project's review procedure and lenses, run by its
+standards review and refusal review.
 
 ---
 
@@ -124,7 +125,8 @@ threshold drives over-engineering.
 
 ### Enforcement
 
-Per project: `standards-review` spawned as a fresh-context agent before push/PR;
+Per project: the standards review (`koinon-standards-review` with the project's review
+procedure and standards lens) run by a fresh-context agent before push/PR;
 the reviewer reads the actual code and verifies claims; review bounded to
 correctness, requirements, and record compliance.
 
@@ -154,7 +156,7 @@ merge: a blocking finding stops the merge until resolved or waived.
    which an agent needs to act unattended.
 2. A waiver-with-justification keeps the gate firm while leaving a deliberate,
    reviewable escape hatch for genuine exceptions.
-3. `standards-review` already emits severities and a recommendation; defining the
+3. The standards review already emits severities and a recommendation; defining the
    taxonomy is what makes that output binding rather than advisory.
 
 ### Enforcement
@@ -221,7 +223,7 @@ waived under Decision 2.
 
 | Alternative | Description | Why Rejected |
 | ----------- | ----------- | ------------ |
-| One item of the general review | Check constraint sources inside `standards-review` | A broad review weighs correctness first; unsourced limits pass because the change works as written |
+| One item of the general review | Check constraint sources inside the standards review | A broad review weighs correctness first; unsourced limits pass because the change works as written |
 | Keyword scan in CI | Fail the build on words such as "never" or "only" | Misses positively phrased limits, tests and code conditions, and blocks legitimate text |
 | Periodic audit only | Find unsourced constraints after they merge | Later agents already read them as rules, refuse work and ask for approvals the task gave |
 
@@ -236,8 +238,9 @@ waived under Decision 2.
 
 ### Enforcement
 
-Per project: the `refusal-review` skill spawned as a fresh-context agent before push/PR, with its
-verdict wired to the merge gate beside `standards-review`; findings classified on the
+Per project: the refusal review (`koinon-refusal-review` with the project's refusal lens) run by a
+fresh-context agent before push/PR, with its verdict wired to the merge gate beside the standards
+review; findings classified on the
 Decision 2 scale.
 
 ---
@@ -251,8 +254,8 @@ merge-time counterpart to the agent-time operating loop (WDR 003) and testing
 discipline (WDR 004): the agent verifies its own work, then an independent reviewer
 verifies it again with no shared context, and every limit the change adds is traced
 to a decision. The concrete review protocol, severity scale, waiver mechanism, and
-control-plane guards are each adopting project's enforcement, with `standards-review`
-and `refusal-review` as the reference implementations.
+control-plane guards are each adopting project's enforcement, with this repository's review
+procedure and lenses (`docs/engineering/review/`) as the reference implementation.
 
 ---
 
@@ -262,3 +265,4 @@ and `refusal-review` as the reference implementations.
 | ---------- | ---------------- |
 | 2026-05-31 | Initial creation |
 | 2026-10-12 | Decision 4: new constraints pass their own source review (`refusal-review`) |
+| 2026-11-25 | Summary, problem, scope, conclusion and the Decision 1 and 4 enforcement point to the review procedure and lenses in `docs/engineering/review/`, run by the shared-catalog skills (WDR 008, Decision 4) |

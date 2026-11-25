@@ -1,9 +1,9 @@
 ---
 wdr: "002"
 title: "Record System as Infrastructure"
-status: accepted
+status: modified
 created: "2026-05-31"
-updated: "2026-05-31"
+updated: "2026-11-25"
 parent_wdr: ""
 authors:
   - "Robert Capps"
@@ -12,6 +12,7 @@ supersedes: ""
 superseded_by: ""
 related:
   - "001"
+  - "008"
 tags:
   - workflow
   - agentic
@@ -20,7 +21,7 @@ tags:
 # WDR 002: Record System as Infrastructure
 
 **Date:** 2026-05-31
-**Status:** Accepted
+**Status:** Modified
 **Authors:** Robert Capps
 
 ---
@@ -29,7 +30,7 @@ tags:
 
 The decision records are not just documentation for humans to read occasionally —
 they are the **interface an agent consults every time it changes the system**, the
-thing `standards-review` validates against, and the memory that keeps a
+thing the standards review validates against, and the memory that keeps a
 part-human, part-agent team from re-litigating settled decisions. For that to hold
 at scale, the record set must behave like infrastructure: machine-readable,
 selectable, internally consistent, and kept current.
@@ -39,7 +40,8 @@ frontmatter is a **machine-readable contract** (with the human-facing index
 generated from it, never hand-maintained); records carry **applicability metadata**
 so the governing set is *selected by narrowing* rather than read in full; and the
 record graph maintains **referential integrity and freshness**, so a stale or
-orphaned record is a defect, not background noise.
+orphaned record is a defect, not background noise. A project that adopts shared records
+**copies them or cites them against a pinned list**, never through a live link.
 
 ---
 
@@ -49,8 +51,9 @@ orphaned record is a defect, not background noise.
 2. Decision 1: Frontmatter Is a Machine-Readable Contract; the Index Is Generated
 3. Decision 2: Records Are Selected by Applicability, Not Read Wholesale
 4. Decision 3: The Record Graph Stays Referentially Sound and Current
-5. Conclusion
-6. Document History
+5. Decision 4: Shared Records Are Copied or Cited Against a Pinned List
+6. Conclusion
+7. Document History
 
 ---
 
@@ -161,7 +164,7 @@ deep-read only the selected records**. "Read every record in full" is replaced b
 ### Enforcement
 
 Per project: an applicability convention in the frontmatter (e.g., tags and
-path/area scope); an index filter as the canonical entry point; `standards-review`
+path/area scope); an index filter as the canonical entry point; the standards review
 narrows to the applicable records before deep-reading.
 
 ---
@@ -203,18 +206,58 @@ system they govern:
 ### Enforcement
 
 Per project: link-graph and status invariants checked in the gate; a
-`standards-review` finding when a change contradicts an accepted record without
+standards review finding when a change contradicts an accepted record without
 updating it, or when a significant change cites no governing record.
 
 ---
 
-## 5. Conclusion
+## 5. Decision 4: Shared Records Are Copied or Cited Against a Pinned List
+
+### Decision
+
+A project that adopts records from a shared source holds them in one of two ways:
+
+- **Copy:** the project copies the records into its own repository and owns them from there.
+- **Cite against a pinned list:** the records stay in one source repository. The project cites
+  each record it relies on, and a check compares each citation with a list of the source's
+  records pinned at a known version, so a citation to a record that does not exist fails.
+
+A project does not hold shared records through a live link that follows the source's latest
+state, such as a submodule or an unpinned reference.
+
+- **Decided by:** Robert Capps
+- **Date:** 2026-11-25
+- **Context:** how does an adopting project hold the shared records? The options were to copy
+  them, to cite them against a pinned list, or to link them live with a submodule.
+- **Reason and scope:** a copy suits a project that adapts the records; a pinned citation suits
+  a family of repositories that share one source and must not drift from it. A live link changes
+  a project's rules without a change in the project. It covers decision records only; skills are
+  WDR 008, Decision 4.
+- **Strength:** default.
+- **Review when:** a project needs a third way that neither form serves.
+
+### Alternatives Considered
+
+| Alternative | Description | Why Rejected |
+| ----------- | ----------- | ------------ |
+| Copy only | Every project copies the records | A family of repositories that share one source gets many drifting copies |
+| Live link (submodule or unpinned reference) | The project follows the source's latest state | The project's rules change without a reviewed change in the project |
+| Copy, or cite against a pinned list | Chosen | Chosen |
+
+### Enforcement
+
+Per project: a copied set follows its own process documents; a cited set has a check that fails
+a citation missing from the pinned list, and moves the pin only in a reviewed change.
+
+---
+
+## 6. Conclusion
 
 Treated as infrastructure, the record set is machine-readable (a frontmatter
 contract with a generated index), selectable (applicability metadata, narrow before
 deep-read), and sound (a referentially consistent graph kept current with the code).
 These properties are what let the records serve as an agent's interface and memory
-at scale, and what let `standards-review` validate against them without reading the
+at scale, and what let the standards review validate against them without reading the
 entire corpus. The concrete schema, validator, generator, and filters are each
 adopting project's enforcement.
 
@@ -225,3 +268,4 @@ adopting project's enforcement.
 | Date       | Change           |
 | ---------- | ---------------- |
 | 2026-05-31 | Initial creation |
+| 2026-11-25 | Decision 4: shared records are copied or cited against a pinned list; the review is named as the standards review, not a local skill |

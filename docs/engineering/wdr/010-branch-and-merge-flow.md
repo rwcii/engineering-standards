@@ -3,7 +3,7 @@ wdr: "010"
 title: "Branch & Merge Flow"
 status: draft
 created: "2026-05-31"
-updated: "2026-10-12"
+updated: "2026-11-25"
 parent_wdr: ""
 authors:
   - "Robert Capps"
@@ -127,8 +127,9 @@ The bundled tooling implements this default; a project that changes the flow adj
 - **Local guard:** a committed `pre-commit` hook (`.githooks/pre-commit`) blocks a
   direct (non-merge) commit on `main`; enable it once per clone with
   `git config core.hooksPath .githooks`.
-- **Review base:** `standards-review` and `refusal-review` default their base branch to
-  `develop`, so a feature is reviewed against what it will merge into.
+- **Review base:** the standards review and the refusal review take `develop` as their base
+  (the project's check facts, `.koinon/skills/check.md`), so a feature is reviewed against
+  what it will merge into.
 - **Setup (config-as-code):** `scripts/setup-repo.sh` re-applies the GitHub settings
   above (merge methods, auto-delete, rulesets) and the local hook path, so a cloned or
   newly created repo reproduces this policy with one command.
@@ -143,7 +144,8 @@ The recommended default flows feature → squash → `develop` → merge → `ma
 is never committed to directly. The `develop` buffer keeps the released line stable,
 squash keeps integration history clean, and the regular merge to `main` preserves real
 release points. Enforcement is branch protection plus a local commit guard, with
-`standards-review` and `refusal-review` reviewing each feature against `develop`. A project with different
+the standards review and the refusal review (the project's review procedure) checking each
+feature against `develop`. A project with different
 needs records its own flow in this slot.
 
 ---
@@ -155,3 +157,4 @@ needs records its own flow in this slot.
 | 2026-05-31 | Initial creation |
 | 2026-06-16 | Reframed as the project-specific template/worked example — recommended default flow to adopt or replace; removed sibling WDR 011 (contribution policy now lives in `CONTRIBUTING.md`) |
 | 2026-10-12 | Review base and conclusion name both preflights, `standards-review` and `refusal-review` (WDR 005, Decision 4) |
+| 2026-11-25 | Review base read from the project's check facts, and the conclusion names the review procedure, not local skills (WDR 008, Decision 4) |

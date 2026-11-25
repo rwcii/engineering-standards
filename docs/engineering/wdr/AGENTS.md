@@ -11,9 +11,9 @@ and the decision-record system itself. WDRs are the process counterpart to ADRs
 
 - Before changing how the team or its agents work (the operating loop, review
   gates, autonomy boundaries)
-- Before changing the record system, `standards-review`, or the enforcement loop
+- Before changing the record system, the review procedure (`docs/engineering/review/`), or the enforcement loop
 - Before adding or relaxing a gate that governs other changes
-- When `standards-review` runs its WDR-compliance phase
+- When the standards review runs its WDR-compliance phase (standards lens, Phase 2c)
 
 ## Key Constraints
 

@@ -1,32 +1,13 @@
----
-name: standards-review
-description: Independent preflight that reviews every change on the current branch against the ADR, PDR and WDR records before push or pull request, in a fresh context with no prior conversation. Use before push/PR beside refusal-review, or when asked for a standards review of a branch.
----
+# Standards Lens
 
-# Standards Review — Preflight Check
+The instructions of the standards reviewer. The [review procedure](README.md) says when the review
+runs, who reviews, and where the result goes; `koinon-standards-review` starts the reviewer and
+gives it this file to read in full. Follow every instruction below exactly.
 
-Perform a comprehensive architecture, product, and code review of all changes on the
-current branch compared to the base branch. This review is a preflight gate before
-push/PR.
-
-**This review MUST be performed by a separate agent** with no prior context from the
-working conversation. Start it in a fresh context, such as a subagent or a new agent session, so
-it gives an independent assessment.
-The agent must follow every instruction below exactly.
-
-> **Adopting this skill:** this is a stack-agnostic skeleton. Set your base branch
-> default below, point the test/build references at your project's gate (recorded in ADR
-> 002.x), and — optionally — add a project-specific ADR/PDR/WDR checklist table to Phase 2.
-> The mandatory protocol and the phase structure are universal; the concrete checks come
-> from the project's own decision records.
-
-## Arguments
-
-- `$ARGUMENTS` — optional: base branch override (defaults to `develop`)
-
-## Agent Instructions
-
-The review agent receives the full instructions below. Do NOT summarize or abbreviate them.
+> **Adopting this lens:** it is stack-agnostic. Point the test and build references at your
+> project's gate (recorded in ADR 002.x), and optionally add a project-specific ADR/PDR/WDR
+> checklist table to Phase 2. The protocol and the phase structure are universal; the concrete
+> checks come from the project's own decision records.
 
 ---
 
@@ -66,15 +47,18 @@ These rules override everything else. Violation of any rule invalidates the enti
 
 ### Phase 0: Establish Scope
 
+Take the base hash and the head hash from the brief, then list the change:
+
 ```bash
-BASE_BRANCH="${ARGUMENTS:-develop}"
-git diff $(git merge-base HEAD $BASE_BRANCH)...HEAD --stat
-git diff $(git merge-base HEAD $BASE_BRANCH)...HEAD --name-only
-git log $(git merge-base HEAD $BASE_BRANCH)...HEAD --oneline
+git diff --stat <base>...<head>
+git diff --name-only <base>...<head>
+git log --oneline <base>...<head>
 ```
 
-1. Run the commands above to identify all changed files and commits.
-2. **Read EVERY changed file completely** with a file read — not grep, not search.
+1. Identify all changed files and commits.
+2. **Read EVERY changed file completely** with a file read — not grep, not search. Read each
+   file in the tree that the [review procedure](README.md#which-tree-to-read) names: an added
+   file at the head, a deleted file at the base, and both sides of a moved or replaced file.
 3. Identify the **applicable records**: read the ADR, PDR, and WDR indexes (each
    module's `README.md`) and select the records whose scope the change touches — by tag,
    area, and change type — then deep-read the selected records in full (per WDR 002). You
@@ -151,8 +135,8 @@ the way it was produced — complies. WDRs govern **how the work is done**:
   reach green? Does a defect fix carry a regression test seen to fail first? Is the change
   scoped, or does it sprawl into unrequested edits?
 - **Independent review & the control plane (WDR 005):** apply **heightened scrutiny to any
-  change to the control plane** — the records, CI guards, hooks, `standards-review` and
-  `refusal-review` themselves, or enforcement config. A weakened, disabled, or removed check is a **high-severity,
+  change to the control plane** — the records, CI guards, hooks, the review procedure and
+  this lens, the `.koinon/skills` facts, or enforcement config. A weakened, disabled, or removed check is a **high-severity,
   must-justify** finding, and a gate must not be loosened in the same change whose
   violations it would catch.
 - **Autonomy, security, provenance (WDR 006/007/009):** are the autonomy/guardrail,
@@ -191,7 +175,7 @@ as unwired:
 - **New API endpoints:** does the endpoint exist in the contract/spec? Do request/response shapes match? Is generated code in sync?
 - **New registry/variant entries:** is the new variant actually registered?
 - **New config/env vars:** are they parsed in the canonical config source, with defaults, and documented in the example env file?
-- **Refactored functions:** read the OLD implementation from the base branch (`git show $BASE_BRANCH:path`). Enumerate every input case it handled and verify the new code handles each. A lost case is a finding even if the new code "works" for its own logic.
+- **Refactored functions:** read the OLD implementation from the base branch (`git show <base>:path`). Enumerate every input case it handled and verify the new code handles each. A lost case is a finding even if the new code "works" for its own logic.
 
 ---
 
@@ -257,15 +241,8 @@ Before finalizing:
 
 ## Severity & Review Scope
 
-Per WDR 005, the merge gate has a defined severity scale; classify every finding on it:
-
-| Severity | Meaning                                                                                          | Blocks merge? |
-| -------- | ------------------------------------------------------------------------------------------------ | ------------- |
-| critical | Breaks correctness, security, or data integrity; or a control-plane check was weakened/disabled  | Yes           |
-| high     | A real defect, or a violation of an accepted record, likely to cause harm                        | Yes           |
-| medium   | A genuine issue that should be fixed but is contained                                            | No (track)    |
-| low      | A minor issue or smell                                                                           | No            |
-| note     | An observation, not a defect                                                                     | No            |
+Classify every finding on the severity scale of the [review procedure](README.md#severity-and-the-merge-block)
+(WDR 005, Decision 2).
 
 Scope the review to **correctness, requirements, and record compliance**. Do not pad the
 findings with speculative or stylistic nits — a reviewer that manufactures findings drives
@@ -281,7 +258,9 @@ The review agent MUST output this structured report:
 ```
 ## Scope
 - Branch: [branch name]
-- Base: [base branch]
+- Base: [full base hash]
+- Head: [full head hash]
+- Kind: full review / recheck of [earlier finding IDs]
 - Files changed: N
 - Commits: N
 
@@ -329,9 +308,12 @@ The review agent MUST output this structured report:
 | CI | adequate/gaps | ... |
 
 ## Findings
-| # | Severity | File | Description | Recommended Fix |
-|---|----------|------|-------------|-----------------|
-| 1 | critical/high/medium/low/note | ... | ... | ... |
+| ID | Severity | File and location | Rule or record broken | Description | Recommended Fix |
+|----|----------|-------------------|-----------------------|-------------|-----------------|
+| S1 | critical/high/medium/low/note | ... | ... | ... | ... |
+
+A recheck states for each earlier ID whether it is closed or open, and gives a new ID to each new
+finding.
 
 ## Documentation Impact
 - [ ] docs updates needed: [list or "none"]
@@ -343,6 +325,12 @@ The review agent MUST output this structured report:
 | # | Issue | Tracked? | Reference |
 |---|-------|----------|-----------|
 | 1 | ... | yes/no | ... |
+
+## Coverage
+- Read in full: [files and records]
+- Read in part: [files, and why]
+- Not read: [files, and why]
+- Reviewer: [model, effort setting, tool limits]
 
 ## Summary
 - Total findings: N (X critical, Y high, Z medium)

@@ -5,3 +5,6 @@ Thumbs.db
 *~
 .idea/
 .vscode/
+
+# Agent session handoffs (WDR 008, Decision 5)
+_handoff/

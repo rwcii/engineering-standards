@@ -11,7 +11,7 @@ contracts**. PDRs are the product counterpart to Architecture Decision Records (
 - Before modifying any multi-step user flow (onboarding, setup, a wizard)
 - Before changing user-facing behavior or a product promise (what a feature guarantees)
 - Before altering generated or templated user-facing content
-- When `standards-review` runs Phase 2b (PDR Compliance)
+- When the standards review runs Phase 2b (PDR Compliance) of the standards lens (`docs/engineering/review/standards-lens.md`)
 
 ## Key Constraints
 
