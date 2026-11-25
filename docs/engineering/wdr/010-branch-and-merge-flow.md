@@ -27,7 +27,7 @@ tags:
 > **Project template.** Branch and merge flow is a **project-specific** decision. The universal
 > WDR baseline is 001–009, and project records begin here at 010. This record is this
 > repository's own flow and the worked example for adopters: the bundled tooling
-> (`scripts/setup-repo.sh`, `.githooks/pre-commit`, `.github/workflows/checks.yml`) implements it.
+> (`scripts/setup-repo.sh`, `.githooks/pre-commit`, `.github/workflows/`) implements it.
 > **Adopt it, or replace it with your own flow and adjust the tooling.** Decision 1 names the
 > variants a project may choose instead.
 
@@ -227,9 +227,11 @@ A required check is only as trustworthy as whoever can report it:
 - **Context:** This repository had no required checks and auto-merge was off. Should auto-merge be
   enabled, and which gates should it wait for? The options were CI checks with the review verdicts
   as statuses, CI checks only, or no CI and no auto-merge.
-- **Reason and scope:** with the review verdicts as statuses, the host waits for every gate, so
-  auto-merge cannot pass a change that a review has not approved. This governs this repository;
-  an adopter declares its own required checks.
+- **Reason and scope:** with the review verdicts as statuses, the host waits for CI and for both
+  review statuses on the head before an auto-merge. The host cannot tell who posted a status, so
+  the review gate holds as far as write access is limited and the statuses are posted only from
+  review reports (below). This governs this repository; an adopter declares its own required
+  checks.
 - **Strength:** hard rule for this repository; default for adopters.
 
 ### Alternatives Considered
@@ -290,8 +292,9 @@ does not merge. It is cut again at the new `develop` commit, with fresh evidence
 All the release evidence names it and is posted in the pull request: the required checks green
 on it, the full local check run at it, and a fresh-context review of the whole `main`...`develop`
 diff. The merge is bound to the pinned head and is a merge commit. The `promotion-source` check
-requires the head to come from this repository's `develop`; it proves the source, and the
-merge's head binding proves the pin. The local release check compares the pinned commit with
+requires the head to come from this repository's `develop`. It runs from the base branch, so a
+pull request cannot change the check that judges it, and it runs again when a pull request's base
+changes. It proves the source; the merge's head binding proves the pin. The local release check compares the pinned commit with
 `main`, the base it merges into. After the merge, read back `main` and
 confirm that its new merge commit has the pinned commit as its second parent. The tag and the
 host release are created on the released merge commit, under an approval that names them.
@@ -362,10 +365,16 @@ The bundled tooling implements these decisions; a project that changes the flow 
   a public repository or a paid plan; without them, the local guard and the convention carry the
   policy, and auto-merge stays off.
 - **Required checks:** `.github/workflows/checks.yml` runs `repo-checks` (`scripts/check-repo.sh`,
-  `scripts/check-repo.test.sh` and `scripts/setup-repo.test.sh`) and `promotion-source` (`scripts/check-promotion-source.sh`)
-  on every pull request into `develop` or `main`. A pull request can change the workflow it runs,
-  so a change to `.github/`, `scripts/` or `.githooks/` is a gate-document change and gets the
-  stricter review of WDR 005, Decision 3.
+  `scripts/check-repo.test.sh` and `scripts/setup-repo.test.sh`) on the candidate merge of every
+  pull request into `develop` or `main`, and again when its base changes. A pull request can change
+  that workflow, so a change to `.github/`, `scripts/` or `.githooks/` is a gate-document change
+  and gets the stricter review of WDR 005, Decision 3. `.github/workflows/promotion-source.yml`
+  runs `promotion-source` (`scripts/check-promotion-source.sh`) from the base branch on
+  `pull_request_target`, with no code from the pull request, so a pull request cannot change it.
+- **Head-bound merge:** a feature merges with `gh pr merge <number> --squash --match-head-commit
+  <approved head>`, and a release with `gh pr merge <number> --merge --match-head-commit <pin>`;
+  the host refuses the merge if the head has moved. Then read back the result as Decision 2 says
+  (`gh pr view <number> --json state,mergeCommit` and a tree or parent comparison).
 - **Review statuses:** the review procedure (§ Results) posts `standards-review` and
   `refusal-review` on the exact head from each approving report.
 - **Local guard:** `.githooks/pre-commit` blocks a direct (non-merge) commit on `main`; enable it
@@ -378,8 +387,8 @@ The bundled tooling implements these decisions; a project that changes the flow 
 - **Rollout check:** the policy is first applied with auto-merge off (`AUTO_MERGE=off`). A probe
   pull request into `develop` then shows the gate working: it is blocked while any of the four
   checks is missing on its head, a status posted under a CI check's name by hand does not satisfy
-  it, and it becomes mergeable only when all four report success on that head. Auto-merge is
-  turned on only after the probe passes.
+  it, and it becomes mergeable only when all four report success on that head. Retargeted to
+  `main`, it fails `promotion-source`. Auto-merge is turned on only after the probe passes.
 - **Review base:** the standards review and the refusal review take `develop` as their base (the
   project's check facts, `.koinon/skills/check.md`).
 - **Compliance:** a merge of a commit other than the approved head, a change that lands on `main`

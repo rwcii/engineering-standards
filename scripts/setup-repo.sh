@@ -5,13 +5,15 @@
 # auto-merge), which a clone does NOT inherit. This script applies it as config-as-code and reads
 # it back. Idempotent — safe to re-run.
 #
-# Requires: gh (GitHub CLI) authenticated with admin on the target repo (read access for --check),
-#           and jq.
+# Requires: gh (GitHub CLI) authenticated with admin on the target repo, and jq. --check needs admin
+#           too: GitHub returns a ruleset's bypass actors only to a caller who can edit it, and
+#           --check reports INCOMPLETE when they are not returned.
 # Usage:    scripts/setup-repo.sh [--check] [owner/repo]   # defaults to the current repo
 #   --check   read the live settings and report each difference from this policy; change nothing.
 #
-# Exit status: 0 the live settings match the policy (or rulesets are unavailable on this plan and
-# the rest matches); 1 a setting differs or an apply step failed; 2 the settings could not be read.
+# Exit status: 0 the live settings match the policy (for an apply on a plan without rulesets: the
+# rest was applied, with auto-merge off); 1 a setting differs or an apply step failed; 2 the
+# settings could not be read in full. On a plan without rulesets, --check reports them missing (1).
 #
 # Policy (WDR 010): feature -> squash -> develop; a pinned develop commit -> merge commit -> main;
 # never commit directly to main. Required checks and auto-merge: WDR 010, Decision 3.
@@ -99,6 +101,11 @@ verify() {
     id="$(ruleset_id "${name}")" || { echo "  - INCOMPLETE: cannot list the rulesets"; return 2; }
     if [ -z "${id}" ]; then echo "  - DIFFERS: ruleset '${name}' is missing"; drift=1; continue; fi
     live="$(gh api "repos/${REPO}/rulesets/${id}")" || { echo "  - INCOMPLETE: cannot read ruleset '${name}'"; return 2; }
+    # an absent field is not "no bypass actors": GitHub omits it for a caller who cannot edit it
+    if [ "$(printf '%s' "${live}" | jq 'has("bypass_actors")')" != true ]; then
+      echo "  - INCOMPLETE: ruleset '${name}' does not show its bypass actors (admin access needed)"
+      return 2
+    fi
     want="$(desired_ruleset "${name}" "${branch}" "${method}" "${contexts}" | canonical)"
     have="$(printf '%s' "${live}" | canonical)"
     if [ "${have}" != "${want}" ]; then
@@ -123,6 +130,12 @@ echo "Configuring ${REPO}"
 if git rev-parse --git-dir >/dev/null 2>&1; then
   git config core.hooksPath .githooks
   echo "  - core.hooksPath = .githooks (pre-commit blocks direct commits to main)"
+fi
+
+# Nothing to change: leave the live settings alone (no auto-merge off/on cycle).
+if verify "${WANT_AUTO_MERGE}" >/dev/null; then
+  echo "Done: the live settings already match the policy; nothing changed."
+  exit 0
 fi
 
 # 2) Merge methods and auto-delete, with auto-merge OFF until the gates are proven in force.

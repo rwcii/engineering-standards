@@ -18,6 +18,7 @@ check
 - scripts/setup-repo.sh
 - scripts/setup-repo.test.sh
 - .github/workflows/checks.yml
+- .github/workflows/promotion-source.yml
 
 ## Base branch
 `develop`, read as `origin/develop`. A release compares `develop` with `origin/main`
@@ -39,14 +40,20 @@ incomplete (it did not run, with the reason; never a pass, WDR 004 Decision 8) o
 ## Conditional checks
 - A change to `scripts/setup-repo.sh`: `bash scripts/setup-repo.test.sh`.
 - A release pull request into `main` (WDR 010, Decision 5), at the pinned commit:
-  - `git rev-parse origin/develop` equals the pin, and the pull request's head equals it;
-  - `bash scripts/check-promotion-source.sh main develop <this repo> <this repo>`.
+  - `git rev-parse origin/develop` equals the pin, and
+    `gh pr view <number> --json headRefOid -q .headRefOid` equals it too;
+  - the pull request's real source passes:
+    `bash scripts/check-promotion-source.sh main "$(gh pr view <number> --json headRefName -q .headRefName)" "$(gh pr view <number> --json headRepositoryOwner,headRepository -q '.headRepositoryOwner.login + "/" + .headRepository.name')" "$(gh repo view --json nameWithOwner -q .nameWithOwner)"`.
   If `develop` moves before the merge, the pin is void: cut the release again at the new commit.
+- After a merge (bound to the approved head with `--match-head-commit`, WDR 010 Enforcement), read
+  back the result: for a feature, the tree of `origin/develop` equals the approved head's tree when
+  `develop` had not moved; for a release, the second parent of `origin/main` is the pin.
 ## Required CI
-`.github/workflows/checks.yml` runs on every pull request into `develop` or `main`, with no path
-filters:
-- `repo-checks`: steps 1 and 2 above, against the pull request's base, pinned to GitHub Actions.
-- `promotion-source`: a pull request into `main` comes from this repository's `develop`.
-The review statuses `standards-review` and `refusal-review` are posted on the exact head after each
-approving verdict (docs/engineering/review/README.md § Results). `develop` requires all four
-contexts; `main` requires `repo-checks` and `promotion-source` (`scripts/setup-repo.sh`).
+On every pull request into `develop` or `main`, with no path filters, and again when its base
+changes:
+- `repo-checks` (`.github/workflows/checks.yml`): steps 1 and 2 above, on the candidate merge.
+- `promotion-source` (`.github/workflows/promotion-source.yml`): runs from the base branch; a pull
+  request into `main` comes from this repository's `develop`.
+The review statuses are posted on the exact head after each approving verdict
+(docs/engineering/review/README.md § Results). Which contexts each branch requires is declared in
+`scripts/setup-repo.sh` and decided in WDR 010, Decision 3.

@@ -14,7 +14,6 @@ related:
   - "003"
   - "007"
   - "009"
-  - "010"
 tags:
   - workflow
   - agentic
@@ -198,7 +197,8 @@ rather than loops.
 
 ### Decision
 
-When the agent has asked a human for a decision (Decision 3) and the answer has not come:
+When the agent has put a decision request to a human on the project's decision channel, such as a
+decision card (Decision 3), and the verdict has not come:
 
 - It continues independent work that is already authorized.
 - It continues reversible work on the option it recommended, on its work branch only.
@@ -215,8 +215,9 @@ When the agent has asked a human for a decision (Decision 3) and the answer has 
   stop all dependent work, to continue only work that needs no new authority, or to continue
   reversible work on the recommended option while the hard-to-undo steps wait.
 - **Reason and scope:** decisions can wait for hours, and branch work is cheap to discard; the
-  steps that are hard to undo still wait, so the decision keeps its authority. This governs every
-  pending decision an agent has asked for, through any channel.
+  steps that are hard to undo still wait, so the decision keeps its authority. This governs a
+  decision request the agent has put on the project's decision channel, such as a decision card,
+  while it waits for the verdict.
 - **Strength:** default.
 - **Review when:** discarded work on a declined option becomes a recurring cost.
 
@@ -230,7 +231,7 @@ When the agent has asked a human for a decision (Decision 3) and the answer has 
 ### Enforcement
 
 Per project: the list of waiting actions in the agent instructions; the base branches protected so
-a push or merge needs its own authorization (WDR 010).
+a push or merge needs its own authorization (the project's branch and merge record).
 
 ---
 

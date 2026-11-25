@@ -13,7 +13,6 @@ superseded_by: ""
 related:
   - "003"
   - "005"
-  - "010"
 tags:
   - workflow
   - agentic
@@ -241,7 +240,8 @@ needs retries to pass is a flaky check under Decision 4.
 A check that a gate relies on is shown to fail: it has a failure control, such as a seeded
 defect, a mutation, a guard removed, or a fail-on-revert run, that it is observed to catch. A
 "not found" result needs a known positive that the same check does find. The check runs on the
-candidate tree, the exact commit being judged (WDR 010, Decision 2). When the proof and the work it
+candidate: the exact commit being judged or, for CI on a pull request, the result of merging
+that commit into its base, as the project's branch and merge record states. When the proof and the work it
 proves need different trust or different runners, they run as separate jobs, so that the job under
 test cannot change its own verdict.
 

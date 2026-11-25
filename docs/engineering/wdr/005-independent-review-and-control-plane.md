@@ -15,7 +15,6 @@ related:
   - "003"
   - "004"
   - "008"
-  - "010"
 tags:
   - workflow
   - agentic
@@ -133,7 +132,8 @@ correctness, requirements, and record compliance.
 
 ### Amendment (2026-11-25): one frozen commit, a named reviewer, explicit security scope
 
-Each review judges one frozen commit and names its full hash (WDR 010, Decision 2). The standards
+Each review judges one frozen commit and names its full hash, which the project's merge binds to
+(its branch and merge record). The standards
 review and the refusal review (Decision 4) give separate verdicts on the same commit. Each report
 states whether security review applies, covering the code and the configuration and data that
 tools read, and says why. The reviewer's family and model follow the project's policy and are

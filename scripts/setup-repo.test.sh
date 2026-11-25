@@ -133,8 +133,25 @@ fixture; mutate repos_o_r.json '.allow_auto_merge = false'
 run 1 "auto-merge off differs" --check o/r
 fixture; rm "$tmp/fake/repos_o_r_rulesets.json"
 run 2 "unreadable rulesets are INCOMPLETE" --check o/r
+fixture; mutate "$D" 'del(.bypass_actors)'
+run 2 "bypass actors not shown is INCOMPLETE, not a match" --check o/r
+fixture; mutate repos_o_r_rulesets.json 'map(select(.name != "main release policy"))'
+run 1 "a missing ruleset differs" --check o/r
+fixture; mutate repos_o_r_rulesets_12.json '.rules |= map(select(.type != "deletion"))'
+run 1 "drift on the main ruleset differs" --check o/r
+fixture; mutate repos_o_r.json '.allow_rebase_merge = true'
+run 1 "a repository merge flag differs" --check o/r
+fixture; mutate "$D" '.rules |= map(select(.type != "required_status_checks"))'; mutate repos_o_r.json '.allow_auto_merge = false'
+REQUIRED_DEVELOP="" run 0 "empty REQUIRED_DEVELOP expects no checks and auto-merge off" --check o/r
+fixture
+REQUIRED_DEVELOP="" run 1 "empty REQUIRED_DEVELOP differs from a ruleset that requires checks" --check o/r
 
 # apply: safe order -----------------------------------------------------------------------------
+fixture
+run 0 "apply with nothing to change succeeds" o/r
+assert "apply with nothing to change writes nothing" \
+  bash -c "! grep -q -- '--method \\(PATCH\\|PUT\\|POST\\|DELETE\\)' '$tmp/fake/log'"
+
 fixture; mutate repos_o_r.json '.allow_auto_merge = false'
 run 0 "apply over existing rulesets succeeds" o/r
 assert "apply turns auto-merge off before any ruleset write" \

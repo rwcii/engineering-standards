@@ -242,10 +242,9 @@ scripts/setup-repo.sh owner/repo
 scripts/setup-repo.sh --check owner/repo
 ```
 
-The script also requires `jq`. It declares the required status checks of each branch
-(WDR 010, Decision 3). This repository's are `repo-checks`, `promotion-source`,
-`standards-review` and `refusal-review` on `develop`, and `repo-checks` and `promotion-source`
-on `main`. `NAME@15368` pins a check to GitHub Actions, so a status posted by hand under that name
+The script also requires `jq`. It declares the required status checks of each branch, as
+[WDR 010, Decision 3](docs/engineering/wdr/010-branch-and-merge-flow.md#4-decision-3-required-checks-gate-the-merge-auto-merge-only-when-every-gate-is-required)
+decides; the lists are at the top of the script. `NAME@15368` pins a check to GitHub Actions, so a status posted by hand under that name
 does not satisfy it. A required check must report on every pull request to its branch, or it
 blocks every merge, so set your own before applying:
 
