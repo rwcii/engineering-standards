@@ -3,7 +3,8 @@
 ## What This Repository Is
 
 A portable, stack-agnostic system of decision records and a review gate, meant to
-be **vendored into other projects**. It contains:
+be **adopted by other projects** — copied, or cited against a pinned record list (WDR 002,
+Decision 4). It contains:
 
 - **ADRs** (`docs/architecture/adr/`) — how a system is built (structure, patterns, boundaries)
 - **PDRs** (`docs/product/pdr/`) — how a product behaves (flows, UX contracts, voice)

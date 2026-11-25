@@ -144,7 +144,8 @@ The recommended default flows feature → squash → `develop` → merge → `ma
 is never committed to directly. The `develop` buffer keeps the released line stable,
 squash keeps integration history clean, and the regular merge to `main` preserves real
 release points. Enforcement is branch protection plus a local commit guard, with
-`standards-review` and `refusal-review` reviewing each feature against `develop`. A project with different
+the standards review and the refusal review (the project's review procedure) checking each
+feature against `develop`. A project with different
 needs records its own flow in this slot.
 
 ---
@@ -156,4 +157,4 @@ needs records its own flow in this slot.
 | 2026-05-31 | Initial creation |
 | 2026-06-16 | Reframed as the project-specific template/worked example — recommended default flow to adopt or replace; removed sibling WDR 011 (contribution policy now lives in `CONTRIBUTING.md`) |
 | 2026-10-12 | Review base and conclusion name both preflights, `standards-review` and `refusal-review` (WDR 005, Decision 4) |
-| 2026-11-25 | Review base read from the project's check facts, not from local skill defaults (WDR 008, Decision 4) |
+| 2026-11-25 | Review base read from the project's check facts, and the conclusion names the review procedure, not local skills (WDR 008, Decision 4) |

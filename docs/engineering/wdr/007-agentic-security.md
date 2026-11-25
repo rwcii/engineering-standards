@@ -1,9 +1,9 @@
 ---
 wdr: "007"
 title: "Agentic Security"
-status: accepted
+status: modified
 created: "2026-05-31"
-updated: "2026-05-31"
+updated: "2026-11-25"
 parent_wdr: ""
 authors:
   - "Robert Capps"
@@ -21,7 +21,7 @@ tags:
 # WDR 007: Agentic Security
 
 **Date:** 2026-05-31
-**Status:** Accepted
+**Status:** Modified
 **Authors:** Robert Capps
 
 ---
@@ -36,7 +36,8 @@ and the lethal combination of private data + untrusted content + an exfiltration
 channel is never co-located without a gate**; the agent executes in a **hermetic,
 least-privilege sandbox** with enumerated tools and deny-by-default egress; and
 **no agent-introduced dependency enters the tree unproven, while secrets never flow
-into the agent's context or out into generated artifacts.** These are the
+into the agent's context or out into generated artifacts.** Text that an agent publishes
+in a **public repository names no private project and quotes no private conversation.** These are the
 agent-specific complement to the project's general security posture (ADR 005).
 
 ---
@@ -47,8 +48,9 @@ agent-specific complement to the project's general security posture (ADR 005).
 2. Decision 1: Untrusted Content Is Never Instructions
 3. Decision 2: The Agent Executes in a Hermetic, Least-Privilege Sandbox
 4. Decision 3: Dependencies Are Proven and Secrets Never Cross the Boundary
-5. Conclusion
-6. Document History
+5. Decision 4: Public Text Names No Private Project and Quotes No Private Conversation
+6. Conclusion
+7. Document History
 
 ---
 
@@ -195,7 +197,45 @@ egress; pairs with ADR 005 (secrets management) and ADR 003 (pinned toolchain).
 
 ---
 
-## 5. Conclusion
+## 5. Decision 4: Public Text Names No Private Project and Quotes No Private Conversation
+
+### Decision
+
+Text that goes into a public repository — files, commit messages, pull request text, review
+summaries and posted evidence — names no private project, repository, host or person's private
+detail, and quotes no private conversation (chat, decision-board text or agent messages). A
+practice learned in a private project is carried as the general practice, without its source's
+name.
+
+- **Decided by:** Robert Capps
+- **Date:** 2026-11-25
+- **Context:** what may public text say about the private projects and conversations that shaped
+  it? The options were to name sources freely, to redact them when a review finds them, or to
+  carry only the general practice.
+- **Reason and scope:** a public repository is copied and indexed; a private name or a quoted
+  conversation in it cannot be withdrawn. It covers public repositories and their public
+  artifacts. It does not cover a private repository's own records, and it does not stop naming
+  public projects.
+- **Strength:** hard rule.
+- **Review when:** none known.
+
+### Alternatives Considered
+
+| Alternative | Description | Why Rejected |
+| ----------- | ----------- | ------------ |
+| Name sources freely | Cite the private project a practice came from | Exposes private work in a public, copied place |
+| Redact at review time | Write freely, and remove names when a review finds them | A missed name is already published; review becomes the only guard |
+| Carry the general practice only | Chosen | Chosen |
+
+### Enforcement
+
+Per project: a scan of each change, its commit messages and its pull request text for the
+project's list of private names, with the list kept outside the public repository; the review
+procedure checks posted text before it is posted.
+
+---
+
+## 6. Conclusion
 
 Agentic security closes the surfaces human-only workflows never had: untrusted
 content is data and never instructions (and the lethal data+content+egress
@@ -213,3 +253,4 @@ enforcement.
 | Date       | Change           |
 | ---------- | ---------------- |
 | 2026-05-31 | Initial creation |
+| 2026-11-25 | Decision 4: public text names no private project and quotes no private conversation |

@@ -62,7 +62,7 @@ standard (ADR 001.1) applied to the record system:
 - **Same cardinal rules** — no AI/bot attribution; no line numbers or volatile
   details; principle-level and stack-agnostic, with concrete tooling pushed to
   each adopting project's enforcement.
-- **Same review path** — `standards-review` validates changes against accepted
+- **Same review path** — the standards review (`docs/engineering/review/`) validates changes against accepted
   WDRs in its WDR-compliance phase.
 
 ### Frontmatter differences from an ADR

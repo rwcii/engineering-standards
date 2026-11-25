@@ -85,41 +85,53 @@ beginning with WDR 001 (the decision-record taxonomy itself). See the
 click **Use this template** (or `gh repo create <your-repo> --template rwcii/engineering-standards`)
 to get a fresh repo with these files, then run `scripts/setup-repo.sh` to apply the GitHub
 settings a template does not carry (merge methods, auto-delete, branch-protection rulesets,
-hook path). To adopt into an *existing* repo instead, choose how your project holds the
-records, then add the pieces:
+hook path). To adopt into an *existing* repo instead, follow the common steps, then the steps of
+the way your project holds the records (WDR 002, Decision 4).
 
-- **Records only (copy).** Copy `docs/architecture/adr/`, `docs/product/pdr/` and
-  `docs/engineering/wdr/` into your repo, and own them from there.
-- **Cite only (no copy).** Keep the records in one source repository. Your repo cites each
-  record it relies on, and a check compares those citations against a pinned list of the
-  source's records, so a citation to a record that does not exist fails.
+**Common steps**
 
-Then:
+1. **Install the skills** from a shared catalog for your agents — this repository uses
+   [Koinon](https://github.com/rwcii/koinon) — and copy `docs/engineering/review/` and
+   `.koinon/skills/` into your repo. By default, do not copy the catalog's skill procedures into
+   the repo; a project that cannot install the catalog keeps local skills and says so in its
+   `AGENTS.md` (WDR 008, Decision 4).
+2. **Adapt** the facts in `.koinon/skills/` (your base branch, record folders and check
+   commands) and the review documents in `docs/engineering/review/` (your build/test gate, and
+   an optional project-specific ADR/PDR/WDR checklist in the standards lens).
+3. **Replace** `CONTRIBUTING.md` and `.github/PULL_REQUEST_TEMPLATE.md` with your own —
+   they govern contributions to the *kit itself*. The DCO section and the PR checklist
+   items are reusable starting points you can keep.
+4. **Configure the repo:** run `scripts/setup-repo.sh` to apply the branch/merge policy
+   (merge methods, auto-delete, branch-protection rulesets) and the local hook path —
+   the GitHub settings a clone does not inherit.
 
-1. **Install the skills** from the [Koinon](https://github.com/rwcii/koinon) catalog for your
-   agents, and copy `docs/engineering/review/` and `.koinon/skills/` into your repo. Do not copy
-   skill procedures into the repo (WDR 008, Decision 4).
-2. **Keep** ADR 001.x as-is (the universal code-architecture standards).
+**If you copy the records** — you own and adapt them:
+
+1. **Copy** `docs/architecture/adr/`, `docs/product/pdr/` and `docs/engineering/wdr/` into
+   your repo.
+2. **Keep** ADR 001.x as-is (the universal code-architecture standards) and the baseline
+   WDRs 001–009.
 3. **Fill in** the templates for your stack: ADR 002.x (frontend / api /
    backend-persistence) and ADR 004.x (your data-handling specifics).
 4. **Flesh out** the stubs (ADR 005 Security, 006 Authentication) when those
    decisions are made — or leave them `draft` until then.
 5. **Add** your project's own ADRs from 007+, your PDRs from 001, and your WDRs from 010.
-   Baseline WDRs 001–009 are universal — keep them. WDR 010 ships as a branch-flow
-   *template* (the worked example of a project-specific WDR): adopt its default flow or
-   replace it with your own.
-6. **Adapt** the facts in `.koinon/skills/` (your base branch, record folders and check
-   commands) and the review documents in `docs/engineering/review/` (your build/test gate,
-   and an optional project-specific ADR/PDR/WDR checklist in the standards lens).
-7. **Replace** `CONTRIBUTING.md` and `.github/PULL_REQUEST_TEMPLATE.md` with your own —
-   they govern contributions to the *kit itself*. The DCO section and the PR checklist
-   items are reusable starting points you can keep.
-8. **Configure the repo:** run `scripts/setup-repo.sh` to apply the branch/merge policy
-   (merge methods, auto-delete, branch-protection rulesets) and the local hook path —
-   the GitHub settings a clone does not inherit.
+   WDR 010 ships as a branch-flow *template* (the worked example of a project-specific WDR):
+   adopt its default flow or replace it with your own.
 
-The records are a starting template you own and adapt — not a runtime dependency. Copy and
-customize them, or cite them from one source with a pinned record list; don't submodule.
+**If you cite the records from one source** — you follow them and do not edit them:
+
+1. **Pin** a list of the source's records at a known version in your repo, and add a check
+   that fails a citation to a record missing from that list. Move the pin only in a reviewed
+   change.
+2. **Cite** each shared record by its source and ID. Point the standards lens and the record
+   facts at the source's record indexes, read at the pinned version.
+3. **Keep your own records** only for decisions that are yours. If you keep any, give them
+   their own series and index, and set `.koinon/skills/record.md` and
+   `.koinon/skills/standards-audit.md` to that series; if you keep none, leave those facts out.
+
+Either way, don't hold the records through a live link that follows the source's latest state,
+such as a submodule (WDR 002, Decision 4).
 
 ## Repository setup (`scripts/setup-repo.sh`)
 

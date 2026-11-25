@@ -16,7 +16,8 @@ that are its own (base branch, where results go).
   - **refusal**: every refusal, gate, limit or approval step that the change adds or changes
     has a source that covers its case, with the procedure of `koinon-refusal-review` and the
     [refusal lens](refusal-lens.md).
-- The base branch is `develop`, read as `origin/develop`.
+- The base branch is the one in [`.koinon/skills/check.md`](../../../.koinon/skills/check.md)
+  § Base branch (`develop` today); this procedure does not set its own.
 
 ## Reviewer
 
@@ -80,7 +81,8 @@ the right approver (WDR 005, Decision 2).
   location, the record or rule it breaks, and the fix. An ID stays the same through the rechecks
   of that review (for example S1, S2 for standards and R1, R2 for refusal).
 - Put the verdict (APPROVE, REQUEST CHANGES or BLOCK), the full head hash and the findings in the
-  pull request's review summary. Before posting, scan the text for private data.
+  pull request's review summary. Before posting, check the text against WDR 007, Decision 4
+  (no private project names, no quoted private conversation).
 - Record the outcome of each finding: fixed, accepted with a reason, or moved to a tracked issue.
   A finding is never dropped silently.
 
