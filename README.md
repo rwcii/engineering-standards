@@ -133,8 +133,9 @@ the way your project holds the records (WDR 002, Decision 4).
    your repo: replace each reference to a local record (such as a WDR path in a facts file's
    Sources) with your pinned list or with the source document read at the pin, and remove each
    reference to a facts file you left out (such as the record checks in `check.md`). Then run
-   the catalog's state check and confirm that every facts file is valid and every Sources path
-   exists.
+   the catalog's state check and confirm that every facts file you kept is valid and every
+   Sources path exists. With no own series, the record and standards-audit skills report their
+   facts as missing; that is expected, and those skills are not used in your repo.
 
 Either way, don't hold the records through a live link that follows the source's latest state,
 such as a submodule (WDR 002, Decision 4).
