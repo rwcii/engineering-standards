@@ -77,7 +77,7 @@ tags:
 | ----------- | ------------ | ------------------------------- |
 | [Name]      | [What it is] | [Specific reason for rejection] |
 
-### Rationale
+### Rationale (optional)
 
 1. [Reason — user research, product goal, UX principle]
 

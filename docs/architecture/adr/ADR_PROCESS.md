@@ -171,7 +171,7 @@ tags:
 | ----------- | ------------ | ------------------------------- |
 | [Name]      | [What it is] | [Specific reason for rejection] |
 
-### Rationale
+### Rationale (optional)
 
 [Numbered list of reasons supporting the decision.]
 
@@ -215,7 +215,7 @@ project. Optional for non-code decisions.]
 | Header (title/date/status/authors) | Yes    | Human-readable duplicate of key frontmatter fields |
 | Executive Summary                | Yes      | 1–2 paragraphs                                     |
 | Problem Context                  | Yes      | Include specific incidents or requirements         |
-| At least one Decision section    | Yes      | Include the decision form and alternatives          |
+| At least one Decision section    | Yes      | Include the decision form and alternatives. Reason and scope states the rationale.          |
 | Alternatives Considered table    | Yes      | Per decision — always show what was rejected and why |
 | Enforcement                      | No       | Include for decisions that govern code             |
 | Trade-offs Accepted              | No       | Include when downsides exist                       |
@@ -275,7 +275,7 @@ Document History entry, update the index, commit `docs(adr): update NNN [title]`
 | -------------------------------------- | ----------------------------------------- |
 | Typo, clarification, formatting        | Update in place (keep `accepted`)         |
 | New decision added to existing context | Update in place (change to `modified`)    |
-| Fundamental change to a prior decision | Add a dated replacement or create a new ADR. Link both ways. |
+| Fundamental change to a prior decision | Add a dated replacement section or create a new ADR. Mark the earlier decision as replaced and link both ways. Set a replaced record to `superseded`. |
 | Decision no longer relevant            | Set `status: deprecated` with explanation |
 
 **Reference** from code with a short comment (`// Per ADR 00X, …`), from docs with a

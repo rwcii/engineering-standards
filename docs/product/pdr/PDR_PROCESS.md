@@ -166,7 +166,7 @@ tags:
 | ----------- | ------------ | ------------------------------- |
 | [Name]      | [What it is] | [Specific reason for rejection] |
 
-### Rationale
+### Rationale (optional)
 
 [Numbered list — user research, product goals, UX principles.]
 
@@ -207,7 +207,7 @@ tags:
 | Header                        | Yes      | Human-readable duplicate of key fields           |
 | Executive Summary             | Yes      | 1–2 paragraphs                                   |
 | Problem Context               | Yes      | Include specific user scenarios                  |
-| At least one Decision section | Yes      | Include the decision form and alternatives       |
+| At least one Decision section | Yes      | Include the decision form and alternatives. Reason and scope states the rationale.       |
 | Alternatives Considered table | Yes      | Per decision                                     |
 | User Impact                   | Yes      | How the experience changes                       |
 | Success Criteria              | No       | Include when measurable                          |
@@ -254,7 +254,7 @@ Document History entry, update the index, commit `docs(pdr): update NNN [title]`
 | -------------------------------------- | ----------------------------------------- |
 | Typo, clarification, formatting        | Update in place (keep `accepted`)         |
 | New decision added to existing context | Update in place (change to `modified`)    |
-| Fundamental change to a prior decision | Add a dated replacement or create a new PDR. Link both ways. |
+| Fundamental change to a prior decision | Add a dated replacement section or create a new PDR. Mark the earlier decision as replaced and link both ways. Set a replaced record to `superseded`. |
 | Decision no longer relevant            | Set `status: deprecated` with explanation |
 
 **Reference** from code with a short comment, from docs with a link, and to the

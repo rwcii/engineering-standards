@@ -122,9 +122,9 @@ index, commit `docs(wdr): update NNN [title]`. **Reference** from code with
 `// Per WDR 00X, …`, from docs with a link, and between records via the `related`
 frontmatter.
 
-Run the record checks described in [WDR 002](002-record-system-as-infrastructure.md)
-after changing a record. The check covers record metadata, index entries, links,
-citations and this project's publication rules.
+After changing a record, run the **Record checks** in
+[`.koinon/skills/record.md`](../../../.koinon/skills/record.md), which implement
+[WDR 002](002-record-system-as-infrastructure.md), Decision 6.
 
 **Filter** with frontmatter:
 

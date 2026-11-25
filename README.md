@@ -193,14 +193,15 @@ they cannot install the catalog record that choice in their `AGENTS.md`. See
 
 ### How this repository uses Koinon
 
-The [task-to-skill table](AGENTS.md#skills) links each task to its installed entry and
+The [task-to-skill table](AGENTS.md#skills) lists this repository's skill entries and their
 project facts. The steps below show where Koinon fits in the development flow.
 
 1. **Plan and branch.** For a multi-PR deliverable, use `koinon-sprint` to agree on acceptance
    criteria, checks, and the order of increments. Start the work branch from `develop`.
-2. **Build and verify.** Use `koinon-check` to run the project's checks. When working in a pair,
-   the driver edits and commits, and the observer receives a frozen checkpoint through Koinon's
-   message bridge and sends one batch of reproduced findings.
+2. **Build and verify.** Use `koinon-check` to run the project's checks. In paired work,
+   `koinon-pair` guides the driver and observer. The driver edits and commits, and the observer
+   receives a frozen checkpoint through Koinon's message bridge and sends one batch of
+   reproduced findings.
 3. **Review the candidate.** Independent reviewers use `koinon-standards-review` and
    `koinon-refusal-review` on the same frozen head. Each records a head-bound verdict under the
    [review procedure](docs/engineering/review/README.md).

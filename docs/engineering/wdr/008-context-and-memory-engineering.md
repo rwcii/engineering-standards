@@ -39,7 +39,8 @@ source of truth and is recorded here as a deliberate decision; and each task wor
 from **durable records plus an explicit scope** rather than an inherited transcript,
 with deliberate handoffs between agents and phases. Agent **skills come from one shared
 catalog**, a repository keeps only the facts those skills read, and each agent hands off
-into its own uncommitted folder.
+into its own uncommitted folder. Each kind of guidance lives with the document that
+serves its reader.
 
 ---
 
@@ -305,15 +306,14 @@ A project may set budgets for its instruction files.
   or documents scoped by audience with links to the owning rule.
 - **Reason and scope:** Readers can find a rule without loading unrelated material. One
   owner per rule reduces drift. This governs repository guidance and session notes.
-- **Strength:** default.
 - **Review when:** readers repeatedly miss a rule or find contradictory copies.
 
 ### Alternatives Considered
 
-| Alternative | Reason declined |
-| ----------- | --------------- |
-| Combined handbook | Loads instructions and project history into the same entry point for every reader. |
-| Repeat governing text at each entry point | Copies drift and obscure which one governs. |
+| Alternative | Description | Reason declined |
+| ----------- | ----------- | --------------- |
+| Combined handbook | Put all guidance in one document | Loads instructions and project history into the same entry point for every reader |
+| Repeat governing text | Copy the rule to each entry point | Copies drift and obscure which one governs |
 
 ### Enforcement
 
@@ -329,8 +329,9 @@ rules and pointers, the `AGENTS.md`/`CLAUDE.md` convention gives that tier a por
 and tiered shape, and tasks run from current records and scope rather than an
 accreted transcript. Together these keep an agent's attention on what is true and
 relevant, which is the precondition for every other standard to actually be followed.
-The records this guidance routes to are governed by WDR 002; concrete compaction and
-summary mechanics are each adopting project's enforcement.
+Each entry point serves its audience and links to the document that owns the rule.
+WDR 002 governs the linked records. Concrete compaction and summary mechanics are each
+adopting project's enforcement.
 
 ---
 

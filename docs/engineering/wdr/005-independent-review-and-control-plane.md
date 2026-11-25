@@ -38,7 +38,7 @@ hard requirement; a **defined merge-gate contract** (a severity taxonomy, what
 blocks versus advises, and how an override is justified) so author and reviewer
 cannot simply disagree on severity; **heightened protection for the control
 plane** — the records, gates, and review machinery that judge every other change; and a
-**source review** that traces every refusal, gate or limit a change adds to a decision.
+**source review** that traces every refusal, gate or limit a change adds to a source that covers its case.
 
 ---
 
@@ -82,7 +82,7 @@ refuse work and ask again for approval the task already gave.
 2. "Pass" and "fail" are defined, not improvised per change.
 3. Changes that alter the judging machinery are held to a higher bar than the
    changes it judges.
-4. Every refusal, gate or limit a change adds traces to a decision that covers its case.
+4. Every refusal, gate or limit a change adds traces to a source that covers its case.
 
 ### Scope
 
@@ -228,8 +228,6 @@ Decision 5. All the source kinds above remain valid.
   authorizes and for how long?
 - **Reason and scope:** A real decision may govern a narrower case or have expired. This
   review applies the decision-strength rule to constraints supported by a decision.
-- **Strength:** hard rule.
-
 **Gate crossed:** merge-time.
 
 ### Alternatives Considered

@@ -42,7 +42,9 @@ generated from it, never hand-maintained); records carry **applicability metadat
 so the governing set is *selected by narrowing* rather than read in full; and the
 record graph maintains **referential integrity and freshness**, so a stale or
 orphaned record is a defect, not background noise. A project that adopts shared records
-**copies them or cites them against a pinned list**, never through a live link.
+**copies them or cites them against a pinned list**, never through a live link. The owning
+record attributes the decision by name and preserves earlier decisions when their scope,
+strength or status changes.
 
 ---
 
@@ -263,10 +265,11 @@ the question and options in the writer's own words, the decision, and its reason
 Include a review trigger when known. Use the **Decided by** field for attribution.
 
 This repository paraphrases chat and decision-card text in its records and cites tracked
-governing documents. Private card, verdict, chat and message identifiers stay in working
-notes. The record carries the attribution. Public READMEs, commit messages, pull requests
-and release notes describe the work without private approvals, decision attribution, or
-private process notes.
+governing documents. Keep private card, verdict, chat and message identifiers in working
+notes when needed. The record carries decision attribution. Keep that attribution and
+the private approval material out of public READMEs, commit messages, pull requests and
+release notes. WDR 009 governs the separate provenance of the work, including who is
+accountable for it.
 
 - **Decided by:** Robert Capps
 - **Date:** 2026-11-25
@@ -280,15 +283,17 @@ private process notes.
 
 ### Alternatives Considered
 
-| Alternative | Reason declined |
-| ----------- | --------------- |
-| Publish verbatim quotes | Exposes private text and makes an accurately relayed quote hard to verify. |
-| Attribute a paraphrase in the body | Repeats the attribution and makes the summary read as the decider's wording. |
+| Alternative | Description | Reason declined |
+| ----------- | ----------- | --------------- |
+| Verbatim quotation | Use the decider's words in the body | Exposes private text and makes a relayed quote hard to verify |
+| Attributed paraphrase | Name the decider again in the body | Repeats the attribution and makes the summary read as the decider's wording |
 
 ### Enforcement
 
-The record forms carry these fields. Review checks the record against the decision source
-and uses file and section references in the published result.
+The record forms carry these fields. Review checks the record against the decision source.
+In the published result, cite the tracked rule and section when available. For a verified
+source without a tracked rule, describe the source and what it covers in your own words.
+WDR 005, Decision 4 defines valid sources.
 
 ---
 
@@ -309,8 +314,9 @@ remain. Use a point record when a refinement has its own scope and decision. Cla
 can amend the owning record without allocating another identifier.
 
 Cite a shared decision by its source, record identifier, pinned revision and relevant
-section. A local record may link to a vendored baseline without editing the baseline to
-add a backlink. When replacing a local decision, keep the reciprocal supersession links.
+section. A local record may link to a shared baseline at its pinned revision without
+editing the baseline to add a backlink. When replacing a local decision, keep the reciprocal
+supersession links.
 
 Record **Strength** when it helps a reader apply a decision, especially one that authorizes
 a constraint. The field is optional. It can take these values.
@@ -340,18 +346,16 @@ independent authorized work moving.
   find what changed. This decision covers how this repository records, cites, replaces and
   revisits durable decisions. It also covers material exceptions to those decisions and how
   working notes handle relayed evidence. WDR 005, Decision 4 governs other source kinds.
-- **Strength:** hard rule for the decision lifecycle and authority rules described here.
-  The optional strength label and review fields guide how individual decisions are written.
 - **Review when:** a decision cannot be located from a citation or the form repeatedly fails
   to show whether a constraint applies.
 
 ### Alternatives Considered
 
-| Alternative | Reason declined |
-| ----------- | --------------- |
-| Keep a running decision log as authority | The log and the governing document can disagree. |
-| Overwrite earlier decisions on replacement | Hides which rule applied to earlier work and breaks references. |
-| Assign the same strength to every decision | Turns case-specific judgments into general restrictions or weakens existing rules. |
+| Alternative | Description | Reason declined |
+| ----------- | ----------- | --------------- |
+| Running decision log | Put authority in a separate chronological log | The log and the governing document can disagree |
+| Overwrite on replacement | Replace earlier text in place | Hides which rule applied to earlier work and breaks references |
+| Uniform strength | Assign the same strength to every decision | Turns case-specific judgments into general restrictions or weakens existing rules |
 
 ### Enforcement
 
@@ -369,8 +373,9 @@ contract with a generated index), selectable (applicability metadata, narrow bef
 deep-read), and sound (a referentially consistent graph kept current with the code).
 These properties are what let the records serve as an agent's interface and memory
 at scale, and what let the standards review validate against them without reading the
-entire corpus. The concrete schema, validator, generator, and filters are each
-adopting project's enforcement.
+entire corpus. The record provides a named attribution, and dated replacements keep
+earlier decisions findable. The concrete schema, validator, generator, and filters are
+each adopting project's enforcement.
 
 ---
 

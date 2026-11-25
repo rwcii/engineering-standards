@@ -42,7 +42,7 @@ Each constraint needs a source that covers its case:
 
 - an accepted decision record (ADR, PDR or WDR) whose scope includes the case;
 - the requirement of the issue or plan that the change delivers;
-- the accountable human's direct decision, with its date and the question it answered;
+- the accountable human's direct decision (WDR 009), with its date and the question it answered;
 - a verified platform, API, storage or protocol contract, or a reproduced correctness or security
   boundary.
 
@@ -83,7 +83,7 @@ Is a finding:
 ## Constraints
 | # | File | Constraint (quoted) | Kind | Source | Covers this case? |
 |---|------|---------------------|------|--------|-------------------|
-| 1 | ... | ... | refusal/approval/cap/exclusion/test/code | record, requirement, quote or contract | yes/no/narrower |
+| 1 | ... | ... | refusal/approval/cap/exclusion/test/code | record, requirement, decision or contract | yes/no/narrower |
 
 ## Findings
 | ID | Severity | File and location | Constraint # | Finding | Missing or narrower source | Recommended Fix |
