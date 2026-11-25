@@ -7,10 +7,13 @@ refusal-review
 ## Sources
 - docs/engineering/review/README.md
 - docs/engineering/review/refusal-lens.md
+- docs/engineering/wdr/002-record-system-as-infrastructure.md
 - docs/engineering/wdr/005-independent-review-and-control-plane.md
 
 ## Verdict format
 The output format of docs/engineering/review/refusal-lens.md, with the levels of
 docs/engineering/review/README.md § Severity and the merge block and the rules of § Results. The
 verdict is APPROVE or REQUEST CHANGES, bound to the full head hash. Give the reviewer
-refusal-lens.md to read in full beside this skill's procedure.
+refusal-lens.md to read in full beside this skill's procedure. For decision attribution and
+public review text, apply docs/engineering/review/README.md § Decision attribution in refusal
+review (WDR 002, Decision 5).

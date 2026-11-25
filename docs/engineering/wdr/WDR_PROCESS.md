@@ -73,6 +73,15 @@ standard (ADR 001.1) applied to the record system:
 | `parent_wdr` | parent WDR number on point versions (replaces `parent_adr`) |
 | `tags`       | include `workflow`; add `agentic` for AI-specific decisions |
 
+### Decision form
+
+Use the Decision section in the shared ADR template, including **Decided by**,
+**Date**, **Context**, the decision text, and **Reason and scope**. For decisions
+authorizing a constraint, include **Strength** (hard rule, default, preference,
+or one-off). Include **Review when** and **Expires** when known. See
+[WDR 002](002-record-system-as-infrastructure.md) for attribution and lifecycle
+and [WDR 005](005-independent-review-and-control-plane.md) for source review.
+
 ### One optional added field
 
 A Decision section in a WDR may carry a one-line **Gate crossed: agent-time |
@@ -111,6 +120,10 @@ template (with WDR frontmatter) → fill all required sections → add a row to 
 index, commit `docs(wdr): update NNN [title]`. **Reference** from code with
 `// Per WDR 00X, …`, from docs with a link, and between records via the `related`
 frontmatter.
+
+Run the record checks described in [WDR 002](002-record-system-as-infrastructure.md)
+after changing a record. The check covers record metadata, index entries, links,
+citations and this project's publication rules.
 
 **Filter** with frontmatter:
 

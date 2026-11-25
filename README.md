@@ -141,6 +141,68 @@ the way your project holds the records (WDR 002, Decision 4).
 Either way, don't hold the records through a live link that follows the source's latest state,
 such as a submodule (WDR 002, Decision 4).
 
+## Using Koinon
+
+Koinon connects agent sessions, carries review and decision messages, and supplies shared
+skills. A project configures those skills with its own policy and check commands.
+
+### Install the skills
+
+On macOS or Linux with Homebrew, install Koinon and set up Claude Code and Codex:
+
+```sh
+brew install rwcii/koinon/koinon
+koinon install --agent claude --agent codex
+```
+
+You can also download a [release binary](https://github.com/rwcii/koinon/releases) for your
+platform, verify its checksum, and run the same install command with that binary. Use
+`koinon setup FAMILY` to configure another supported family after installation. Koinon writes
+entries named `koinon-NAME` into the agents' user-level skill directories. See the
+[Koinon README](https://github.com/rwcii/koinon) and
+[installation guide](https://github.com/rwcii/koinon/blob/main/docs/INSTALL.md) for supported
+families, installation options and agent-specific locations.
+
+For a machine without Koinon, run the following from the source of Koinon v0.13.0 or later.
+Replace the example version with the release you want:
+
+```sh
+sh scripts/install-skills.sh v0.13.3
+```
+
+The script verifies the release archive and installs the skills at user scope. Steps that
+call Koinon tools require the running Koinon service.
+
+### Configure a project
+
+Create `.koinon/skills/NAME.md` for the skills your project uses. Set its `Version`, `Skill` and
+`Sources`, then provide the documented facts such as your base branch, check commands and
+review procedures. [This repository's facts](.koinon/skills/) are examples. Check them with
+`library_state` in your Koinon-connected agent, or use the command-line equivalent:
+
+```sh
+koinon library state --scope project --as FAMILY:SESSION_ID
+```
+
+Replace `FAMILY:SESSION_ID` with your registered native session identity. Look for
+`present-valid` in the repository facts report. Projects that keep local procedures because
+they cannot install the catalog record that choice in their `AGENTS.md`. See
+[WDR 008](docs/engineering/wdr/008-context-and-memory-engineering.md#5-decision-4-skills-come-from-one-shared-catalog-a-repository-keeps-only-its-facts).
+
+### How this repository uses Koinon
+
+The [task-to-skill table](AGENTS.md#skills) points agents to the installed entries and the
+facts each reads. The [review procedure](docs/engineering/review/README.md) explains how
+independent standards and refusal reviews evaluate the same frozen commit. In paired work,
+the driver makes changes and the observer reviews named checkpoints. Decision cards carry
+questions and verdicts, while the relevant tracked record carries the resulting rule.
+Handoff and pickup preserve private session state between work sessions.
+
+The catalog also offers `koinon-ship` for project publication workflows and
+`koinon-provenance` for projects with usage capture tooling. Their operation depends on the
+adopting project's policy, facts and commands. This repository documents its contribution
+flow in [CONTRIBUTING.md](CONTRIBUTING.md).
+
 ## Repository setup (`scripts/setup-repo.sh`)
 
 Part of the branch/merge policy (see [WDR 010](docs/engineering/wdr/010-branch-and-merge-flow.md))
