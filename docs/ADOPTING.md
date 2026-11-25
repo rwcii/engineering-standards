@@ -24,8 +24,9 @@ adapting the kit.
    record list and use the process guides for any local series the target maintains.
    Keep the target's existing record identifiers and numbering. Resolve collisions in the
    imported set or use qualified citations. Bring in the [review procedure and lenses](engineering/review/)
-   and point them to the target's local indexes or the pinned source. In the copied
-   review procedure, point the gate-document entry for this runbook to the target's
+   and point them to the target's local indexes or the pinned source. Point the review
+   procedure to the review-base setting the target uses, whether that is a shared skill fact
+   or its own procedure. In the copied review procedure, point this runbook entry to the target's
    adoption guidance. Remove that entry if the target keeps no adoption guidance.
 
    **Verify.** An example citation reaches its governing record, and existing target
@@ -63,7 +64,7 @@ adapting the kit.
 
 5. **Apply the target's branch policy.** Compare the desired policy with the target's
    existing settings and hook configuration. Ensure the branches named by the target's
-   policy exist and that the facts name the real review base. If the target adopts this
+   policy exist and that the review-base setting names the actual branch. If the target adopts this
    kit's GitHub flow, use [`scripts/setup-repo.sh`](../scripts/setup-repo.sh) from the target checkout,
    together with the matching hook, when the target authorizes those changes. For another
    flow, use the target's setup mechanism. The [repository setup notes](../README.md#repository-setup-scriptssetup-reposh)
@@ -94,9 +95,9 @@ adapting the kit.
    **Verify.** A contributor can identify where to obtain an approval when the policy
    requires one, and how to match it to the reviewed commit or authorized action.
 
-8. **Run both first reviews.** Freeze a candidate. Check the facts and relative links,
-   then run independent standards and refusal reviews through the target's review
-   procedure. Record each verdict and resolve findings using that procedure.
+8. **Run both first reviews.** Freeze a candidate. Check the inputs for the route chosen
+   in step 3 and the relative links. Run independent standards and refusal reviews through
+   the target's review procedure. Record each verdict and resolve findings using that procedure.
 
-   **Verify.** The facts and links pass. Both reports name the same full candidate head
+   **Verify.** The chosen inputs and links pass. Both reports name the same full candidate head
    and its base and show the result of each review.

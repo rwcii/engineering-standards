@@ -185,8 +185,9 @@ Without Koinon, check the facts manually against the installed skill's
 `<!-- koinon:repository-facts -->` schema. Use `Version` 1 and the canonical skill name from the schema filename in
 `Skill`, such as `record` for `.koinon/skills/record.md`. The installed folder uses the
 `koinon-` prefix. Put one repository-relative path per bullet in `Sources` and confirm
-each resolves. Use the schema's declared headings, supply a value for every required
-heading, and use each heading at most once.
+each resolves. Include the required headings. Use each heading at most once and give
+every heading you include a value. Use headings from the schema or the skill's documented
+compatibility exceptions.
 
 Projects that keep local procedures because
 they cannot install the catalog record that choice in their `AGENTS.md`. See
