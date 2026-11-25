@@ -26,8 +26,8 @@
 # An empty REQUIRED_DEVELOP sets no required checks on develop and leaves auto-merge off.
 #
 # AUTO_MERGE=off applies everything else and keeps auto-merge off (and --check then expects it
-# off). Use it for the first rollout: apply with AUTO_MERGE=off, prove the gate with a probe pull
-# request (WDR 010, Enforcement), then re-run without it to turn auto-merge on.
+# off). A first rollout is staged — first without promotion-source, which cannot run until the
+# default branch carries its workflow — as WDR 010, Enforcement (Bootstrap and rollout check) says.
 REQUIRED_DEVELOP="${REQUIRED_DEVELOP-repo-checks@15368 promotion-source@15368 standards-review refusal-review}"
 REQUIRED_MAIN="${REQUIRED_MAIN-repo-checks@15368 promotion-source@15368}"
 set -uo pipefail
@@ -72,9 +72,14 @@ canonical() {
     include: (.conditions.ref_name.include // []), exclude: (.conditions.ref_name.exclude // []),
     rules: ([.rules[] |
       if .type == "pull_request" then {type, methods: (.parameters.allowed_merge_methods | sort),
-        approvals: .parameters.required_approving_review_count}
+        approvals: .parameters.required_approving_review_count,
+        dismiss_stale: .parameters.dismiss_stale_reviews_on_push,
+        code_owner: .parameters.require_code_owner_review,
+        last_push: .parameters.require_last_push_approval,
+        thread_resolution: .parameters.required_review_thread_resolution}
       elif .type == "required_status_checks" then {type,
         strict: .parameters.strict_required_status_checks_policy,
+        enforce_on_create: (.parameters.do_not_enforce_on_create // false | not),
         checks: ([.parameters.required_status_checks[] |
           .context + (if .integration_id then "@" + (.integration_id | tostring) else "" end)] | sort)}
       else {type} end] | sort_by(.type))}'
@@ -90,7 +95,9 @@ verify() {
   local want_auto="$1" drift=0 settings pair key want have line name branch rest method contexts id live
   settings="$(gh api "repos/${REPO}")" || { echo "  - INCOMPLETE: cannot read the repository settings"; return 2; }
   for pair in allow_squash_merge=true allow_merge_commit=true allow_rebase_merge=false \
-              delete_branch_on_merge=true "allow_auto_merge=${want_auto}"; do
+              delete_branch_on_merge=true "allow_auto_merge=${want_auto}" \
+              squash_merge_commit_title=PR_TITLE squash_merge_commit_message=PR_BODY \
+              merge_commit_title=PR_TITLE merge_commit_message=PR_BODY; do
     key="${pair%%=*}"; want="${pair#*=}"
     have="$(printf '%s' "${settings}" | jq -r ".${key}")"
     [ "${have}" = "${want}" ] || { echo "  - DIFFERS: ${key} is ${have}, policy says ${want}"; drift=1; }

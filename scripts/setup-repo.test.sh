@@ -62,7 +62,9 @@ fixture() {
   rm -rf "$tmp/fake"; mkdir -p "$tmp/fake"; : > "$tmp/fake/log"; : > "$tmp/fake/fields"
   cat > "$tmp/fake/repos_o_r.json" <<'JSON'
 {"full_name":"o/r","visibility":"public","allow_squash_merge":true,"allow_merge_commit":true,
- "allow_rebase_merge":false,"delete_branch_on_merge":true,"allow_auto_merge":true}
+ "allow_rebase_merge":false,"delete_branch_on_merge":true,"allow_auto_merge":true,
+ "squash_merge_commit_title":"PR_TITLE","squash_merge_commit_message":"PR_BODY",
+ "merge_commit_title":"PR_TITLE","merge_commit_message":"PR_BODY"}
 JSON
   cat > "$tmp/fake/repos_o_r_rulesets.json" <<'JSON'
 [{"id":11,"name":"develop integration policy","target":"branch","enforcement":"active"},
@@ -141,6 +143,15 @@ fixture; mutate repos_o_r_rulesets_12.json '.rules |= map(select(.type != "delet
 run 1 "drift on the main ruleset differs" --check o/r
 fixture; mutate repos_o_r.json '.allow_rebase_merge = true'
 run 1 "a repository merge flag differs" --check o/r
+fixture; mutate repos_o_r.json '.squash_merge_commit_title = "COMMIT_OR_PR_TITLE"'
+run 1 "a merge commit title differs" --check o/r
+fixture; mutate "$D" '(.rules[] | select(.type == "pull_request") | .parameters.require_last_push_approval) = true'
+run 1 "a pull request rule parameter differs" --check o/r
+fixture; mutate "$D" '(.rules[] | select(.type == "required_status_checks") | .parameters.do_not_enforce_on_create) = true'
+run 1 "skipping checks on branch creation differs" --check o/r
+fixture; mutate repos_o_r.json '.squash_merge_commit_title = "COMMIT_OR_PR_TITLE"'
+run 0 "apply corrects a drifted title" o/r
+assert "apply rewrote the drifted title" bash -c "[ \"\$(jq -r .squash_merge_commit_title '$tmp/fake/repos_o_r.json')\" = PR_TITLE ]"
 fixture; mutate "$D" '.rules |= map(select(.type != "required_status_checks"))'; mutate repos_o_r.json '.allow_auto_merge = false'
 REQUIRED_DEVELOP="" run 0 "empty REQUIRED_DEVELOP expects no checks and auto-merge off" --check o/r
 fixture

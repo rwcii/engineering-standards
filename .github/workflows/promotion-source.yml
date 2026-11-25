@@ -1,7 +1,8 @@
 # promotion-source (WDR 010, Decisions 3 and 5): a pull request into main comes from this
-# repository's develop. It runs on pull_request_target, so the workflow and the script come from
-# the base branch, never from the pull request: a pull request cannot change the check that
-# judges it. It checks out the base branch only and runs no code from the pull request.
+# repository's develop. It runs on pull_request_target: GitHub takes this workflow from the
+# default branch, and the step checks out the pull request's base commit for the script, so
+# neither comes from the pull request and a pull request cannot change the check that judges it.
+# It runs no code from the pull request.
 # The job name is a required status context; renaming it breaks the merge gate.
 name: promotion-source
 

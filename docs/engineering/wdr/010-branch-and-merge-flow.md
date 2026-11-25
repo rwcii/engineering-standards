@@ -292,11 +292,12 @@ does not merge. It is cut again at the new `develop` commit, with fresh evidence
 All the release evidence names it and is posted in the pull request: the required checks green
 on it, the full local check run at it, and a fresh-context review of the whole `main`...`develop`
 diff. The merge is bound to the pinned head and is a merge commit. The `promotion-source` check
-requires the head to come from this repository's `develop`. It runs from the base branch, so a
-pull request cannot change the check that judges it, and it runs again when a pull request's base
-changes. It proves the source; the merge's head binding proves the pin. The local release check compares the pinned commit with
-`main`, the base it merges into. After the merge, read back `main` and
-confirm that its new merge commit has the pinned commit as its second parent. The tag and the
+requires the head to come from this repository's `develop`. It runs trusted code only — its
+workflow from the default branch and its script from the base commit — so a pull request cannot
+change the check that judges it, and it runs again when a pull request's base changes. It proves the source; the merge's head binding proves the pin. The local release check compares the pinned commit with
+`main`, the base it merges into. After the merge, read back the merge
+commit that the pull request records, not the tip of `main`, and confirm that its second parent is
+the pinned commit. The tag and the
 host release are created on the released merge commit, under an approval that names them.
 Version numbering and release signing are each project's choice.
 
@@ -371,8 +372,9 @@ The bundled tooling implements these decisions; a project that changes the flow 
   pull request into `develop` or `main`, and again when its base changes. A pull request can change
   that workflow, so a change to `.github/`, `scripts/` or `.githooks/` is a gate-document change
   and gets the stricter review of WDR 005, Decision 3. `.github/workflows/promotion-source.yml`
-  runs `promotion-source` (`scripts/check-promotion-source.sh`) from the base branch on
-  `pull_request_target`, with no code from the pull request, so a pull request cannot change it.
+  runs `promotion-source` (`scripts/check-promotion-source.sh`) on `pull_request_target`: the host
+  takes the workflow from the default branch, and the step checks out the base commit for the
+  script, with no code from the pull request, so a pull request cannot change it.
 - **Head-bound merge:** a feature merges with `gh pr merge <number> --squash --match-head-commit
   <approved head>`, and a release with `gh pr merge <number> --merge --match-head-commit <pin>`;
   the host refuses the merge if the head has moved. Then read back the merge commit the pull
@@ -406,7 +408,9 @@ The bundled tooling implements these decisions; a project that changes the flow 
      mergeable only when all four report success on that head; retargeted to `main`, it fails
      `promotion-source`.
   5. Turn auto-merge on (`scripts/setup-repo.sh`) only after the probe passes.
-  Each step that changes settings or `main` needs its own authorization.
+  Each step that changes settings or `main` proceeds only under an authorization that covers it;
+  one approval may name several steps (WDR 006, Decision 1). After an apply that changes settings,
+  check that auto-merge is still set on the open pull requests that had it.
 - **Review base:** the standards review and the refusal review take `develop` as their base (the
   project's check facts, `.koinon/skills/check.md`).
 - **Compliance:** a merge of a commit other than the approved head, a change that lands on `main`

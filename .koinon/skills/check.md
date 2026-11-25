@@ -47,7 +47,9 @@ incomplete (it did not run, with the reason; never a pass, WDR 004 Decision 8) o
   If `develop` moves before the merge, the pin is void: cut the release again at the new commit.
 - After a merge (bound to the approved head with `--match-head-commit`, WDR 010 Enforcement), read
   back the merge commit that the pull request records, not the branch tip:
-  `m=$(gh pr view <number> --json mergeCommit -q .mergeCommit.oid)`, then `git fetch origin`.
+  `m=$(gh pr view <number> --json mergeCommit -q .mergeCommit.oid)`, then
+  `git fetch origin "$m" "pull/<number>/head"`, because the merged head branch is deleted. If the
+  merge commit or the approved head cannot be fetched, the read-back is incomplete, not a pass.
   For a feature, the squash's tree is the expected candidate for its actual first parent:
   `git rev-parse <m>^{tree}` equals `git merge-tree --write-tree <m>^ <approved head>` (Git 2.38 or
   later); when `<m>^` is an ancestor of the approved head, it also equals
@@ -57,8 +59,9 @@ incomplete (it did not run, with the reason; never a pass, WDR 004 Decision 8) o
 On every pull request into `develop` or `main`, with no path filters, and again when its base
 changes:
 - `repo-checks` (`.github/workflows/checks.yml`): steps 1 and 2 above, on the candidate merge.
-- `promotion-source` (`.github/workflows/promotion-source.yml`): runs from the base branch; a pull
-  request into `main` comes from this repository's `develop`.
+- `promotion-source` (`.github/workflows/promotion-source.yml`): runs trusted code only, its
+  workflow from the default branch and its script from the base commit; a pull request into `main`
+  comes from this repository's `develop`.
 The review statuses are posted on the exact head after each approving verdict
 (docs/engineering/review/README.md § Results). Which contexts each branch requires is declared in
 `scripts/setup-repo.sh` and decided in WDR 010, Decision 3.
