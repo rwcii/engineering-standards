@@ -93,8 +93,9 @@ the right approver (WDR 005, Decision 2).
 The reviewer may read direct private evidence to verify a decision's authority, scope and
 wording. For this repository, the named **Decided by** field and the context in the record
 writer's own words satisfy the attribution check. Apply [WDR 002, Decision 5](../wdr/002-record-system-as-infrastructure.md)
-when the shared refusal-review procedure asks for quoted speech in a record. Use the tracked
-rule and its section in the published verdict. See the [refusal lens](refusal-lens.md#phase-2-find-each-source)
+when the shared refusal-review procedure asks for quoted speech in a record. Cite the tracked
+rule and section when available. Otherwise describe the verified source and what it covers
+in your own words. See the [refusal lens](refusal-lens.md#phase-2-find-each-source)
 for how to evaluate the source.
 
 ## Recheck

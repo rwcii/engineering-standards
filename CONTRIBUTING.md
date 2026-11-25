@@ -26,7 +26,7 @@ adopters:
 ## 2. Contribute back to the canonical kit (maintainer-curated)
 
 Changes to *this* repository are curated, to keep the standard set coherent for everyone
-who vendors it:
+who adopts it:
 
 - **Open an issue or discussion first**, describing the change and the decision behind
   it. Pull requests are accepted **by invitation**, once there is agreement — please

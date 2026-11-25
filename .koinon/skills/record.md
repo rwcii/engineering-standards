@@ -36,9 +36,9 @@ No automated record check exists yet. Check by hand, and report each check as pa
 - each relative link that the change adds or changes resolves to an existing file;
 - the cardinal rules of AGENTS.md hold: no AI or bot attribution, no line numbers or counts, no
   volatile implementation detail, no toolchain names in a universal record;
-- new or substantively amended decisions use the attribution and strength fields in WDR 002,
-  Decisions 5 and 6. Check pinned citations, resolvable retired identifiers and reciprocal
-  supersession where applicable;
+- new or substantively amended decisions use the attribution fields in WDR 002, Decision 5.
+  When a decision states its strength, check the value and scope against Decision 6. Check
+  pinned citations, resolvable retired identifiers and reciprocal supersession where applicable;
 - publish tracked source references and apply WDR 002, Decision 5 to private decision material.
   Working notes and handoff snapshots are private.
 ## Commit subject pattern

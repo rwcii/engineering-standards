@@ -125,8 +125,9 @@ the way your project holds the records (WDR 002, Decision 4).
 1. **Pin** a list of the source's records at a known version in your repo, and add a check
    that fails a citation to a record missing from that list. Move the pin only in a reviewed
    change.
-2. **Cite** each shared record by its source and ID. Point the standards lens and the record
-   facts at the source's record indexes, read at the pinned version.
+2. **Cite** each shared record by source, record ID, pinned revision and relevant section, as
+   described in [WDR 002](docs/engineering/wdr/002-record-system-as-infrastructure.md#7-decision-6-preserve-and-revisit-the-decisions-that-govern-the-work).
+   Point the standards lens and the record facts at the source's record indexes at that revision.
 3. **Keep your own records** only for decisions that are yours. If you keep any, give them
    their own series and index, and set `.koinon/skills/record.md` and
    `.koinon/skills/standards-audit.md` to that series; if you keep none, leave those facts out.
@@ -193,20 +194,21 @@ they cannot install the catalog record that choice in their `AGENTS.md`. See
 ### How this repository uses Koinon
 
 The [task-to-skill table](AGENTS.md#skills) links each task to its installed entry and
-project facts. A change moves through the following steps.
+project facts. The steps below show where Koinon fits in the development flow.
 
 1. **Plan and branch.** For a multi-PR deliverable, use `koinon-sprint` to agree on acceptance
    criteria, checks, and the order of increments. Start the work branch from `develop`.
-2. **Pair and verify.** The driver edits and commits. The observer receives a frozen checkpoint
-   through Koinon's message bridge and sends one batch of reproduced findings. The driver uses
-   `koinon-check` to run the project's checks.
+2. **Build and verify.** Use `koinon-check` to run the project's checks. When working in a pair,
+   the driver edits and commits, and the observer receives a frozen checkpoint through Koinon's
+   message bridge and sends one batch of reproduced findings.
 3. **Review the candidate.** Independent reviewers use `koinon-standards-review` and
    `koinon-refusal-review` on the same frozen head. Each records a head-bound verdict under the
    [review procedure](docs/engineering/review/README.md).
-4. **Publish and merge.** A Koinon decision card carries any approval needed to push and open a
-   PR or to merge it. The PR records the review results for that head. The feature lands in
-   `develop` as a squash, following [CONTRIBUTING.md](CONTRIBUTING.md) and
-   [WDR 010](docs/engineering/wdr/010-branch-and-merge-flow.md).
+4. **Publish and merge.** Follow [CONTRIBUTING.md](CONTRIBUTING.md) and
+   [WDR 010](docs/engineering/wdr/010-branch-and-merge-flow.md) for publication and merge.
+   When the team asks for approval through Koinon, the decision card names the action and its
+   reviewed head. The PR records the verdicts for that head, and the feature lands in
+   `develop` as a squash.
 5. **Resume a session.** `koinon-handoff` writes a private work snapshot. `koinon-pickup` reads
    that snapshot and verifies the current state before resuming.
 
